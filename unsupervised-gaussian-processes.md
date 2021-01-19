@@ -55,3 +55,4 @@ For the mini-project I recommend one of four tasks.
 
 2. Fit a GP-LVM to a data set and visualise the Riemannian metric in the latent space using *magnification factors* (see also [this paper on the GTM](https://ieeexplore.ieee.org/document/607494)). Compare magnification factors for GP-LVM and Bayesian GP-LVM. 
 
+3. [Harder]: Modify Bayesian GP-LVM code to perform non-linear matrix factorization in the manner suggested by Lawrence and Urtasun. Demonstrate on one of the data sets from the Lawrence and Urtasun paper.
