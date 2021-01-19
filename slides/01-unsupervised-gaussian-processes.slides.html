@@ -287,6 +287,55 @@ b_i^2
 <h2>Eigenvectors of a Symmetric Matric</h2>
 <p>Symmetric matrices have <em>orthonormal</em> eigenvectors. This means that <span class="math inline">\(\mathbf{U}\)</span> is an <a href="http://en.wikipedia.org/wiki/Orthogonal_matrix">orthogonal matrix</a>, <span class="math inline">\(\mathbf{U}^\top\mathbf{U} = \mathbf{I}\)</span>. This implies that <span class="math inline">\(\mathbf{u}_{:, i} ^\top \mathbf{u}_{:, j}\)</span> is equal to 0 if <span class="math inline">\(i\neq j\)</span> and 1 if <span class="math inline">\(i=j\)</span>.</p>
 </section>
+<section id="two-important-gaussian-properties" class="slide level2">
+<h2>Two Important Gaussian Properties</h2>
+</section>
+<section id="sum-of-gaussians" class="slide level2">
+<h2>Sum of Gaussians</h2>
+<div class="fragment">
+<p><span style="text-align:left">Sum of Gaussian variables is also Gaussian.</span></p>
+<p><span class="math display">\[y_i \sim \mathcal{N}\left(\mu_i,\sigma_i^2\right)\]</span></p>
+</div>
+<div class="fragment">
+<p><span style="text-align:left">And the sum is distributed as</span></p>
+<p><span class="math display">\[
+\sum_{i=1}^{n} y_i \sim \mathcal{N}\left(\sum_{i=1}^n\mu_i,\sum_{i=1}^n\sigma_i^2\right)
+\]</span></p>
+</div>
+<div class="fragment">
+<p><small>(<em>Aside</em>: As sum increases, sum of non-Gaussian, finite variance variables is also Gaussian because of <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">central limit theorem</a>.)</small></p>
+</div>
+</section>
+<section id="scaling-a-gaussian" class="slide level2">
+<h2>Scaling a Gaussian</h2>
+<div class="fragment">
+<p><span style="text-align:left">Scaling a Gaussian leads to a Gaussian.</span></p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[y\sim \mathcal{N}\left(\mu,\sigma^2\right)\]</span></p>
+</div>
+<div class="fragment">
+<p><span style="text-align:left">And the scaled variable is distributed as</span></p>
+<p><span class="math display">\[wy\sim \mathcal{N}\left(w\mu,w^2 \sigma^2\right).\]</span></p>
+</div>
+</section>
+<section id="multivariate-gaussian-properties" class="slide level2">
+<h2>Multivariate Gaussian Properties</h2>
+<ul>
+<li><p>If <span class="math display">\[
+\mathbf{ y}= \mathbf{W}\mathbf{ x}+ \boldsymbol{ \epsilon},
+\]</span></p></li>
+<li><p>Assume <span class="math display">\[
+\begin{align}
+\mathbf{ x}&amp; \sim \mathcal{N}\left(\boldsymbol{ \mu},\mathbf{C}\right)\\
+\boldsymbol{ \epsilon}&amp; \sim \mathcal{N}\left(\mathbf{0},\boldsymbol{ \Sigma}\right)
+\end{align}
+\]</span></p></li>
+<li><p>Then <span class="math display">\[
+\mathbf{ y}\sim \mathcal{N}\left(\mathbf{W}\boldsymbol{ \mu},\mathbf{W}\mathbf{C}\mathbf{W}^\top + \boldsymbol{ \Sigma}\right).
+\]</span> If <span class="math inline">\(\boldsymbol{ \Sigma}=\sigma^2\mathbf{I}\)</span>, this is Probabilistic PCA <span class="citation" data-cites="Tipping:probpca99">(Tipping and Bishop, 1999)</span>.</p></li>
+</ul>
+</section>
 <section id="principal-component-analysis-1" class="slide level2">
 <h2>Principal Component Analysis</h2>
 <ul>
