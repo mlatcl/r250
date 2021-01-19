@@ -19,8 +19,7 @@ If you want to review some of the background then the following might also be us
 2. [Bayesian Regression](http://inverseprobability.com/mlai2015/2015/11/03/week-6-bayesian-regression.html) from my old Sheffield course (also with [Jupyter notebook](https://nbviewer.jupyter.org/github/lawrennd/mlai2015/blob/master/week6.ipynb) and [video](https://www.youtube.com/watch?v=17zr5dGcUzE)) goes through some other important fundamentals like Bayes rule and multivariate Gaussians.
 3. [Gaussian Processes](/r250/lectures/01-gaussian-processes-intro.html) lecture from R250 in 2019-2020. For further background, you can also check the first part of these [notes and video from the machine learning summer school in Stellenbosch](http://inverseprobability.com/talks/notes/deep-gaussian-processes.html). 
 
-
-Here are the papers for the different sessions.
+Here are some papers to choose from for the different sessions.
 
 [Non-linear Matrix Factorization with Gaussian Processes](https://dl.acm.org/doi/10.1145/1553374.1553452) ICML 2009 with [Raquel Urtasun](http://www.cs.toronto.edu/~urtasun/)
 
@@ -31,6 +30,7 @@ Here are the papers for the different sessions.
 
 [Manifold Relevance Determination](https://dl.acm.org/doi/10.5555/3042573.3042644) ICML 2012 with [Andreas Damianou](https://adamian.github.io/), [Carl Henrik Ek](http://carlhenrik.com/), [Michalis K. Titsias](http://www2.aueb.gr/users/mtitsias/)
 
+[Latent variable modeling with random features](https://arxiv.org/abs/2006.11145) by [Gregory W. Gundersen](http://gregorygundersen.com/), [Michael Minyi Zhang](https://michaelzhang01.github.io/), [Barbara E. Engelhardt](https://www.cs.princeton.edu/~bee/)
 
 ### Session 1 
 
@@ -53,8 +53,8 @@ For the mini-project I recommend one of four tasks.
 
 1. Find an implementation of Bayesian GP-LVM and one of standard GP-LVM (for example in [GPy](https://github.com/SheffieldML/GPy). Explore different initialisation strategies. See how they compare for the Bayesian and non Bayesian approach. **Note**: for the Bayesian approach you will need an additional initialisation strategy around the variances of the posterior approximation for $\mathbf{X}$ so you might need several Bayesian GP-LVM comparisons. Explore the results for several different standard data sets. You could use simulated data and real data. You might want your exploration to be two stage. One where you keep covariance function parameters fixed, and one where you vary the covariance function parameters. 
 
-2. Find an implementation of SVI for GPs. For a smaller dataset (where the standard sparse GP can also be used) explore the stochastic optimization routine. Try different patterns of update between the inducing variables and the covariance parameters. If possible, attempt to update the inducing point locations. Monitor the quality of results by comparing to the best-approximate GP as computed by the Titsias variational approach.
+2. Fit a GP-LVM to a data set and visualise the Riemannian metric in the latent space using *magnification factors* (see also [this paper on the GTM](https://ieeexplore.ieee.org/document/607494)). Compare magnification factors for GP-LVM and Bayesian GP-LVM. 
 
-3. Use an implementation of Deep GPs to test different initialisation approaches. The implementation from my MLSS talk uses PCA for initializing latent spaces. What other approaches can you try?
+3. Recreate Use an implementation of Deep GPs to test different initialisation approaches. The implementation from my MLSS talk uses PCA for initializing latent spaces. What other approaches can you try?
 
 4. Reimplement the latent force model covariance function in python. Be careful about numerical problems that arise in that reimplementation. Use your implementation to fit the latent force model to e.g. a small motion capture data set.

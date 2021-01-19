@@ -157,41 +157,11 @@ p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) \propto p(\mathbf{ y}_{i,
 = \mathbf{C}_x \noiseStd^{-2}\mathbf{W}^\top \mathbf{ y}_{i, :} 
 \]</span> Compare this to the posterior for the Bayesian linear regression from last week, do they have similar forms? What matches and what differs?</p>
 </section>
-<section id="python-implementation-of-the-posterior" class="slide level2">
-<h2>Python Implementation of the Posterior</h2>
-<p>Now let’s implement the system in code.</p>
-</section>
 <section id="exercise-1" class="slide level2">
 <h2>Exercise 1</h2>
 <p>Use the values for <span class="math inline">\(\mathbf{W}\)</span> and <span class="math inline">\(\noiseStd^2\)</span> you have computed, along with the data set <span class="math inline">\(\mathbf{Y}\)</span> to compute the posterior density over <span class="math inline">\(\mathbf{Z}\)</span>. Write a function of the form</p>
 <p>python mu_x, C_x = posterior(Y, W, sigma2)} where <code>mu_x</code> and <code>C_x</code> are the posterior mean and posterior covariance for the given <span class="math inline">\(\mathbf{Y}\)</span>.</p>
 <p>Don’t forget to subtract the mean of the data <code>Y</code> inside your function before computing the posterior: remember we assumed at the beginning of our analysis that the data had been centred (i.e. the mean was removed).}{20}</p>
-</section>
-<section id="numerically-stable-and-efficient-version" class="slide level2">
-<h2>Numerically Stable and Efficient Version</h2>
-<p>Just as we saw for  and  computation of a matrix such as <span class="math inline">\(\mathbf{Y}^\top\mathbf{Y}\)</span> (or its centred version) can be a bad idea in terms of loss of numerical accuracy. Fortunately, we can find the eigenvalues and eigenvectors of the matrix <span class="math inline">\(\mathbf{Y}^\top\mathbf{Y}\)</span> without direct computation of the matrix. This can be done with the <a href="http://en.wikipedia.org/wiki/Singular_value_decomposition"><em>singular value decomposition</em></a>. The singular value decompsition takes a matrix, <span class="math inline">\(\mathbf{Z}\)</span> and represents it in the form, <span class="math display">\[
-\mathbf{Z} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{V}^\top
-\]</span> where <span class="math inline">\(\mathbf{U}\)</span> is a matrix of orthogonal vectors in the columns, meaning <span class="math inline">\(\mathbf{U}^\top\mathbf{U} = \mathbf{I}\)</span>. It has the same number of rows and columns as <span class="math inline">\(\mathbf{Z}\)</span>. The matrices <span class="math inline">\(\mathbf{\Lambda}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are both square with dimensionality given by the number of columns of <span class="math inline">\(\mathbf{Z}\)</span>. The matrix <span class="math inline">\(\mathbf{\Lambda}\)</span> is <em>diagonal</em> and <span class="math inline">\(\mathbf{V}\)</span> is an orthogonal matrix so <span class="math inline">\(\mathbf{V}^\top\mathbf{V} = \mathbf{V}\mathbf{V}^\top = \mathbf{I}\)</span>. The eigenvalues of the matrix <span class="math inline">\(\mathbf{Y}^\top\mathbf{Y}\)</span> are then given by the singular values of the matrix <span class="math inline">\(\mathbf{Y}^\top\)</span> squared and the eigenvectors are given by <span class="math inline">\(\mathbf{U}\)</span>.</p>
-</section>
-<section id="solution-for-mathbfw" class="slide level2">
-<h2>Solution for <span class="math inline">\(\mathbf{W}\)</span></h2>
-<p>Given the singular value decomposition of <span class="math inline">\(\mathbf{Y}\)</span> then we have <span class="math display">\[
-\mathbf{W}=
-\mathbf{U}\mathbf{L}\mathbf{R}^\top
-\]</span> where <span class="math inline">\(\mathbf{R}\)</span> is an arbitrary rotation matrix. This implies that the posterior is given by <span class="math display">\[
-\mathbf{C}_x =
-\left[\noiseStd^{-2}\mathbf{R}\mathbf{L}^2\mathbf{R}^\top + \mathbf{I}\right]^{-1}
-\]</span> because <span class="math inline">\(\mathbf{U}^\top \mathbf{U} = \mathbf{I}\)</span>. Since, by convention, we normally take <span class="math inline">\(\mathbf{R} = \mathbf{I}\)</span> to ensure that the principal components are orthonormal we can write <span class="math display">\[
-\mathbf{C}_x = \left[\noiseStd^{-2}\mathbf{L}^2 +
-\mathbf{I}\right]^{-1}
-\]</span> which implies that <span class="math inline">\(\mathbf{C}_x\)</span> is actually diagonal with elements given by <span class="math display">\[
-c_i = \frac{\noiseStd^2}{\noiseStd^2 + \ell^2_i}
-\]</span> and allows us to write <span class="math display">\[
-\boldsymbol{ \mu}_x = [\mathbf{L}^2 + \noiseStd^2
-\mathbf{I}]^{-1} \mathbf{L} \mathbf{U}^\top \mathbf{ y}_{i, :}
-\]</span> <span class="math display">\[
-\boldsymbol{ \mu}_x = \mathbf{D}\mathbf{U}^\top \mathbf{ y}_{i, :}
-\]</span> where <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix with diagonal elements given by <span class="math inline">\(d_{i} = \frac{\ell_i}{\noiseStd^2 + \ell_i^2}\)</span>.</p>
 </section>
 <section id="difficulty-for-probabilistic-approaches" class="slide level2">
 <h2>Difficulty for Probabilistic Approaches</h2>
