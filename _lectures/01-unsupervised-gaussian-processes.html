@@ -678,17 +678,49 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <li><p>Result is a non-linear probabilistic PCA.</p></li>
 <li><p><em>Optimise latent variables</em> rather than integrate them out.</p></li>
 </ul>
+<h2 id="bayesian-inference-by-rejection-sampling">Bayesian Inference by Rejection Sampling</h2>
+<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-intro-very-short.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-intro-very-short.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
+<p>One view of Bayesian inference is to assume we are given a mechanism for generating samples, where we assume that mechanism is representing on accurate view on the way we believe the world works.</p>
+<p>This mechanism is known as our <em>prior</em> belief.</p>
+<p>We combine our prior belief with our observations of the real world by discarding all those samples that are inconsistent with our prior. The <em>likelihood</em> defines mathematically what we mean by inconsistent with the prior. The higher the noise level in the likelihood, the looser the notion of consistent.</p>
+<p>The samples that remain are considered to be samples from the <em>posterior</em>.</p>
+<p>This approach to Bayesian inference is closely related to two sampling techniques known as <em>rejection sampling</em> and <em>importance sampling</em>. It is realized in practice in an approach known as <em>approximate Bayesian computation</em> (ABC) or likelihood-free inference.</p>
+<p>In practice, the algorithm is often too slow to be practical, because most samples will be inconsistent with the data and as a result the mechanism has to be operated many times to obtain a few posterior samples.</p>
+<p>However, in the Gaussian process case, when the likelihood also assumes Gaussian noise, we can operate this mechanism mathematically, and obtain the posterior density <em>analytically</em>. This is the benefit of Gaussian processes.</p>
+<p>First we will load in two python functions for computing the covariance function.</p>
+<p>Next we sample from a multivariate normal density (a multivariate Gaussian), using the covariance function as the covariance matrix.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>plot.rejection_samples(kernel<span class="op">=</span>kernel, </span>
+<span id="cb21-2"><a href="#cb21-2"></a>    diagrams<span class="op">=</span><span class="st">&#39;../slides/diagrams/gp&#39;</span>)</span></code></pre></div>
+<div class="figure">
+<div id="gp-rejection-samples-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/gp/gp_rejection_sample003.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/gp/gp_rejection_sample004.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/gp/gp_rejection_sample005.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div id="gp-rejection-samples-magnify" class="magnify" onclick="magnifyFigure(&#39;gp-rejection-samples&#39;)">
+<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
+</div>
+<div id="gp-rejection-samples-caption" class="caption-frame">
+<p>Figure: One view of Bayesian inference is we have a machine for generating samples (the <em>prior</em>), and we discard all samples inconsistent with our data, leaving the samples of interest (the <em>posterior</em>). This is a rejection sampling view of Bayesian inference. The Gaussian process allows us to do this analytically by multiplying the <em>prior</em> by the <em>likelihood</em>.</p>
+</div>
+</div>
 <h2 id="getting-started-and-downloading-data">Getting Started and Downloading Data</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="im">import</span> GPy</span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="im">import</span> string</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="im">import</span> GPy</span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="im">import</span> string</span></code></pre></div>
 <p>The following code is for plotting and to prepare the bigger models for later useage. If you are interested, you can have a look, but this is not essential.</p>
 <p>For this lab, we’ll use a data set containing all handwritten digits from <span class="math inline">\(0 \cdots 9\)</span> handwritten, provided by <span class="citation" data-cites="deCampos-character09">de Campos et al. (2009)</span>. We will only use some of the digits for the demonstrations in this lab class, but you can edit the code below to select different subsets of the digit data as you wish.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>which <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">9</span>] <span class="co"># which digits to work on</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a>data <span class="op">=</span> pods.datasets.decampos_digits(which_digits<span class="op">=</span>which)</span>
-<span id="cb22-3"><a href="#cb22-3"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
-<span id="cb22-4"><a href="#cb22-4"></a>labels <span class="op">=</span> data[<span class="st">&#39;str_lbls&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>which <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">9</span>] <span class="co"># which digits to work on</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>data <span class="op">=</span> pods.datasets.decampos_digits(which_digits<span class="op">=</span>which)</span>
+<span id="cb23-3"><a href="#cb23-3"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
+<span id="cb23-4"><a href="#cb23-4"></a>labels <span class="op">=</span> data[<span class="st">&#39;str_lbls&#39;</span>]</span></code></pre></div>
 <p>You can try to plot some of the digits using <code>plt.matshow</code> (the digit images have size <code>16x16</code>).</p>
 <h2 id="principal-component-analysis-2">Principal Component Analysis</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
@@ -698,49 +730,49 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <li>What is the right shape <span class="math inline">\(n\times p\)</span> to use?</li>
 </ul>
 <p>We will call the reshaped observed outputs <span class="math inline">\(\mathbf{Y}\)</span> in the following.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>Yn <span class="op">=</span> Y<span class="co">#Y-Y.mean()</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>Yn <span class="op">=</span> Y<span class="co">#Y-Y.mean()</span></span></code></pre></div>
 <p>Now let’s run PCA on the reshaped dataset <span class="math inline">\(\mathbf{Y}\)</span>:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="im">from</span> GPy.util <span class="im">import</span> pca</span>
-<span id="cb24-2"><a href="#cb24-2"></a>p <span class="op">=</span> pca.pca(Y) <span class="co"># create PCA class with digits dataset</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="im">from</span> GPy.util <span class="im">import</span> pca</span>
+<span id="cb25-2"><a href="#cb25-2"></a>p <span class="op">=</span> pca.pca(Y) <span class="co"># create PCA class with digits dataset</span></span></code></pre></div>
 <p>The resulting plot will show the lower dimensional representation of the digits in 2 dimensions.</p>
 <h2 id="gaussian-process-latent-variable-model">Gaussian Process Latent Variable Model</h2>
 <p>The Gaussian Process Latent Variable Model (GP-LVM) <span class="citation" data-cites="Lawrence:pnpca05">(Lawrence, 2005)</span> embeds PCA into a Gaussian process framework, where the latent inputs <span class="math inline">\(\mathbf{Z}\)</span> are learnt as hyperparameters and the mapping variables <span class="math inline">\(\mathbf{W}\)</span> are integrated out. The advantage of this interpretation is it allows PCA to be generalized in a non linear way by replacing the resulting <em>linear</em> covariance witha non linear covariance. But first, let’s see how GPLVM is equivalent to PCA using an automatic relevance determination (ARD, see e.g. <span class="citation" data-cites="Bishop:book06">Bishop (2006)</span>) linear kernel:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>input_dim <span class="op">=</span> <span class="dv">4</span> <span class="co"># How many latent dimensions to use</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a>kernel <span class="op">=</span> GPy.kern.Linear(input_dim, ARD<span class="op">=</span><span class="va">True</span>) <span class="co"># ARD kernel</span></span>
-<span id="cb25-3"><a href="#cb25-3"></a>m <span class="op">=</span> GPy.models.GPLVM(Yn, input_dim<span class="op">=</span>input_dim, kernel<span class="op">=</span>kernel)</span>
-<span id="cb25-4"><a href="#cb25-4"></a></span>
-<span id="cb25-5"><a href="#cb25-5"></a>m.optimize(messages<span class="op">=</span><span class="dv">1</span>, max_iters<span class="op">=</span><span class="dv">1000</span>) <span class="co"># optimize for 1000 iterations</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>input_dim <span class="op">=</span> <span class="dv">4</span> <span class="co"># How many latent dimensions to use</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>kernel <span class="op">=</span> GPy.kern.Linear(input_dim, ARD<span class="op">=</span><span class="va">True</span>) <span class="co"># ARD kernel</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a>m <span class="op">=</span> GPy.models.GPLVM(Yn, input_dim<span class="op">=</span>input_dim, kernel<span class="op">=</span>kernel)</span>
+<span id="cb26-4"><a href="#cb26-4"></a></span>
+<span id="cb26-5"><a href="#cb26-5"></a>m.optimize(messages<span class="op">=</span><span class="dv">1</span>, max_iters<span class="op">=</span><span class="dv">1000</span>) <span class="co"># optimize for 1000 iterations</span></span></code></pre></div>
 <p>As you can see the solution with a linear kernel is the same as the PCA solution with the exception of rotational changes and axis flips.</p>
 <p>For the sake of time, the solution you see was only running for 1000 iterations, thus it might not be converged fully yet. The GP-LVM proceeds by iterative optimization of the <em>inputs</em> to the covariance. As we saw in the lecture earlier, for the linear covariance, these latent points can be optimized with an eigenvalue problem, but generally, for non-linear covariance functions, we are obliged to use gradient based optimization.</p>
 <h2 id="cmu-mocap-database">CMU Mocap Database</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_datasets/includes/cmu-mocap-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_datasets/includes/cmu-mocap-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Motion capture data from the CMU motion capture data base <span class="citation" data-cites="CMU-mocap03">(CMU Motion Capture Labb, 2003)</span>.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="im">import</span> pods</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="im">import</span> pods</span></code></pre></div>
 <p>You can download any subject and motion from the data set. Here we will download motion <code>01</code> from subject <code>35</code>.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>subject<span class="op">=</span><span class="st">&#39;35&#39;</span> </span>
-<span id="cb27-2"><a href="#cb27-2"></a>motion<span class="op">=</span>[<span class="st">&#39;01&#39;</span>]</span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>data <span class="op">=</span> pods.datasets.cmu_mocap(subject, motion)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>subject<span class="op">=</span><span class="st">&#39;35&#39;</span> </span>
+<span id="cb28-2"><a href="#cb28-2"></a>motion<span class="op">=</span>[<span class="st">&#39;01&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>data <span class="op">=</span> pods.datasets.cmu_mocap(subject, motion)</span></code></pre></div>
 <p>The data dictionary contains the keys ‘Y’ and ‘skel’, which represent the data and the skeleton..</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>data[<span class="st">&#39;Y&#39;</span>].shape</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>data[<span class="st">&#39;Y&#39;</span>].shape</span></code></pre></div>
 <p>The data was used in the hierarchical GP-LVM paper <span class="citation" data-cites="Lawrence:hgplvm07">(Lawrence and Moore, 2007)</span> in an experiment that was also recreated in the Deep Gaussian process paper <span class="citation" data-cites="Damianou:deepgp13">(Damianou and Lawrence, 2013)</span>.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="bu">print</span>(data[<span class="st">&#39;citation&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="bu">print</span>(data[<span class="st">&#39;citation&#39;</span>])</span></code></pre></div>
 <p>And extra information about the data is included, as standard, under the keys <code>info</code> and <code>details</code>.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="bu">print</span>(data[<span class="st">&#39;info&#39;</span>])</span>
-<span id="cb31-2"><a href="#cb31-2"></a><span class="bu">print</span>()</span>
-<span id="cb31-3"><a href="#cb31-3"></a><span class="bu">print</span>(data[<span class="st">&#39;details&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="bu">print</span>(data[<span class="st">&#39;info&#39;</span>])</span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="bu">print</span>()</span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="bu">print</span>(data[<span class="st">&#39;details&#39;</span>])</span></code></pre></div>
 <p>The original data has the figure moving across the floor during the motion capture sequence. We can make the figure walk ‘in place’, by setting the x, y, z positions of the root node to zero. This makes it easier to visualize the result.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Make figure move in place.</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a>data[<span class="st">&#39;Y&#39;</span>][:, <span class="dv">0</span>:<span class="dv">3</span>] <span class="op">=</span> <span class="fl">0.0</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Make figure move in place.</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>data[<span class="st">&#39;Y&#39;</span>][:, <span class="dv">0</span>:<span class="dv">3</span>] <span class="op">=</span> <span class="fl">0.0</span></span></code></pre></div>
 <p>We can also remove the mean of the data.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
-<span id="cb33-2"><a href="#cb33-2"></a>Y_mean <span class="op">=</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb33-3"><a href="#cb33-3"></a>Y_std <span class="op">=</span> Y.std(<span class="dv">0</span>)</span>
-<span id="cb33-4"><a href="#cb33-4"></a>Yhat <span class="op">=</span> (Y<span class="op">-</span>Y_mean)<span class="op">/</span>Y_std</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
+<span id="cb34-2"><a href="#cb34-2"></a>Y_mean <span class="op">=</span> Y.mean(<span class="dv">0</span>)</span>
+<span id="cb34-3"><a href="#cb34-3"></a>Y_std <span class="op">=</span> Y.std(<span class="dv">0</span>)</span>
+<span id="cb34-4"><a href="#cb34-4"></a>Yhat <span class="op">=</span> (Y<span class="op">-</span>Y_mean)<span class="op">/</span>Y_std</span></code></pre></div>
 <p>Now we create the GP-LVM model.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a><span class="im">import</span> GPy</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>model <span class="op">=</span> GPy.models.GPLVM(Yhat, <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a><span class="im">import</span> GPy</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>model <span class="op">=</span> GPy.models.GPLVM(Yhat, <span class="dv">2</span>)</span></code></pre></div>
 <p>Now we optimize the model.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>, max_f_eval<span class="op">=</span><span class="dv">10000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>, max_f_eval<span class="op">=</span><span class="dv">10000</span>)</span></code></pre></div>
 <h2 id="example-latent-doodle-space">Example: Latent Doodle Space</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/latent-doodle-space.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/latent-doodle-space.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <div class="figure">
@@ -789,23 +821,23 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <p>They first visualized their data using principal component analysis. In the first two principal components this fails to separate the domains. This is perhaps because the principal components are dominated by the variation in the 64 cell systems. This in turn may be because there are more cells from the data set in that regime, and may be because the natural variation is greater. We first recreate their visualization using principal component analysis.</p>
 <p>In this notebook we will perform PCA on the original data, showing that the different regimes do not separate.</p>
 <p>Next we load in the data. We’ve provided a convenience function for loading in the data with <code>pods</code>. It is loaded in as a <code>pandas</code> DataFrame. This allows us to summarize it with the <code>describe</code> attribute.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a><span class="im">import</span> pods</span></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>data <span class="op">=</span> pods.datasets.singlecell()</span>
-<span id="cb38-2"><a href="#cb38-2"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
-<span id="cb38-3"><a href="#cb38-3"></a>Y.describe</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="im">import</span> pods</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>data <span class="op">=</span> pods.datasets.singlecell()</span>
+<span id="cb39-2"><a href="#cb39-2"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
+<span id="cb39-3"><a href="#cb39-3"></a>Y.describe</span></code></pre></div>
 <h2 id="principal-component-analysis-3">Principal Component Analysis</h2>
 <p>Now we follow <span class="citation" data-cites="Guo:fate10">Guo et al. (2010)</span> in performing PCA on the data. Rather than calling a ‘PCA routine’, here we break the algorithm down into its steps: compute the data covariance, compute the eigenvalues and eigenvectors and sort according to magnitude of eigenvalue. Because we want to visualize the data, we’ve chose to compute the eigenvectors of the <em>inner product matrix</em> rather than the covariance matrix. This allows us to plot the eigenvalues directly. However, this is less efficient (in this case because the number of genes is smaller than the number of data) than computing the eigendecomposition of the covariance matrix.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># obtain a centred version of data.</span></span>
-<span id="cb40-2"><a href="#cb40-2"></a>centredY <span class="op">=</span> Y <span class="op">-</span> Y.mean()</span>
-<span id="cb40-3"><a href="#cb40-3"></a><span class="co"># compute inner product matrix</span></span>
-<span id="cb40-4"><a href="#cb40-4"></a>C <span class="op">=</span> np.dot(centredY,centredY.T)</span>
-<span id="cb40-5"><a href="#cb40-5"></a><span class="co"># perform eigendecomposition</span></span>
-<span id="cb40-6"><a href="#cb40-6"></a>V, U <span class="op">=</span> np.linalg.eig(C)</span>
-<span id="cb40-7"><a href="#cb40-7"></a><span class="co"># sort eigenvalues and vectors according to size</span></span>
-<span id="cb40-8"><a href="#cb40-8"></a>ind <span class="op">=</span> V.argsort()</span>
-<span id="cb40-9"><a href="#cb40-9"></a>ev <span class="op">=</span> V[ind[::<span class="op">-</span><span class="dv">1</span>]]</span>
-<span id="cb40-10"><a href="#cb40-10"></a>U <span class="op">=</span> U[:, ind[::<span class="op">-</span><span class="dv">1</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># obtain a centred version of data.</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>centredY <span class="op">=</span> Y <span class="op">-</span> Y.mean()</span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="co"># compute inner product matrix</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a>C <span class="op">=</span> np.dot(centredY,centredY.T)</span>
+<span id="cb41-5"><a href="#cb41-5"></a><span class="co"># perform eigendecomposition</span></span>
+<span id="cb41-6"><a href="#cb41-6"></a>V, U <span class="op">=</span> np.linalg.eig(C)</span>
+<span id="cb41-7"><a href="#cb41-7"></a><span class="co"># sort eigenvalues and vectors according to size</span></span>
+<span id="cb41-8"><a href="#cb41-8"></a>ind <span class="op">=</span> V.argsort()</span>
+<span id="cb41-9"><a href="#cb41-9"></a>ev <span class="op">=</span> V[ind[::<span class="op">-</span><span class="dv">1</span>]]</span>
+<span id="cb41-10"><a href="#cb41-10"></a>U <span class="op">=</span> U[:, ind[::<span class="op">-</span><span class="dv">1</span>]]</span></code></pre></div>
 <p>To visualize the result, we now construct a simple helper function. This will ensure that the plots have the same legends as the GP-LVM plots we use below.</p>
 <h2 id="pca-result">PCA Result</h2>
 <p>Now, using the helper function we can plot the results with appropriate labels.</p>
@@ -826,10 +858,10 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <p>Work done as a collaboration between Max Zwiessele, Oliver Stegle and Neil D. Lawrence.</p>
 <p>Then, we follow <span class="citation" data-cites="Buettner:resolving12">Buettner and Theis (2012)</span> in applying the GP-LVM to the data. There is a slight pathology in the result, one which they fixed by using priors that were dependent on the developmental stage. We then show how the Bayesian GP-LVM doesn’t exhibit those pathologies and gives a nice results that seems to show the lineage of the cells.</p>
 <p>They used modified prior to ensure that small differences between cells at the same differential stage were preserved. Here we apply a standard GP-LVM (no modified prior) to the data.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="im">import</span> GPy</span></code></pre></div>
-<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>kernel <span class="op">=</span> GPy.kern.RBF(<span class="dv">2</span>)<span class="op">+</span>GPy.kern.Bias(<span class="dv">2</span>)</span>
-<span id="cb42-2"><a href="#cb42-2"></a>model <span class="op">=</span> GPy.models.GPLVM(Y.values, <span class="dv">2</span>, kernel<span class="op">=</span>kernel)</span>
-<span id="cb42-3"><a href="#cb42-3"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="im">import</span> GPy</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>kernel <span class="op">=</span> GPy.kern.RBF(<span class="dv">2</span>)<span class="op">+</span>GPy.kern.Bias(<span class="dv">2</span>)</span>
+<span id="cb43-2"><a href="#cb43-2"></a>model <span class="op">=</span> GPy.models.GPLVM(Y.values, <span class="dv">2</span>, kernel<span class="op">=</span>kernel)</span>
+<span id="cb43-3"><a href="#cb43-3"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
 <div class="figure">
 <div id="singlecell-gplvm-figure" class="figure-frame">
 <object class="svgplot " data="../slides/diagrams/gplvm/singlecell-gplvm.svg" width="60%" style=" ">
@@ -857,10 +889,10 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <h2 id="blastocyst-data-isomap">Blastocyst Data: Isomap</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-isomap.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-isomap.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Isomap first builds a neighbourhood graph, and then uses distances along this graph to approximate the geodesic distance between points. These distances are then visualized by performing classical multidimensional scaling (which involves computing the eigendecomposition of the centred distance matrix). As the neighborhood size is increased to match the data, principal component analysis is recovered (or strictly speaking, principal coordinate analysis). The fewer the neighbors, the more ‘non-linear’ the isomap embeddings are.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
-<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>n_neighbors <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb44-2"><a href="#cb44-2"></a>model <span class="op">=</span> sklearn.manifold.Isomap(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb44-3"><a href="#cb44-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a>n_neighbors <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>model <span class="op">=</span> sklearn.manifold.Isomap(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb45-3"><a href="#cb45-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
 <div class="figure">
 <div id="singlecell-isomap-figure" class="figure-frame">
 <object class="svgplot " data="../slides/diagrams/dimred/singlecell-isomap.svg" width="60%" style=" ">
@@ -876,10 +908,10 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <h2 id="blastocyst-data-locally-linear-embedding">Blastocyst Data: Locally Linear Embedding</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-lle.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-lle.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Next we try locally linear embedding. In locally linear embedding a neighborhood is also computed. Each point is then reconstructed by it’s neighbors using a linear weighting. This implies a locally linear patch is being fitted to the data in that region. These patches are assimilated into a large <span class="math inline">\(n\times n\)</span> matrix and a lower dimensional data set which reflects the same relationships is then sought. Quite a large number of neighbours needs to be selected for the data to not collapse in on itself. When a large number of neighbours is selected the embedding is more linear and begins to look like PCA. However, the algorithm does <em>not</em> converge to PCA in the limit as the number of neighbors approaches <span class="math inline">\(n\)</span>.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
-<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>n_neighbors <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb46-2"><a href="#cb46-2"></a>model <span class="op">=</span> sklearn.manifold.LocallyLinearEmbedding(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb46-3"><a href="#cb46-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a>n_neighbors <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a>model <span class="op">=</span> sklearn.manifold.LocallyLinearEmbedding(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb47-3"><a href="#cb47-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
 <div class="figure">
 <div id="singlecell-lle-figure" class="figure-frame">
 <object class="svgplot " data="../slides/diagrams/dimred/singlecell-lle.svg" width="60%" style=" ">
