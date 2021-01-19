@@ -590,7 +590,38 @@ p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{p}\mathcal{N}\left(\mathbf{ y}_
 \mathbf{U}_{q}=\mathbf{Y}^{\top}\mathbf{U}_{q}^{\prime}\Lambda_{q}^{-\frac{1}{2}}
   \]</span></p></li>
 </ul>
-<h2 id="gaussian-processes">Gaussian Processes</h2>
+<h2 id="bayesian-inference-by-rejection-sampling">Bayesian Inference by Rejection Sampling</h2>
+<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-intro-very-short.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-intro-very-short.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
+<p>One view of Bayesian inference is to assume we are given a mechanism for generating samples, where we assume that mechanism is representing on accurate view on the way we believe the world works.</p>
+<p>This mechanism is known as our <em>prior</em> belief.</p>
+<p>We combine our prior belief with our observations of the real world by discarding all those samples that are inconsistent with our prior. The <em>likelihood</em> defines mathematically what we mean by inconsistent with the prior. The higher the noise level in the likelihood, the looser the notion of consistent.</p>
+<p>The samples that remain are considered to be samples from the <em>posterior</em>.</p>
+<p>This approach to Bayesian inference is closely related to two sampling techniques known as <em>rejection sampling</em> and <em>importance sampling</em>. It is realized in practice in an approach known as <em>approximate Bayesian computation</em> (ABC) or likelihood-free inference.</p>
+<p>In practice, the algorithm is often too slow to be practical, because most samples will be inconsistent with the data and as a result the mechanism has to be operated many times to obtain a few posterior samples.</p>
+<p>However, in the Gaussian process case, when the likelihood also assumes Gaussian noise, we can operate this mechanism mathematically, and obtain the posterior density <em>analytically</em>. This is the benefit of Gaussian processes.</p>
+<p>First we will load in two python functions for computing the covariance function.</p>
+<p>Next we sample from a multivariate normal density (a multivariate Gaussian), using the covariance function as the covariance matrix.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>plot.rejection_samples(kernel<span class="op">=</span>kernel, </span>
+<span id="cb20-2"><a href="#cb20-2"></a>    diagrams<span class="op">=</span><span class="st">&#39;../slides/diagrams/gp&#39;</span>)</span></code></pre></div>
+<div class="figure">
+<div id="gp-rejection-samples-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/gp/gp_rejection_sample003.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/gp/gp_rejection_sample004.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/gp/gp_rejection_sample005.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div id="gp-rejection-samples-magnify" class="magnify" onclick="magnifyFigure(&#39;gp-rejection-samples&#39;)">
+<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
+</div>
+<div id="gp-rejection-samples-caption" class="caption-frame">
+<p>Figure: One view of Bayesian inference is we have a machine for generating samples (the <em>prior</em>), and we discard all samples inconsistent with our data, leaving the samples of interest (the <em>posterior</em>). This is a rejection sampling view of Bayesian inference. The Gaussian process allows us to do this analytically by multiplying the <em>prior</em> by the <em>likelihood</em>.</p>
+</div>
+</div>
 <p><strong>Prior for Functions</strong></p>
 <ul>
 <li><p>Probability Distribution over Functions</p></li>
@@ -678,38 +709,6 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <li><p>Result is a non-linear probabilistic PCA.</p></li>
 <li><p><em>Optimise latent variables</em> rather than integrate them out.</p></li>
 </ul>
-<h2 id="bayesian-inference-by-rejection-sampling">Bayesian Inference by Rejection Sampling</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-intro-very-short.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-intro-very-short.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>One view of Bayesian inference is to assume we are given a mechanism for generating samples, where we assume that mechanism is representing on accurate view on the way we believe the world works.</p>
-<p>This mechanism is known as our <em>prior</em> belief.</p>
-<p>We combine our prior belief with our observations of the real world by discarding all those samples that are inconsistent with our prior. The <em>likelihood</em> defines mathematically what we mean by inconsistent with the prior. The higher the noise level in the likelihood, the looser the notion of consistent.</p>
-<p>The samples that remain are considered to be samples from the <em>posterior</em>.</p>
-<p>This approach to Bayesian inference is closely related to two sampling techniques known as <em>rejection sampling</em> and <em>importance sampling</em>. It is realized in practice in an approach known as <em>approximate Bayesian computation</em> (ABC) or likelihood-free inference.</p>
-<p>In practice, the algorithm is often too slow to be practical, because most samples will be inconsistent with the data and as a result the mechanism has to be operated many times to obtain a few posterior samples.</p>
-<p>However, in the Gaussian process case, when the likelihood also assumes Gaussian noise, we can operate this mechanism mathematically, and obtain the posterior density <em>analytically</em>. This is the benefit of Gaussian processes.</p>
-<p>First we will load in two python functions for computing the covariance function.</p>
-<p>Next we sample from a multivariate normal density (a multivariate Gaussian), using the covariance function as the covariance matrix.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>plot.rejection_samples(kernel<span class="op">=</span>kernel, </span>
-<span id="cb21-2"><a href="#cb21-2"></a>    diagrams<span class="op">=</span><span class="st">&#39;../slides/diagrams/gp&#39;</span>)</span></code></pre></div>
-<div class="figure">
-<div id="gp-rejection-samples-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/gp/gp_rejection_sample003.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/gp/gp_rejection_sample004.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/gp/gp_rejection_sample005.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-<div id="gp-rejection-samples-magnify" class="magnify" onclick="magnifyFigure(&#39;gp-rejection-samples&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="gp-rejection-samples-caption" class="caption-frame">
-<p>Figure: One view of Bayesian inference is we have a machine for generating samples (the <em>prior</em>), and we discard all samples inconsistent with our data, leaving the samples of interest (the <em>posterior</em>). This is a rejection sampling view of Bayesian inference. The Gaussian process allows us to do this analytically by multiplying the <em>prior</em> by the <em>likelihood</em>.</p>
-</div>
-</div>
 <h2 id="getting-started-and-downloading-data">Getting Started and Downloading Data</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
