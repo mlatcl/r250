@@ -55,6 +55,3 @@ For the mini-project I recommend one of four tasks.
 
 2. Fit a GP-LVM to a data set and visualise the Riemannian metric in the latent space using *magnification factors* (see also [this paper on the GTM](https://ieeexplore.ieee.org/document/607494)). Compare magnification factors for GP-LVM and Bayesian GP-LVM. 
 
-3. Recreate Use an implementation of Deep GPs to test different initialisation approaches. The implementation from my MLSS talk uses PCA for initializing latent spaces. What other approaches can you try?
-
-4. Reimplement the latent force model covariance function in python. Be careful about numerical problems that arise in that reimplementation. Use your implementation to fit the latent force model to e.g. a small motion capture data set.
