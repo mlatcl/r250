@@ -134,6 +134,42 @@ sns.set_palette('colorblind')}-->
 <li>3648 dimensions (64 rows, 57 columns)</li>
 <li>Space contains much more than just this digit.</li>
 </ul>
+<div class="figure">
+<div id="dem_six000-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six000.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
+<div class="figure">
+<div id="dem_six001-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six001.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
+<div class="figure">
+<div id="dem_six002-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six002.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
+<div class="figure">
+<div id="dem_six003-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six003.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
 </section>
 <section id="usps-samples" class="slide level2">
 <h2>USPS Samples</h2>
@@ -146,6 +182,42 @@ sns.set_palette('colorblind')}-->
 <ul>
 <li>Rotate a prototype</li>
 </ul>
+<div class="figure">
+<div id="dem_six_rotate000-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six_rotate000.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
+<div class="figure">
+<div id="dem_six_rotate001-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six_rotate001.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
+<div class="figure">
+<div id="dem_six_rotate002-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six_rotate002.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
+<div class="figure">
+<div id="dem_six_rotate003-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/ml/dem_six_rotate003.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+</aside>
 </section>
 <section id="low-dimensional-manifolds" class="slide level2">
 <h2>Low Dimensional Manifolds</h2>
@@ -160,6 +232,48 @@ sns.set_palette('colorblind')}-->
 <li>Therefore we expect the data to live on a lower dimensional manifold.</li>
 <li>Conclusion: Deal with high dimensional data by looking for a lower dimensional non-linear embedding.</li>
 </ul></li>
+</ul>
+</section>
+<section id="dimensionality-reduction" class="slide level2">
+<h2>Dimensionality Reduction</h2>
+<ul>
+<li>Compress the data by replacing the original data with reduced number of continuous variables.</li>
+</ul>
+<div class="figure">
+<div id="marionette-figure" class="figure-frame">
+<object class data="../slides/diagrams/ml/marionette.svg" width="40%" style=" ">
+</object>
+</div>
+</div>
+<aside class="notes">
+Thinking of dimensionality reduction as a marionette. We observe the high dimensional pose of the puppet, <span class="math inline">\(\mathbf{ x}\)</span>, but the movement of the puppeteer’s hand, <span class="math inline">\(\mathbf{ z}\)</span> remains hidden to us. Dimensionality reduction aims to recover those hidden movements which generated the observations.
+</aside>
+</section>
+<section id="dimensionality-reduction-1" class="slide level2">
+<h2>Dimensionality Reduction</h2>
+<ul>
+<li>Position of each body part of a marionette could be thought of as our data, <span class="math inline">\(\mathbf{ x}_i\)</span>.</li>
+<li>Each data point is the 3-D co-ordinates of all the different body parts</li>
+<li>Movement of parts determined by puppeteer via strings.</li>
+<li>For a simple puppet with one stick can move the stick up and down, left and right and twist.</li>
+</ul>
+</section>
+<section id="dimensionality-reduction-2" class="slide level2">
+<h2>Dimensionality Reduction</h2>
+<ul>
+<li>This gives three parameters in the puppeteers control.</li>
+<li>Implies that the puppet we see moving is controlled by only 3 variables.</li>
+<li>These 3 variables are often called the hidden or <em>latent variables</em>.</li>
+<li>Assume similar for real world data, observations are derived from lower dimensional underlying process</li>
+</ul>
+</section>
+<section id="examples-in-social-sciences" class="slide level2">
+<h2>Examples in Social Sciences</h2>
+<ul>
+<li>Underpins <em>psychological scoring</em> such as <em>IQ</em> or <em>personality tests</em></li>
+<li>Myers-Briggs assumes personality is four dimensional.</li>
+<li>Political belief (left/right wing).</li>
+<li>Also language modelling has taken similar approaches: <a href="https://arxiv.org/abs/1301.3781">word2vec</a></li>
 </ul>
 </section>
 <section id="two-important-gaussian-properties" class="slide level2">
