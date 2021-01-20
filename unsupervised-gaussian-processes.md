@@ -21,20 +21,19 @@ If you want to review some of the background then the following might also be us
 
 Here are some papers to choose from for the different sessions.
 
-[Local Distance Preservation in the GP-LVM through Back Constraints](https://dl.acm.org/doi/10.1145/1143844.1143909) with [Joaquin Quiñonero-Candela](https://quinonero.net/)
+* [Local Distance Preservation in the GP-LVM through Back Constraints](https://dl.acm.org/doi/10.1145/1143844.1143909) with [Joaquin Quiñonero-Candela](https://quinonero.net/)
 
-[Gaussian Process Dynamical Models](https://dl.acm.org/doi/10.5555/2976248.2976429) by [Jack M. Wang](http://www.dgp.toronto.edu/~jmwang/) and [David J. Fleet](http://www.cs.toronto.edu/~fleet/) and [Aaron Hertzmann](https://research.adobe.com/person/aaron-hertzmann/)
+* [Gaussian Process Dynamical Models](https://dl.acm.org/doi/10.5555/2976248.2976429) by [Jack M. Wang](http://www.dgp.toronto.edu/~jmwang/) and [David J. Fleet](http://www.cs.toronto.edu/~fleet/) and [Aaron Hertzmann](https://research.adobe.com/person/aaron-hertzmann/)
 
-[Non-linear Matrix Factorization with Gaussian Processes](https://dl.acm.org/doi/10.1145/1553374.1553452) ICML 2009 with [Raquel Urtasun](http://www.cs.toronto.edu/~urtasun/)
+* [Non-linear Matrix Factorization with Gaussian Processes](https://dl.acm.org/doi/10.1145/1553374.1553452) ICML 2009 with [Raquel Urtasun](http://www.cs.toronto.edu/~urtasun/)
 
-[Metrics for Probabilistic Geometries](https://dl.acm.org/doi/10.5555/3020751.3020834) with [Alessandra Tosi](https://www.robots.ox.ac.uk/~atosi/index.html), [
-‪Søren Hauberg‬](http://www2.compute.dtu.dk/~sohau/), [Alfredo Vellido](https://www.cs.upc.edu/~avellido/)
+* [Metrics for Probabilistic Geometries](https://dl.acm.org/doi/10.5555/3020751.3020834) with [Alessandra Tosi](https://www.robots.ox.ac.uk/~atosi/index.html), [‪Søren Hauberg‬](http://www2.compute.dtu.dk/~sohau/), [Alfredo Vellido](https://www.cs.upc.edu/~avellido/)
 
-[Bayesian Gaussian Process Latent Variable Model](http://proceedings.mlr.press/v9/titsias10a.html) AISTATS 2010 with [Michalis K. Titsias](http://www2.aueb.gr/users/mtitsias/)
+* [Bayesian Gaussian Process Latent Variable Model](http://proceedings.mlr.press/v9/titsias10a.html) AISTATS 2010 with [Michalis K. Titsias](http://www2.aueb.gr/users/mtitsias/)
 
-[Manifold Relevance Determination](https://dl.acm.org/doi/10.5555/3042573.3042644) ICML 2012 with [Andreas Damianou](https://adamian.github.io/), [Carl Henrik Ek](http://carlhenrik.com/), [Michalis K. Titsias](http://www2.aueb.gr/users/mtitsias/)
+* [Manifold Relevance Determination](https://dl.acm.org/doi/10.5555/3042573.3042644) ICML 2012 with [Andreas Damianou](https://adamian.github.io/), [Carl Henrik Ek](http://carlhenrik.com/), [Michalis K. Titsias](http://www2.aueb.gr/users/mtitsias/)
 
-[Latent variable modeling with random features](https://arxiv.org/abs/2006.11145) by [Gregory W. Gundersen](http://gregorygundersen.com/), [Michael Minyi Zhang](https://michaelzhang01.github.io/), [Barbara E. Engelhardt](https://www.cs.princeton.edu/~bee/)
+* [Latent variable modeling with random features](https://arxiv.org/abs/2006.11145) by [Gregory W. Gundersen](http://gregorygundersen.com/), [Michael Minyi Zhang](https://michaelzhang01.github.io/), [Barbara E. Engelhardt](https://www.cs.princeton.edu/~bee/)
 
 ### Session 1 
 
