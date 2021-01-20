@@ -31,7 +31,6 @@ categories:
 
 -->
 <h2 id="setup">Setup</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_notebooks/includes/notebook-setup.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_notebooks/includes/notebook-setup.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>First we download some libraries and files to support the notebook.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> urllib.request</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>urllib.request.urlretrieve(<span class="st">&#39;https://raw.githubusercontent.com/lawrennd/talks/gh-pages/mlai.py&#39;</span>,<span class="st">&#39;mlai.py&#39;</span>)</span></code></pre></div>
@@ -51,26 +50,6 @@ sns.set_palette('colorblind')}-->
 <p>The code is also available on github: <a href="https://github.com/sods/ods" class="uri">https://github.com/sods/ods</a></p>
 <p>Once <code>pods</code> is installed, it can be imported in the usual manner.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> pods</span></code></pre></div>
-<h2 id="gpy-a-gaussian-process-framework-in-python">GPy: A Gaussian Process Framework in Python</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gpy-software.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gpy-software.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>Gaussian processes are a flexible tool for non-parametric analysis with uncertainty. The GPy software was started in Sheffield to provide a easy to use interface to GPs. One which allowed the user to focus on the modelling rather than the mathematics.</p>
-<div class="figure">
-<div id="gpy-software-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/gp/gpy.png" width="70%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-<div id="gpy-software-magnify" class="magnify" onclick="magnifyFigure(&#39;gpy-software&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="gpy-software-caption" class="caption-frame">
-<p>Figure: GPy is a BSD licensed software code base for implementing Gaussian process models in Python. It is designed for teaching and modelling. We welcome contributions which can be made through the Github repository <a href="https://github.com/SheffieldML/GPy" class="uri">https://github.com/SheffieldML/GPy</a></p>
-</div>
-</div>
-<p>GPy is a BSD licensed software code base for implementing Gaussian process models in python. This allows GPs to be combined with a wide variety of software libraries.</p>
-<p>The software itself is available on <a href="https://github.com/SheffieldML/GPy">GitHub</a> and the team welcomes contributions.</p>
-<p>The aim for GPy is to be a probabilistic-style programming language, i.e. you specify the model rather than the algorithm. As well as a large range of covariance functions the software allows for non-Gaussian likelihoods, multivariate outputs, dimensionality reduction and approximations for larger data sets.</p>
-<p>The documentation for GPy can be found <a href="https://gpy.readthedocs.io/en/latest/">here</a>.</p>
 <h2 id="high-dimensional-data">High Dimensional Data</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/high-dimensional-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/high-dimensional-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <ul>
@@ -495,7 +474,7 @@ p(\mathbf{Y}|\mathbf{W}) = \prod_{i=1}^n\mathcal{N}\left(\mathbf{ y}_{i,
 \frac{\sigma^{-2}}{2} \text{tr}\left(\mathbf{Y}^\top \mathbf{Y}\right)
 +\frac{\sigma^{-4}}{2} \text{tr}\left(\mathbf{B}\mathbf{C}_x\mathbf{B}^\top\right) +
 \text{const}
-\]</span> where we also defined <span class="math inline">\(\mathbf{B}=\mathbf{Y}^\top\mathbf{W}\)</span>. Finally, notice that <span class="math inline">\(\text{tr}\left(\mathbf{Y}\mathbf{Y}^\top\right)=\text{tr}\left(\mathbf{Y}^\top\mathbf{Y}\right)\)</span> can be computed faster as the sum of all the elements of <span class="math inline">\(\mathbf{Y}\circ\mathbf{Y}\)</span>, where <span class="math inline">\(\circ\)</span> denotes the element-wise (or <a href="http://en.wikipedia.org/wiki/Hadamard_product_(matrices)">Hadamard</a> product.</p>
+\]</span> where we also defined <span class="math inline">\(\mathbf{B}=\mathbf{Y}^\top\mathbf{W}\)</span>. Finally, notice that <span class="math inline">\(\text{tr}\left(\mathbf{Y}\mathbf{Y}^\top\right)=\text{tr}\left(\mathbf{Y}^\top\mathbf{Y}\right)\)</span> can be computed faster as the sum of all the elements of <span class="math inline">\(\mathbf{Y}\circ\mathbf{Y}\)</span>, where <span class="math inline">\(\circ\)</span> denotes the element-wise (or <a href="http://en.wikipedia.org/wiki/Hadamard_product_(matrices)">Hadamard</a>) product.</p>
 <h2 id="difficulty-for-probabilistic-approaches">Difficulty for Probabilistic Approaches</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/non-linear-difficulty.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/non-linear-difficulty.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>The challenge for composition of probabilistic models is that you need to propagate a probability densities through non linear mappings. This allows you to create broader classes of probability density. Unfortunately it renders the resulting densities <em>intractable</em>.</p>
@@ -709,6 +688,26 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <li><p>Result is a non-linear probabilistic PCA.</p></li>
 <li><p><em>Optimise latent variables</em> rather than integrate them out.</p></li>
 </ul>
+<h2 id="gpy-a-gaussian-process-framework-in-python">GPy: A Gaussian Process Framework in Python</h2>
+<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gpy-software.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gpy-software.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
+<p>Gaussian processes are a flexible tool for non-parametric analysis with uncertainty. The GPy software was started in Sheffield to provide a easy to use interface to GPs. One which allowed the user to focus on the modelling rather than the mathematics.</p>
+<div class="figure">
+<div id="gpy-software-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/gp/gpy.png" width="70%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div id="gpy-software-magnify" class="magnify" onclick="magnifyFigure(&#39;gpy-software&#39;)">
+<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
+</div>
+<div id="gpy-software-caption" class="caption-frame">
+<p>Figure: GPy is a BSD licensed software code base for implementing Gaussian process models in Python. It is designed for teaching and modelling. We welcome contributions which can be made through the Github repository <a href="https://github.com/SheffieldML/GPy" class="uri">https://github.com/SheffieldML/GPy</a></p>
+</div>
+</div>
+<p>GPy is a BSD licensed software code base for implementing Gaussian process models in python. This allows GPs to be combined with a wide variety of software libraries.</p>
+<p>The software itself is available on <a href="https://github.com/SheffieldML/GPy">GitHub</a> and the team welcomes contributions.</p>
+<p>The aim for GPy is to be a probabilistic-style programming language, i.e. you specify the model rather than the algorithm. As well as a large range of covariance functions the software allows for non-Gaussian likelihoods, multivariate outputs, dimensionality reduction and approximations for larger data sets.</p>
+<p>The documentation for GPy can be found <a href="https://gpy.readthedocs.io/en/latest/">here</a>.</p>
 <h2 id="getting-started-and-downloading-data">Getting Started and Downloading Data</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
