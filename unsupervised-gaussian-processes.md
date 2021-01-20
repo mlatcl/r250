@@ -21,6 +21,10 @@ If you want to review some of the background then the following might also be us
 
 Here are some papers to choose from for the different sessions.
 
+[Local Distance Preservation in the GP-LVM through Back Constraints](https://dl.acm.org/doi/10.1145/1143844.1143909) with [Joaquin Quiñonero-Candela](https://quinonero.net/)
+
+[Gaussian Process Dynamical Models](https://dl.acm.org/doi/10.5555/2976248.2976429) by [Jack M. Wang](http://www.dgp.toronto.edu/~jmwang/) and [David J. Fleet](http://www.cs.toronto.edu/~fleet/) and [Aaron Hertzmann](https://research.adobe.com/person/aaron-hertzmann/)
+
 [Non-linear Matrix Factorization with Gaussian Processes](https://dl.acm.org/doi/10.1145/1553374.1553452) ICML 2009 with [Raquel Urtasun](http://www.cs.toronto.edu/~urtasun/)
 
 [Metrics for Probabilistic Geometries](https://dl.acm.org/doi/10.5555/3020751.3020834) with [Alessandra Tosi](https://www.robots.ox.ac.uk/~atosi/index.html), [
@@ -53,6 +57,11 @@ For the mini-project I recommend one of four tasks.
 
 1. Find an implementation of Bayesian GP-LVM and one of standard GP-LVM (for example in [GPy](https://github.com/SheffieldML/GPy). Explore different initialisation strategies. See how they compare for the Bayesian and non Bayesian approach. **Note**: for the Bayesian approach you will need an additional initialisation strategy around the variances of the posterior approximation for $\mathbf{X}$ so you might need several Bayesian GP-LVM comparisons. Explore the results for several different standard data sets. You could use simulated data and real data. You might want your exploration to be two stage. One where you keep covariance function parameters fixed, and one where you vary the covariance function parameters. 
 
-2. Fit a GP-LVM to a data set and visualise the Riemannian metric in the latent space using *magnification factors* (see also [this paper on the GTM](https://ieeexplore.ieee.org/document/607494)). Compare magnification factors for GP-LVM and Bayesian GP-LVM. 
+2. Compare a back constrained GP-LVM to a variational auto-encoder on high dimensional data sets with varying numbers of data points. Use objective methods to compare resulting visualisations. In what domains do the different methods perform best?
 
-3. [Harder]: Modify Bayesian GP-LVM code to perform non-linear matrix factorization in the manner suggested by Lawrence and Urtasun. Demonstrate on one of the data sets from the Lawrence and Urtasun paper.
+3. Implement dynamical variant of the GP-LVM using a time sensitive prior in the latent space. Find a MAP solution for the latent variables. 
+
+4. **Harder**: Fit a GP-LVM to a data set and visualise the Riemannian metric in the latent space using *magnification factors* (see also [this paper on the GTM](https://ieeexplore.ieee.org/document/607494)). Compare magnification factors for GP-LVM and Bayesian GP-LVM. 
+
+
+5. **Harder**: Modify Bayesian GP-LVM code to perform non-linear matrix factorization in the manner suggested by Lawrence and Urtasun. Demonstrate on one of the data sets from the Lawrence and Urtasun paper.
