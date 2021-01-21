@@ -1,5 +1,5 @@
 ---
-title: "R250: Unsupervised Learning with Gaussian Processes"
+title: "R250: Unsupervised Learning with Gaussian Processes II"
 venue: "Virtual (Zoom)"
 abstract: "<p>In this talk we give an introduction to Unsupervised Learning and Gaussian processes for students who are interested in working with Unsupervised GPs for the the R250 module.</p>"
 author:
@@ -12,9 +12,12 @@ author:
   orcid: 
 date: 2021-01-21
 published: 2021-01-21
+time: "11:00"
 week: 1
-reveal: 01-unsupervised-gaussian-processes.slides.html
-ipynb: 01-unsupervised-gaussian-processes.ipynb
+session: 2
+reveal: 01-02-unsupervised-gaussian-processes-II.slides.html
+ipynb: 01-02-unsupervised-gaussian-processes-II.ipynb
+youtube: "-p_RYMQyiAM"
 layout: lecture
 categories:
 - notes
@@ -50,365 +53,9 @@ sns.set_palette('colorblind')}-->
 <p>The code is also available on github: <a href="https://github.com/sods/ods" class="uri">https://github.com/sods/ods</a></p>
 <p>Once <code>pods</code> is installed, it can be imported in the usual manner.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> pods</span></code></pre></div>
-<h2 id="high-dimensional-data">High Dimensional Data</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/high-dimensional-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/high-dimensional-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>To introduce high dimensional data, we will first of all introduce a hand written digit from the U.S. Postal Service handwritten digit data set (originally collected from scanning enveolopes) and used in the first convolutional neural network paper <span class="citation" data-cites="LeCun:zip89">(Le Cun et al., 1989)</span>.</p>
-<p><span class="citation" data-cites="LeCun:zip89">Le Cun et al. (1989)</span> downscaled the images to <span class="math inline">\(16 \times 16\)</span>, here we use an image at the original scale, containing 64 rows and 57 columns. Since the pixels are binary, and the number of dimensions is 3,648, this space contains <span class="math inline">\(2^{3,648}\)</span> possible images. So this space contains a lot more than just one digit.</p>
-<h2 id="usps-samples">USPS Samples</h2>
-<p>If we sample from this space, taking each pixel independently from a probability which is given by the number of pixels which are ‘on’ in the original image, over the total number of pixels, we see images that look nothing like the original digit.</p>
-<div class="figure">
-<div id="dem-six-sample-figure" class="figure-frame">
-<table>
-<tr>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_six000.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_six001.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_six002.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div id="dem-six-sample-magnify" class="magnify" onclick="magnifyFigure(&#39;dem-six-sample&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="dem-six-sample-caption" class="caption-frame">
-<p>Figure: Even if we sample every nano second from now until the end of the universe we won’t see the original six again.</p>
-</div>
-</div>
-<p>Even if we sample every nanosecond from now until the end of the universe you won’t see the original six again.</p>
-<h2 id="simple-model-of-digit">Simple Model of Digit</h2>
-<p>So, an independent pixel model for this digit doesn’t seem sensible. The total space is enormous, and yet the space occupied by the type of data we’re interested in is relatively small.</p>
-<p>Consider a different type of model. One where we take a prototype six and we rotate it left and right to create new data.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">from</span> scipy.misc <span class="im">import</span> imrotate</span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>six_image <span class="op">=</span> mlai.load_pgm(<span class="st">&#39;br1561_6.3.pgm&#39;</span>, directory <span class="op">=</span><span class="st">&#39;../slides/diagrams/dimred&#39;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>six_image <span class="op">=</span> np.hstack([np.zeros((rows, <span class="dv">3</span>)), six_image, np.zeros((rows, <span class="dv">4</span>))])</span>
-<span id="cb8-3"><a href="#cb8-3"></a>dim_one <span class="op">=</span> np.asarray(six_image.shape)</span>
-<span id="cb8-4"><a href="#cb8-4"></a>angles <span class="op">=</span> <span class="bu">range</span>(<span class="dv">360</span>)</span>
-<span id="cb8-5"><a href="#cb8-5"></a>i <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a>Y <span class="op">=</span> np.zeros((<span class="bu">len</span>(angles), np.prod(dim_one)))</span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="cf">for</span> angle <span class="kw">in</span> angles:</span>
-<span id="cb8-8"><a href="#cb8-8"></a>    rot_image <span class="op">=</span> rotate(six_image, angle, mode<span class="op">=</span><span class="st">&#39;nearest&#39;</span>)</span>
-<span id="cb8-9"><a href="#cb8-9"></a>    dim_two <span class="op">=</span> np.asarray(rot_image.shape)</span>
-<span id="cb8-10"><a href="#cb8-10"></a>    start <span class="op">=</span> [<span class="bu">int</span>(<span class="bu">round</span>((dim_two[<span class="dv">0</span>] <span class="op">-</span> dim_one[<span class="dv">0</span>])<span class="op">/</span><span class="dv">2</span>)), <span class="bu">int</span>(<span class="bu">round</span>((dim_two[<span class="dv">1</span>] <span class="op">-</span> dim_one[<span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span>))]</span>
-<span id="cb8-11"><a href="#cb8-11"></a>    crop_image <span class="op">=</span> rot_image[start[<span class="dv">0</span>]<span class="op">+</span>np.array(<span class="bu">range</span>(dim_one[<span class="dv">0</span>])), :][:, start[<span class="dv">1</span>]<span class="op">+</span>np.array(<span class="bu">range</span>(dim_one[<span class="dv">1</span>]))]</span>
-<span id="cb8-12"><a href="#cb8-12"></a>    Y[i, :] <span class="op">=</span> crop_image.flatten()</span></code></pre></div>
-<div class="figure">
-<div id="dem-six-rotate-figure" class="figure-frame">
-<table>
-<tr>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_six_rotate001.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_six_rotate003.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_six_rotate005.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div id="dem-six-rotate-magnify" class="magnify" onclick="magnifyFigure(&#39;dem-six-rotate&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="dem-six-rotate-caption" class="caption-frame">
-<p>Figure: Rotate a prototype six to form a set of plausible sixes.</p>
-</div>
-</div>
-<div class="figure">
-<div id="dem-six-mainfold-print-figure" class="figure-frame">
-<table>
-<tr>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_manifold_print001.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-<td width="30%">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/dem_manifold_print002.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div id="dem-six-mainfold-print-magnify" class="magnify" onclick="magnifyFigure(&#39;dem-six-mainfold-print&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="dem-six-mainfold-print-caption" class="caption-frame">
-<p>Figure: The rotated sixes projected onto the first two principal components of the ‘rotated data set’. The data lives on a one dimensional manifold in the 3,648 dimensional space.</p>
-</div>
-</div>
-<h2 id="low-dimensional-manifolds">Low Dimensional Manifolds</h2>
-<p>Of course, in practice pure rotation of the image is too simple a model. Digits can undergo several distortions and retain their nature. For example, they can be scaled, they can go through translation, they can udnergo ‘thinning’. But, for data with ‘structure’ we expect fewer of these distortions than the dimension of the data. This means we expect data to live on a lower dimensonal manifold. This implies that we should deal with high dimensional data by looking for a lower dimensional (non-linear) embedding.</p>
-<h2 id="dimensionality-reduction">Dimensionality Reduction</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/dimensionality-reduction-intro.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/dimensionality-reduction-intro.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>Dimensionality reduction methods compress the data by replacing the original data with a reduced number of continuous variables. One way of thinking of these methods is to imagine a marionette.</p>
-<div class="figure">
-<div id="marionette-figure" class="figure-frame">
-<object class data="../slides/diagrams/ml/marionette.svg" width="40%" style=" ">
-</object>
-</div>
-<div id="marionette-magnify" class="magnify" onclick="magnifyFigure(&#39;marionette&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="marionette-caption" class="caption-frame">
-<p>Figure: Thinking of dimensionality reduction as a marionette. We observe the high dimensional pose of the puppet, <span class="math inline">\(\mathbf{ x}\)</span>, but the movement of the puppeteer’s hand, <span class="math inline">\(\mathbf{ z}\)</span> remains hidden to us. Dimensionality reduction aims to recover those hidden movements which generated the observations.</p>
-</div>
-</div>
-<p>The position of each body part of a marionette could be thought of as our data, <span class="math inline">\(\mathbf{ x}_i\)</span>. So, each data point consists of the 3-D co-ordinates of all the different body parts of the marionette. Let’s say there are 13 different body parts (2 each of feet, knees, hips, hands, elbows, shoulders, one head). Each body part has an x, y, z position in Cartesian coordinates. So that’s 39 numbers associated with each observation.</p>
-<p>The movement of these 39 parts is determined by the puppeteer via strings. Let’s assume it’s a very simple puppet, with just one stick to control it. The puppeteer can move the stick up and down, left and right. And they can twist it. This gives three parameters in the puppeteers control. This implies that the 39 variables we see moving are controlled by only 3 variables. These 3 variables are often called the hidden or <em>latent variables</em>.</p>
-<p>Dimensionality reduction assumes something similar for real world data. It assumes that the data we observe is generated from some lower dimensional underlying process. It then seeks to recover the values associated with this low dimensional process.</p>
-<h3 id="examples-in-social-sciences">Examples in Social Sciences</h3>
-<p>Dimensionality reduction techniques underpin a lot of psychological scoring tests such as IQ tests or personality tests. An IQ test can involve several hundred questions, potentially giving a rich, high dimensional, characterization of some aspects of your intelligence. It is then summarized by a single number. Similarly, the Myers-Briggs personality test involves answering questions about preferences which are reduced to a set of numbers reflecting personality.</p>
-<p>These tests are assuming that our intelligence is implicitly one-dimensional and that our personality is implicitly four dimensional. Other examples include political belief which is typically represented on a left to right scale. A one-dimensional distillation of an entire philosophy about how a country should be run. Our own leadership principles imply that our decisions have a fourteen-dimensional space underlying them. Each decision could be characterized by judging to what extent it embodies each of the principles.</p>
-<p>Political belief, personality, intelligence, leadership. None of these exist as a directly measurable quantity in the real world, rather they are inferred based on measurables. Dimensionality reduction is the process of allowing the computer to automatically find such underlying dimensions. This automatically allowing us to characterize each data point according to those explanatory variables. Each of these characteristics can be scored, and individuals can then be turned into vectors.</p>
-<p>This doesn’t only apply to individuals, in recent years work on language modeling has taken a similar approach to words. The <a href="https://arxiv.org/abs/1301.3781">word2vec</a> algorithm performed a dimensionality reduction on words, now you can take any word and map it to a latent space where similar words exhibit similar characteristics. A ‘personality space’ for words.</p>
-<h2 id="gaussian-variables-and-linear-dimensionality-reduction">Gaussian Variables and Linear Dimensionality Reduction</h2>
-<p>We will return to non-linear dimensionality reduction approaches shortly, but first we’re going to consider <em>linear</em> approaches to dimensionality reduction. To do so, we’ll first review some characteristics of the Gaussian density.</p>
-<h2 id="two-important-gaussian-properties">Two Important Gaussian Properties</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_ml/includes/univariate-gaussian-properties.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_ml/includes/univariate-gaussian-properties.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>The Gaussian density has many important properties, but for the moment we’ll review two of them.</p>
-<h2 id="sum-of-gaussians">Sum of Gaussians</h2>
-<p>If we assume that a variable, <span class="math inline">\(y_i\)</span>, is sampled from a Gaussian density,</p>
-<p><span class="math display">\[y_i \sim \mathcal{N}\left(\mu_i,\sigma_i^2\right)\]</span></p>
-<p>Then we can show that the sum of a set of variables, each drawn independently from such a density is also distributed as Gaussian. The mean of the resulting density is the sum of the means, and the variance is the sum of the variances,</p>
-<p><span class="math display">\[
-\sum_{i=1}^{n} y_i \sim \mathcal{N}\left(\sum_{i=1}^n\mu_i,\sum_{i=1}^n\sigma_i^2\right)
-\]</span></p>
-<p>Since we are very familiar with the Gaussian density and its properties, it is not immediately apparent how unusual this is. Most random variables, when you add them together, change the family of density they are drawn from. For example, the Gaussian is exceptional in this regard. Indeed, other random variables, if they are independently drawn and summed together tend to a Gaussian density. That is the <a href="https://en.wikipedia.org/wiki/Central_limit_theorem"><em>central limit theorem</em></a> which is a major justification for the use of a Gaussian density.</p>
-<h2 id="scaling-a-gaussian">Scaling a Gaussian</h2>
-<p>Less unusual is the <em>scaling</em> property of a Gaussian density. If a variable, <span class="math inline">\(y\)</span>, is sampled from a Gaussian density,</p>
-<p><span class="math display">\[y\sim \mathcal{N}\left(\mu,\sigma^2\right)\]</span> and we choose to scale that variable by a <em>deterministic</em> value, <span class="math inline">\(w\)</span>, then the <em>scaled variable</em> is distributed as</p>
-<p><span class="math display">\[wy\sim \mathcal{N}\left(w\mu,w^2 \sigma^2\right).\]</span> Unlike the summing properties, where adding two or more random variables independently sampled from a family of densitites typically brings the summed variable <em>outside</em> that family, scaling many densities leaves the distribution of that variable in the same <em>family</em> of densities. Indeed, many densities include a <em>scale</em> parameter (e.g. the <a href="https://en.wikipedia.org/wiki/Gamma_distribution">Gamma density</a>) which is purely for this purpose. In the Gaussian the standard deviation, <span class="math inline">\(\sigma\)</span>, is the scale parameter. To see why this makes sense, let’s consider, <span class="math display">\[z \sim \mathcal{N}\left(0,1\right),\]</span> then if we scale by <span class="math inline">\(\sigma\)</span> so we have, <span class="math inline">\(y=\sigma z\)</span>, we can write, <span class="math display">\[y=\sigma z \sim \mathcal{N}\left(0,\sigma^2\right)\]</span></p>
-<h1 id="linear-latent-variable-models">Linear Latent Variable Models</h1>
-<p>Let’s first of all review the properties of the multivariate Gaussian distribution that make linear Gaussian models easier to deal with. We’ll return to the, perhaps surprising, result on the parameters within the nonlinearity, <span class="math inline">\(\boldsymbol{ \theta}\)</span>, shortly.</p>
-<p>To work with linear Gaussian models, to find the marginal likelihood all you need to know is the following rules. If <span class="math display">\[
-\mathbf{ y}= \mathbf{W}\mathbf{ x}+ \boldsymbol{ \epsilon},
-\]</span> where <span class="math inline">\(\mathbf{ y}\)</span>, <span class="math inline">\(\mathbf{ x}\)</span> and <span class="math inline">\(\boldsymbol{ \epsilon}\)</span> are vectors and we assume that <span class="math inline">\(\mathbf{ x}\)</span> and <span class="math inline">\(\boldsymbol{ \epsilon}\)</span> are drawn from multivariate Gaussians, <span class="math display">\[
-\begin{align}
-\mathbf{ x}&amp; \sim \mathcal{N}\left(\boldsymbol{ \mu},\mathbf{C}\right)\\
-\boldsymbol{ \epsilon}&amp; \sim \mathcal{N}\left(\mathbf{0},\boldsymbol{ \Sigma}\right)
-\end{align}
-\]</span> then we know that <span class="math inline">\(\mathbf{ y}\)</span> is also drawn from a multivariate Gaussian with, <span class="math display">\[
-\mathbf{ y}\sim \mathcal{N}\left(\mathbf{W}\boldsymbol{ \mu},\mathbf{W}\mathbf{C}\mathbf{W}^\top + \boldsymbol{ \Sigma}\right).
-\]</span></p>
-<p>With appropriately defined covariance, <span class="math inline">\(\boldsymbol{ \Sigma}\)</span>, this is actually the marginal likelihood for Factor Analysis, or Probabilistic Principal Component Analysis <span class="citation" data-cites="Tipping:probpca99">(Tipping and Bishop, 1999a)</span>, because we integrated out the inputs (or <em>latent</em> variables they would be called in that case).</p>
-<h1 id="latent-variables">Latent Variables</h1>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/latent-variables.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/latent-variables.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>Latent means hidden, and hidden variables are simply <em>unobservable</em> variables. The idea of a latent variable is crucial to the concept of artificial intelligence, machine learning and experimental design. A latent variable could take many forms. We might observe a man walking along a road with a large bag of clothes and we might <em>infer</em> that the man is walking to the laundrette. Our observations are a highly complex data space, the response in our eyes is processed through our visual cortex, the combination of the individual’s limb movememnts and the direction they are walking in all conflate in our heads to cause us to infer that (perhaps) the individual is going to the laundrette. We don’t <em>know</em> that the man is walking to the laundrette, but we have a model of the world that suggests that it’s a likely outcome for the very complex data. In some ways the latent variable can be seen as a <em>compression</em> of this very complex scene. If I were writing a book, I might write that “A man tripped over whilst walking to the laundrette”. In the reader’s mind an image of a man, perhaps laden with dirty clothes, may occur. All these ideas come from our expectations of the world around us. We can make further inference about the man, some of it perhaps plausible others less so. The man may be going to the laundrette because his washing machine is broken, or because he doesn’t have a large enough flat to have a washing machine, or because he’s carrying a duvet, or because he doesn’t like ironing. All of these may <em>increase</em> in probability given our observation, but they are still <em>latent</em> variables. Unless we follow the man back to his appartment, or start making other enquirires about the man, we don’t know the true answer.</p>
-<p>It’s clear that to do inference about any complex system we <em>must</em> include latent variables. Latent variables are extremely powerful. In robotics, they are used to represent the <em>state</em> of the robot. The state of the robot may include its position (in x, y coordinates) its speed, its direction of facing. How are <em>these</em> variables unknown to the robot? Well the robot only posesses <em>sensors</em>, it can make observations of the nearest object in a certain direction, and it may have a map of its environment. If we represent the state of the robot as its position on a map, it may be uncertain of that position. If you go walking or running in the hills around Sheffield, you can take a very high quality ordnance survey map with you. However, unless you are a really excellent orienteer, when you are far from any given landmark, you will probably be <em>uncertain</em> about your true position on the map. These states are also latent variables.</p>
-<p>In statistical analysis of experiments you try to control for each aspect of the experiment, in particular by <em>randomization</em>. So if I’m interested in the ability of a particular fertilizer to improve the yield of a particular plant I may design an experiment where I apply the fertilizer to some plants (the treatment group) and withold the fertilizer from others (the control group). I then test to see whether the yield from the treatment group is better (or worse) than the control group. I may find that I have an excellent yield for the treatment group. However, what if I’d (unknowlingly) planted all my treatment plants in a sunny part of the field, and all the control plants in a shady part of the field. That would also be a latent variable, in this case known as a <em>confounder</em>. In statistical experimental design <em>randomization</em> is used to attempt to eliminate the correlated effects of these confounders: you aim to ensure that if these confounders <em>do</em> exist their effects are not correlated with treatment and contorl. This is known as a <a href="http://en.wikipedia.org/wiki/Randomized_controlled_trial">randomized control trial</a>.</p>
-<p>Greek philosophers worried a great deal about what was knowable and what was unknowable. Adherents of <a href="http://en.wikipedia.org/wiki/Skepticism">philosophical Skeptisism</a> were inspired by the idea that since your senses sometimes give you contradictory information, they cannot be trusted, and in extreme cases they chose to <em>ignore</em> their senses. This is an acknowledgement that very often the true state of the world cannot be known with precision. Unfortunately, these philosophers didn’t have a good understanding of probability, so they were unable to encapsulate their ideas through a <em>degree</em> of belief.</p>
-<p>We often use language to express the compression of a complex behavior or patterns in a simpler way, for example we talk about motives as a useful distallation for a perhaps very complex patter of behavior. In physics we use principles of causation and simple laws to describe the world around us. Such motives or underlying principles are difficult to observe directly, our conclusions about them emerge over a period of time by observing indirect consequences of the latent variables.</p>
-<p>Epistemic uncertainty allows us to deal with these worries by associating our degree of belief about the state of the world with a probaiblity distribution. This core idea underpins state space modelling, probabilistic graphical models and the wider field of latent variable modelling. In this session we are going to explore the idea in a simple linear system and see how it relates to <em>factor analysis</em> and <em>principal component analysis</em>.</p>
-<h1 id="your-personality">Your Personality</h1>
-<p>At the beginning of the 20th century there was a great deal of interest amoungst psychologists in formalizing patterns of thought. The approach they used became known as factor analysis. The principle is that we observe a potentially high dimensional vector of characteristics about an individual. To formalize this, social scientists designed questionaires. We can envisage many questions that we may ask, but the assumption is that underlying these questions there are only a few traits that dictate the behavior. These models are known as latent trait models and the analysis is sometimes known as factor analysis. The idea is that there are a few characteristic traits that we are looking to discern. These traits or factors can be extracted by assimilating the high dimensional characteristics of the individual into a few latent factors.</p>
-<h2 id="factor-analysis-model">Factor Analysis Model</h2>
-<p>This causes us to consider a model as follows, if we are given a high dimensional vector of features (perhaps questionaire answers) associated with an individual, <span class="math inline">\(\mathbf{ y}\)</span>, we assume that these factors are actually generated from a low dimensional vector latent traits, or latent variables, which determine the personality. <span class="math display">\[
-\mathbf{ y}= \mathbf{f}(\mathbf{ z}) + \boldsymbol{ \epsilon},
-\]</span> where <span class="math inline">\(\mathbf{f}(\mathbf{ z})\)</span> is a <em>vector valued</em> function that is dependent on the latent traits and <span class="math inline">\(\boldsymbol{ \epsilon}\)</span> is some corrupting noise. For simplicity, we assume that the function is given by a <em>linear</em> relationship, <span class="math display">\[
-\mathbf{f}(\mathbf{ z}) = \mathbf{W}\mathbf{ z}
-\]</span> where we have introduced a matrix <span class="math inline">\(\mathbf{W}\)</span> that is sometimes referred to as the <em>factor loadings</em> but we also immediately see is related to our <em>multivariate linear regression</em> models from the . That is because our vector valued function is of the form</p>
-<p><span class="math display">\[
-\mathbf{f}(\mathbf{ z}) =
-\begin{bmatrix} f_1(\mathbf{ z}) \\ f_2(\mathbf{ z}) \\ \vdots \\
-f_p(\mathbf{ z})\end{bmatrix}
-\]</span> where there are <span class="math inline">\(p\)</span> features associated with the individual. If we consider any of these functions individually we have a prediction function that looks like a regression model, <span class="math display">\[
-f_j(\mathbf{ z}) =
-\mathbf{ w}_{j, :}^\top \mathbf{ z},
-\]</span> for each element of the vector valued function, where <span class="math inline">\(\mathbf{ w}_{:, j}\)</span> is the <span class="math inline">\(j\)</span>th column of the matrix <span class="math inline">\(\mathbf{W}\)</span>. In that context each column of <span class="math inline">\(\mathbf{W}\)</span> is a vector of <em>regression weights</em>. This is a multiple input and multiple output regression. Our inputs (or covariates) have dimensionality greater than 1 and our outputs (or response variables) also have dimensionality greater than one. Just as in a standard regression, we are assuming that we don’t observe the function directly (note that this <em>also</em> makes the function a <em>type</em> of latent variable), but we observe some corrupted variant of the function, where the corruption is given by <span class="math inline">\(\boldsymbol{ \epsilon}\)</span>. Just as in linear regression we can assume that this corruption is given by Gaussian noise, where the noise for the <span class="math inline">\(j\)</span>th element of <span class="math inline">\(\mathbf{ y}\)</span> is by, <span class="math display">\[
-\epsilon_j \sim \mathcal{N}\left(0,\sigma^2_j\right).
-\]</span> Of course, just as in a regression problem we also need to make an assumption across the individual data points to form our full likelihood. Our data set now consists of many observations of <span class="math inline">\(\mathbf{ y}\)</span> for diffetent individuals. We store these observations in a <em>design matrix</em>, <span class="math inline">\(\mathbf{Y}\)</span>, where each <em>row</em> of <span class="math inline">\(\mathbf{Y}\)</span> contains the observation for one individual. To emphasize that <span class="math inline">\(\mathbf{ y}\)</span> is a vector derived from a row of <span class="math inline">\(\mathbf{Y}\)</span> we represent the observation of the features associated with the <span class="math inline">\(i\)</span>th individual by <span class="math inline">\(\mathbf{ y}_{i, :}\)</span>, and place each individual in our data matrix,</p>
-<p><span class="math display">\[
-\mathbf{Y}
-= \begin{bmatrix} \mathbf{ y}_{1, :}^\top \\ \mathbf{ y}_{2, :}^\top \\ \vdots \\
-\mathbf{ y}_{n, :}^\top\end{bmatrix},
-\]</span> where we have <span class="math inline">\(n\)</span> data points. Our data matrix therefore has <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> columns. The point to notice here is that each data obsesrvation appears as a row vector in the design matrix (thus the transpose operation inside the brackets). Our prediction functions are now actually a <em>matrix value</em> function, <span class="math display">\[
-\mathbf{F} = \mathbf{Z}\mathbf{W}^\top,
-\]</span> where for each matrix the data points are in the rows and the data features are in the columns. This implies that if we have <span class="math inline">\(q\)</span> inputs to the function we have <span class="math inline">\(\mathbf{F}\in \Re^{n\times p}\)</span>, <span class="math inline">\(\mathbf{W}\in \Re^{p \times q}\)</span> and <span class="math inline">\(\mathbf{Z}\in \Re^{n\times q}\)</span>.</p>
-<h3 id="exercise-1">Exercise 1</h3>
-<p>Show that, given all the definitions above, if, <span class="math display">\[
-\mathbf{F} = \mathbf{Z}\mathbf{W}^\top
-\]</span> and the elements of the vector valued function <span class="math inline">\(\mathbf{F}\)</span> are given by <span class="math display">\[
-f_{i, j} = f_j(\mathbf{ z}_{i, :}),
-\]</span> where <span class="math inline">\(\mathbf{ z}_{i, :}\)</span> is the <span class="math inline">\(i\)</span>th row of the latent variables, <span class="math inline">\(\mathbf{Z}\)</span>, then show that <span class="math display">\[
-f_j(\mathbf{ z}_{i, :}) = \mathbf{ w}_{j, :}^\top
-\mathbf{ z}_{i, :}
-\]</span></p>
-<h2 id="latent-variables-vs-linear-regression">Latent Variables vs Linear Regression</h2>
-<p>The difference between this model and a multiple output regression is that in the regression case we are provided with the covariates <span class="math inline">\(\mathbf{Z}\)</span>, here they are <em>latent variables</em>. These variables are unknown. Just as we have done in the past for unknowns, we now treat them with a probability distribution. In <em>factor analysis</em> we assume that the latent variables have a Gaussian density which is independent across both across the latent variables associated with the different data points, and across those associated with different data features, so we have, <span class="math display">\[
-x_{i,j} \sim
-\mathcal{N}\left(0,1\right),
-\]</span> and we can write the density governing the latent variable associated with a single point as, <span class="math display">\[
-\mathbf{ z}_{i, :} \sim \mathcal{N}\left(\mathbf{0},\mathbf{I}\right).
-\]</span> If we consider the values of the function for the <span class="math inline">\(i\)</span>th data point as <span class="math display">\[
-\mathbf{f}_{i, :} =
-\mathbf{f}(\mathbf{ z}_{i, :}) = \mathbf{W}\mathbf{ z}_{i, :} 
-\]</span> then we can use the rules for multivariate Gaussian relationships to write that <span class="math display">\[
-\mathbf{f}_{i, :} \sim \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top\right)
-\]</span> which implies that the distribution for <span class="math inline">\(\mathbf{ y}_{i, :}\)</span> is given by <span class="math display">\[
-\mathbf{ y}_{i, :} = \sim \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top + \boldsymbol{\Sigma}\right)
-\]</span> where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> the covariance of the noise variable, <span class="math inline">\(\epsilon_{i, :}\)</span> which for factor analysis is a diagonal matrix (because we have assumed that the noise was <em>independent</em> across the features), <span class="math display">\[
-\boldsymbol{\Sigma} = \begin{bmatrix}\sigma^2_{1} &amp; 0 &amp; 0 &amp; 0\\
-0 &amp; \sigma^2_{2} &amp; 0 &amp; 0\\
-                                     0 &amp; 0 &amp; \ddots &amp;
-0\\
-                                     0 &amp; 0 &amp; 0 &amp; \sigma^2_p\end{bmatrix}.
-\]</span> For completeness, we could also add in a <em>mean</em> for the data vector <span class="math inline">\(\boldsymbol{ \mu}\)</span>, <span class="math display">\[
-\mathbf{ y}_{i, :} = \mathbf{W}\mathbf{ z}_{i, :} +
-\boldsymbol{ \mu}+ \boldsymbol{ \epsilon}_{i, :}
-\]</span> which would give our marginal distribution for <span class="math inline">\(\mathbf{ y}_{i, :}\)</span> a mean <span class="math inline">\(\boldsymbol{ \mu}\)</span>. However, the maximum likelihood solution for <span class="math inline">\(\boldsymbol{ \mu}\)</span> turns out to equal the empirical mean of the data, <span class="math display">\[
-\boldsymbol{ \mu}= \frac{1}{n} \sum_{i=1}^n
-\mathbf{ y}_{i, :},
-\]</span> <em>regardless</em> of the form of the covariance, <span class="math inline">\(\mathbf{C}= \mathbf{W}\mathbf{W}^\top + \boldsymbol{\Sigma}\)</span>. As a result it is very common to simply preprocess the data and ensure it is zero mean. We will follow that convention for this session.</p>
-<p>The prior density over latent variables is independent, and the likelihood is independent, that means that the marginal likelihood here is also independent over the data points. Factor analysis was developed mainly in psychology and the social sciences for understanding personality and intelligence. <a href="http://en.wikipedia.org/wiki/Charles_Spearman">Charles Spearman</a> was concerned with the measurements of “the abilities of man” and is credited with the earliest version of factor analysis.</p>
-<h1 id="principal-component-analysis">Principal Component Analysis</h1>
-<p>In 1933 <a href="http://en.wikipedia.org/wiki/Harold_Hotelling">Harold Hotelling</a> published on <em>principal component analysis</em> the first mention of this approach <span class="citation" data-cites="Hotelling:analysis33">(Hotelling, 1933)</span>. Hotelling’s inspiration was to provide mathematical foundation for factor analysis methods that were by then widely used within psychology and the social sciences. His model was a factor analysis model, but he considered the noiseless ‘limit’ of the model. In other words he took <span class="math inline">\(\sigma^2_i \rightarrow 0\)</span> so that he had</p>
-<p><span class="math display">\[
-\mathbf{ y}_{i, :} \sim \lim_{\sigma^2 \rightarrow 0} \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right).
-\]</span> The paper had two unfortunate effects. Firstly, the resulting model is no longer valid probablistically, because the covariance of this Gaussian is ‘degenerate’. Because <span class="math inline">\(\mathbf{W}\mathbf{W}^\top\)</span> has rank of at most <span class="math inline">\(q\)</span> where <span class="math inline">\(q&lt;p\)</span> (due to the dimensionality reduction) the determinant of the covariance is zero, meaning the inverse doesn’t exist so the density, <span class="math display">\[
-p(\mathbf{ y}_{i, :}|\mathbf{W}) =
-\lim_{\sigma^2 \rightarrow 0} \frac{1}{(2\pi)^\frac{p}{2}
-|\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}|^{\frac{1}{2}}}
-\exp\left(-\frac{1}{2}\mathbf{ y}_{i, :}\left[\mathbf{W}\mathbf{W}^\top+ \sigma^2
-\mathbf{I}\right]^{-1}\mathbf{ y}_{i, :}\right),
-\]</span> is <em>not</em> valid for <span class="math inline">\(q&lt;p\)</span> (where <span class="math inline">\(\mathbf{W}\in \Re^{p\times q}\)</span>). This mathematical consequence is a probability density which has no ‘support’ in large regions of the space for <span class="math inline">\(\mathbf{ y}_{i, :}\)</span>. There are regions for which the probability of <span class="math inline">\(\mathbf{ y}_{i, :}\)</span> is zero. These are any regions that lie off the hyperplane defined by mapping from <span class="math inline">\(\mathbf{ z}\)</span> to <span class="math inline">\(\mathbf{ y}\)</span> with the matrix <span class="math inline">\(\mathbf{W}\)</span>. In factor analysis the noise corruption, <span class="math inline">\(\boldsymbol{ \epsilon}\)</span>, allows for points to be found away from the hyperplane. In Hotelling’s PCA the noise variance is zero, so there is only support for points that fall precisely on the hyperplane. Secondly, Hotelling explicity chose to rename factor analysis as principal component analysis, arguing that the factors social scientist sought were different in nature to the concept of a mathematical factor. This was unfortunate because the factor loadings, <span class="math inline">\(\mathbf{W}\)</span> can also be seen as factors in the mathematical sense because the model Hotelling defined is a Gaussian model with covariance given by <span class="math inline">\(\mathbf{C}= \mathbf{W}\mathbf{W}^\top\)</span> so <span class="math inline">\(\mathbf{W}\)</span> is a <em>factor</em> of the covariance in the mathematical sense, as well as a factor loading.</p>
-<p>However, the paper had one great advantage over standard approaches to factor analysis. Despite the fact that the model was a special case that is subsumed by the more general approach of factor analysis it is this special case that leads to a particular algorithm, namely that the factor loadings (or principal components as Hotelling referred to them) are given by an <em>eigenvalue decomposition</em> of the empirical covariance matrix.</p>
-<h2 id="computation-of-the-marginal-likelihood">Computation of the Marginal Likelihood</h2>
-<p><span class="math display">\[
-\mathbf{ y}_{i,:}=\mathbf{W}\mathbf{ z}_{i,:}+\boldsymbol{ \epsilon}_{i,:},\quad \mathbf{ z}_{i,:} \sim \mathcal{N}\left(\mathbf{0},\mathbf{I}\right), \quad \boldsymbol{ \epsilon}_{i,:} \sim \mathcal{N}\left(\mathbf{0},\sigma^{2}\mathbf{I}\right)
-\]</span></p>
-<p><span class="math display">\[
-\mathbf{W}\mathbf{ z}_{i,:} \sim \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top\right)
-\]</span></p>
-<p><span class="math display">\[
-\mathbf{W}\mathbf{ z}_{i, :} + \boldsymbol{ \epsilon}_{i, :} \sim \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right)
-\]</span></p>
-<p><strong>Probabilistic PCA Max. Likelihood Soln</strong> (<span class="citation" data-cites="Tipping:probpca99">Tipping and Bishop (1999a)</span>)</p>
-<div class="figure">
-<div id="ppca-graph-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/ppca_graph.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-<div id="ppca-graph-magnify" class="magnify" onclick="magnifyFigure(&#39;ppca-graph&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="ppca-graph-caption" class="caption-frame">
-<p>Figure: Graphical model representing probabilistic PCA.</p>
-</div>
-</div>
-<p><span class="math display">\[p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i, :}|\mathbf{0},\mathbf{W}\mathbf{W}^{\top}+\sigma^{2}\mathbf{I}\right)\]</span></p>
-<h2 id="eigenvalue-decomposition">Eigenvalue Decomposition</h2>
-<p>Eigenvalue problems are widespreads in physics and mathematics, they are often written as a matrix/vector equation but we prefer to write them as a full matrix equation. In an eigenvalue problem you are looking to find a matrix of eigenvectors, <span class="math inline">\(\mathbf{U}\)</span> and a <em>diagonal</em> matrix of eigenvalues, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> that satisfy the <em>matrix</em> equation <span class="math display">\[
-\mathbf{A}\mathbf{U} = \mathbf{U}\boldsymbol{\Lambda}.
-\]</span> where <span class="math inline">\(\mathbf{A}\)</span> is your matrix of interest. This equation is not trivially solvable through matrix inverse because matrix multiplication is not <a href="http://en.wikipedia.org/wiki/Commutative_property">commutative</a>, so premultiplying by <span class="math inline">\(\mathbf{U}^{-1}\)</span> gives <span class="math display">\[
-\mathbf{U}^{-1}\mathbf{A}\mathbf{U}
-= \boldsymbol{\Lambda}, 
-\]</span> where we remember that <span class="math inline">\(\boldsymbol{\Lambda}\)</span> is a <em>diagonal</em> matrix, so the eigenvectors can be used to <em>diagonalise</em> the matrix. When performing the eigendecomposition on a Gaussian covariances, diagonalisation is very important because it returns the covariance to a form where there is no correlation between points.</p>
-<h2 id="positive-definite">Positive Definite</h2>
-<p>We are interested in the case where <span class="math inline">\(\mathbf{A}\)</span> is a covariance matrix, which implies it is <em>positive definite</em>. A positive definite matrix is one for which the inner product, <span class="math display">\[
-\mathbf{ w}^\top \mathbf{C}\mathbf{ w}
-\]</span> is positive for <em>all</em> values of the vector <span class="math inline">\(\mathbf{ w}\)</span> other than the zero vector. One way of creating a positive definite matrix is to assume that the symmetric and positive definite matrix <span class="math inline">\(\mathbf{C}\in \Re^{p\times p}\)</span> is factorised into, <span class="math inline">\(\mathbf{A}in \Re^{p\times p}\)</span>, a <em>full rank</em> matrix, so that <span class="math display">\[
-\mathbf{C}= \mathbf{A}^\top
-\mathbf{A}.
-\]</span> This ensures that <span class="math inline">\(\mathbf{C}\)</span> must be positive definite because <span class="math display">\[
-\mathbf{ w}^\top \mathbf{C}\mathbf{ w}=\mathbf{ w}^\top
-\mathbf{A}^\top\mathbf{A}\mathbf{ w}
-\]</span> and if we now define a new <em>vector</em> <span class="math inline">\(\mathbf{b}\)</span> as <span class="math display">\[
-\mathbf{b} = \mathbf{A}\mathbf{ w}
-\]</span> we can now rewrite as <span class="math display">\[
-\mathbf{ w}^\top \mathbf{C}\mathbf{ w}= \mathbf{b}^\top\mathbf{b} = \sum_{i}
-b_i^2
-\]</span> which, since it is a sum of squares, is positive or zero. The constraint that <span class="math inline">\(\mathbf{A}\)</span> must be <em>full rank</em> ensures that there is no vector <span class="math inline">\(\mathbf{ w}\)</span>, other than the zero vector, which causes the vector <span class="math inline">\(\mathbf{b}\)</span> to be all zeros.</p>
-<h3 id="exercise-1-1">Exercise 1</h3>
-<p>If <span class="math inline">\(\mathbf{C}=\mathbf{A}^\top \mathbf{A}\)</span> then express <span class="math inline">\(c_{i,j}\)</span>, the value of the element at the <span class="math inline">\(i\)</span>th row and the <span class="math inline">\(j\)</span>th column of <span class="math inline">\(\mathbf{C}\)</span>, in terms of the columns of <span class="math inline">\(\mathbf{A}\)</span>. Use this to show that (i) the matrix is symmetric and (ii) the matrix has positive elements along its diagonal.</p>
-<h2 id="eigenvectors-of-a-symmetric-matric">Eigenvectors of a Symmetric Matric</h2>
-<p>Symmetric matrices have <em>orthonormal</em> eigenvectors. This means that <span class="math inline">\(\mathbf{U}\)</span> is an <a href="http://en.wikipedia.org/wiki/Orthogonal_matrix">orthogonal matrix</a>, <span class="math inline">\(\mathbf{U}^\top\mathbf{U} = \mathbf{I}\)</span>. This implies that <span class="math inline">\(\mathbf{u}_{:, i} ^\top \mathbf{u}_{:, j}\)</span> is equal to 0 if <span class="math inline">\(i\neq j\)</span> and 1 if <span class="math inline">\(i=j\)</span>.</p>
-<h2 id="principal-component-analysis-1">Principal Component Analysis</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/principal-component-analysis.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/principal-component-analysis.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<ul>
-<li><p>PCA (<span class="citation" data-cites="Hotelling:analysis33">Hotelling (1933)</span>) is a linear embedding.</p></li>
-<li><p>Today its presented as:</p>
-<ul>
-<li>Rotate to find ‘directions’ in data with maximal variance.</li>
-<li>How do we find these directions?</li>
-</ul></li>
-<li><p>Algorithmically we do this by diagonalizing the sample covariance matrix <span class="math display">\[
-\mathbf{S}=\frac{1}{n}\sum_{i=1}^n\left(\mathbf{ y}_{i, :}-\boldsymbol{ \mu}\right)\left(\mathbf{ y}_{i, :} - \boldsymbol{ \mu}\right)^\top
-\]</span></p></li>
-<li><p>Find directions in the data, <span class="math inline">\(\mathbf{ z}= \mathbf{U}\mathbf{ y}\)</span>, for which variance is maximized.</p></li>
-<li><p>Solution is found via constrained optimisation (which uses <a href="https://en.wikipedia.org/wiki/Lagrange_multiplier">Lagrange multipliers</a>): <span class="math display">\[
-L\left(\mathbf{u}_{1},\lambda_{1}\right)=\mathbf{u}_{1}^{\top}\mathbf{S}\mathbf{u}_{1}+\lambda_{1}\left(1-\mathbf{u}_{1}^{\top}\mathbf{u}_{1}\right)
-\]</span></p></li>
-<li><p>Gradient with respect to <span class="math inline">\(\mathbf{u}_{1}\)</span> <span class="math display">\[\frac{\text{d}L\left(\mathbf{u}_{1},\lambda_{1}\right)}{\text{d}\mathbf{u}_{1}}=2\mathbf{S}\mathbf{u}_{1}-2\lambda_{1}\mathbf{u}_{1}\]</span> rearrange to form <span class="math display">\[\mathbf{S}\mathbf{u}_{1}=\lambda_{1}\mathbf{u}_{1}.\]</span> Which is known as an <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors"><em>eigenvalue problem</em></a>.</p></li>
-<li><p>Further directions that are <em>orthogonal</em> to the first can also be shown to be eigenvectors of the covariance.</p></li>
-<li><p>Represent data, <span class="math inline">\(\mathbf{Y}\)</span>, with a lower dimensional set of latent variables <span class="math inline">\(\mathbf{Z}\)</span>.</p></li>
-<li><p>Assume a linear relationship of the form <span class="math display">\[
-\mathbf{ y}_{i,:}=\mathbf{W}\mathbf{ z}_{i,:}+\boldsymbol{ \epsilon}_{i,:},
-\]</span> where <span class="math display">\[
-\boldsymbol{ \epsilon}_{i,:} \sim \mathcal{N}\left(\mathbf{0},\sigma^2\mathbf{I}\right)
-\]</span></p></li>
-</ul>
-<p><strong>Probabilistic PCA</strong></p>
-<table>
-<tr>
-<td width>
-<ul>
-<li>Define <em>linear-Gaussian relationship</em> between latent variables and data.</li>
-<li><strong>Standard</strong> Latent variable approach:
-<ul>
-<li>Define Gaussian prior over <em>latent space</em>, <span class="math inline">\(\mathbf{Z}\)</span>.</li>
-</ul></li>
-<li>Integrate out <em>latent variables</em>.
-</td>
-<td width="">
-<div class="figure">
-<div id="ppca-graph-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/ppca_graph.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-<div id="ppca-graph-magnify" class="magnify" onclick="magnifyFigure(&#39;ppca-graph&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="ppca-graph-caption" class="caption-frame">
-<p>Figure: Graphical model representing probabilistic PCA.</p>
-</div>
-</div></li>
-</ul>
-<p><span class="math display">\[
-p\left(\mathbf{Y}|\mathbf{Z},\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{W}\mathbf{ z}_{i,:},\sigma^2\mathbf{I}\right)
-\]</span></p>
-<p><span class="math display">\[
-p\left(\mathbf{Z}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ z}_{i,:}|\mathbf{0},\mathbf{I}\right)
-\]</span></p>
-<span class="math display">\[
-p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{0},\mathbf{W}\mathbf{W}^{\top}+\sigma^{2}\mathbf{I}\right)
-\]</span>
-</td>
-</tr>
-</table>
 <h1 id="probabilistic-pca">Probabilistic PCA</h1>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/probabilistic-pca.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/probabilistic-pca.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>In 1997 <a href="http://research.microsoft.com/pubs/67218/bishop-ppca-jrss.pdf">Tipping and Bishop</a> <span class="citation" data-cites="Tipping:pca97">(Tipping and Bishop, 1999b)</span> and <a href="https://www.cs.nyu.edu/~roweis/papers/empca.pdf">Roweis</a> <span class="citation" data-cites="Roweis:SPCA97">(Roweis, n.d.)</span> independently revisited Hotelling’s model and considered the case where the noise variance was finite, but <em>shared</em> across all output dimensons. Their model can be thought of as a factor analysis where <span class="math display">\[
+<p>In 1997 <a href="http://research.microsoft.com/pubs/67218/bishop-ppca-jrss.pdf">Tipping and Bishop</a> <span class="citation" data-cites="Tipping:pca97">(Tipping and Bishop, 1999a)</span> and <a href="https://www.cs.nyu.edu/~roweis/papers/empca.pdf">Roweis</a> <span class="citation" data-cites="Roweis:SPCA97">(Roweis, n.d.)</span> independently revisited Hotelling’s model and considered the case where the noise variance was finite, but <em>shared</em> across all output dimensons. Their model can be thought of as a factor analysis where <span class="math display">\[
 \boldsymbol{\Sigma} = \sigma^2 \mathbf{I}.
 \]</span> This leads to a marginal likelihood of the form <span class="math display">\[
 p(\mathbf{Y}|\mathbf{W}, \sigma^2)
@@ -423,21 +70,21 @@ p(\mathbf{Y}|\mathbf{W}, \sigma^2)
 \]</span> where <span class="math inline">\(\sigma^2\)</span> is the noise variance. Note that if <span class="math inline">\(\sigma^2\)</span> is larger than any particular eigenvalue, then that eigenvalue (along with its corresponding eigenvector) is <em>discarded</em> from the solution.</p>
 <h2 id="python-implementation-of-probabilistic-pca">Python Implementation of Probabilistic PCA</h2>
 <p>We will now implement this algorithm in python.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># probabilistic PCA algorithm</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">def</span> ppca(Y, q):</span>
-<span id="cb10-3"><a href="#cb10-3"></a>    <span class="co"># remove mean</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>    Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb10-5"><a href="#cb10-5"></a></span>
-<span id="cb10-6"><a href="#cb10-6"></a>    <span class="co"># Comute covariance</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>    S <span class="op">=</span> np.dot(Y_cent.T, Y_cent)<span class="op">/</span>Y.shape[<span class="dv">0</span>]</span>
-<span id="cb10-8"><a href="#cb10-8"></a>    lambd, U <span class="op">=</span> np.linalg.eig(S)</span>
-<span id="cb10-9"><a href="#cb10-9"></a></span>
-<span id="cb10-10"><a href="#cb10-10"></a>    <span class="co"># Choose number of eigenvectors</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a>    sigma2 <span class="op">=</span> np.<span class="bu">sum</span>(lambd[q:])<span class="op">/</span>(Y.shape[<span class="dv">1</span>]<span class="op">-</span>q)</span>
-<span id="cb10-12"><a href="#cb10-12"></a>    l <span class="op">=</span> np.sqrt(lambd[:q]<span class="op">-</span>sigma2)</span>
-<span id="cb10-13"><a href="#cb10-13"></a>    W <span class="op">=</span> U[:, :q]<span class="op">*</span>l[<span class="va">None</span>, :]</span>
-<span id="cb10-14"><a href="#cb10-14"></a>    <span class="cf">return</span> W, sigma2</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># probabilistic PCA algorithm</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">def</span> ppca(Y, q):</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="co"># remove mean</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="co"># Comute covariance</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    S <span class="op">=</span> np.dot(Y_cent.T, Y_cent)<span class="op">/</span>Y.shape[<span class="dv">0</span>]</span>
+<span id="cb8-8"><a href="#cb8-8"></a>    lambd, U <span class="op">=</span> np.linalg.eig(S)</span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a>    <span class="co"># Choose number of eigenvectors</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>    sigma2 <span class="op">=</span> np.<span class="bu">sum</span>(lambd[q:])<span class="op">/</span>(Y.shape[<span class="dv">1</span>]<span class="op">-</span>q)</span>
+<span id="cb8-12"><a href="#cb8-12"></a>    l <span class="op">=</span> np.sqrt(lambd[:q]<span class="op">-</span>sigma2)</span>
+<span id="cb8-13"><a href="#cb8-13"></a>    W <span class="op">=</span> U[:, :q]<span class="op">*</span>l[<span class="va">None</span>, :]</span>
+<span id="cb8-14"><a href="#cb8-14"></a>    <span class="cf">return</span> W, sigma2</span></code></pre></div>
 <p>In practice we may not wish to compute the eigenvectors of the covariance matrix directly. This is because it requires us to estimate the covariance, which involves a sum of squares term, before estimating the eigenvectors. We can estimate the eigenvectors directly either through <a href="http://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> or <a href="http://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a>. We saw a similar issue arise when , where we also wished to avoid computation of <span class="math inline">\(\mathbf{Z}^\top\mathbf{Z}\)</span> (or in the case of  <span class="math inline">\(\boldsymbol{\Phi}^\top\boldsymbol{\Phi}\)</span>).</p>
 <h1 id="posterior-for-principal-component-analysis">Posterior for Principal Component Analysis</h1>
 <p>Under the latent variable model justification for principal component analysis, we are normally interested in inferring something about the latent variables given the data. This is the distribution, <span class="math display">\[
@@ -454,7 +101,7 @@ p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) \propto p(\mathbf{ y}_{i,
 :})^\top(\mathbf{ y}_{i, :} - \mathbf{W}\mathbf{ z}_{i, :}) - \frac{1}{2}
 \mathbf{ z}_{i, :}^\top \mathbf{ z}_{i, :} + \text{const}
 \]</span></p>
-<h3 id="exercise-1-2">Exercise 1</h3>
+<h3 id="exercise-1">Exercise 1</h3>
 <p>Multiply out the terms in the brackets. Then collect the quadratic term and the linear terms together. Show that the posterior has the form <span class="math display">\[
 \mathbf{ z}_{i, :} | \mathbf{W}\sim \mathcal{N}\left(\boldsymbol{ \mu}_x,\mathbf{C}_x\right)
 \]</span> where <span class="math display">\[
@@ -468,7 +115,7 @@ p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) \propto p(\mathbf{ y}_{i,
 <p>Now let’s implement the system in code.</p>
 <h3 id="exercise-2">Exercise 2</h3>
 <p>Use the values for <span class="math inline">\(\mathbf{W}\)</span> and <span class="math inline">\(\sigma^2\)</span> you have computed, along with the data set <span class="math inline">\(\mathbf{Y}\)</span> to compute the posterior density over <span class="math inline">\(\mathbf{Z}\)</span>. Write a function of the form</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>mu_x, C_x <span class="op">=</span> posterior(Y, W, sigma2)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>mu_x, C_x <span class="op">=</span> posterior(Y, W, sigma2)</span></code></pre></div>
 <p>where <code>mu_x</code> and <code>C_x</code> are the posterior mean and posterior covariance for the given <span class="math inline">\(\mathbf{Y}\)</span>.</p>
 <p>Don’t forget to subtract the mean of the data <code>Y</code> inside your function before computing the posterior: remember we assumed at the beginning of our analysis that the data had been centred (i.e. the mean was removed).</p>
 <h2 id="numerically-stable-and-efficient-version">Numerically Stable and Efficient Version</h2>
@@ -493,56 +140,56 @@ c_i = \frac{\sigma^2}{\sigma^2 + \ell^2_i}
 \]</span> <span class="math display">\[
 \boldsymbol{ \mu}_x = \mathbf{D}\mathbf{U}^\top \mathbf{ y}_{i, :}
 \]</span> where <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix with diagonal elements given by <span class="math inline">\(d_{i} = \frac{\ell_i}{\sigma^2 + \ell_i^2}\)</span>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># probabilistic PCA algorithm using SVD</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">def</span> ppca(Y, q, center<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb13-3"><a href="#cb13-3"></a>    <span class="co">&quot;&quot;&quot;Probabilistic PCA through singular value decomposition&quot;&quot;&quot;</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>    <span class="co"># remove mean</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>    <span class="cf">if</span> center:</span>
-<span id="cb13-6"><a href="#cb13-6"></a>        Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb13-7"><a href="#cb13-7"></a>    <span class="cf">else</span>:</span>
-<span id="cb13-8"><a href="#cb13-8"></a>        Y_cent <span class="op">=</span> Y</span>
-<span id="cb13-9"><a href="#cb13-9"></a>        </span>
-<span id="cb13-10"><a href="#cb13-10"></a>    <span class="co"># Comute singluar values, discard &#39;R&#39; as we will assume orthogonal</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a>    U, sqlambd, _ <span class="op">=</span> sp.linalg.svd(Y_cent.T,full_matrices<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-12"><a href="#cb13-12"></a>    lambd <span class="op">=</span> (sqlambd<span class="op">**</span><span class="dv">2</span>)<span class="op">/</span>Y.shape[<span class="dv">0</span>]</span>
-<span id="cb13-13"><a href="#cb13-13"></a>    <span class="co"># Compute residual and extract eigenvectors</span></span>
-<span id="cb13-14"><a href="#cb13-14"></a>    sigma2 <span class="op">=</span> np.<span class="bu">sum</span>(lambd[q:])<span class="op">/</span>(Y.shape[<span class="dv">1</span>]<span class="op">-</span>q)</span>
-<span id="cb13-15"><a href="#cb13-15"></a>    ell <span class="op">=</span> np.sqrt(lambd[:q]<span class="op">-</span>sigma2)</span>
-<span id="cb13-16"><a href="#cb13-16"></a>    <span class="cf">return</span> U[:, :q], ell, sigma2</span>
-<span id="cb13-17"><a href="#cb13-17"></a></span>
-<span id="cb13-18"><a href="#cb13-18"></a><span class="kw">def</span> posterior(Y, U, ell, sigma2, center<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb13-19"><a href="#cb13-19"></a>    <span class="co">&quot;&quot;&quot;Posterior computation for the latent variables given the eigendecomposition.&quot;&quot;&quot;</span></span>
-<span id="cb13-20"><a href="#cb13-20"></a>    <span class="cf">if</span> center:</span>
-<span id="cb13-21"><a href="#cb13-21"></a>        Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb13-22"><a href="#cb13-22"></a>    <span class="cf">else</span>:</span>
-<span id="cb13-23"><a href="#cb13-23"></a>        Y_cent <span class="op">=</span> Y</span>
-<span id="cb13-24"><a href="#cb13-24"></a>    C_x <span class="op">=</span> np.diag(sigma2<span class="op">/</span>(sigma2<span class="op">+</span>ell<span class="op">**</span><span class="dv">2</span>))</span>
-<span id="cb13-25"><a href="#cb13-25"></a>    d <span class="op">=</span> ell<span class="op">/</span>(sigma2<span class="op">+</span>ell<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb13-26"><a href="#cb13-26"></a>    mu_x <span class="op">=</span> np.dot(Y_cent, U)<span class="op">*</span>d[<span class="va">None</span>, :]</span>
-<span id="cb13-27"><a href="#cb13-27"></a>    <span class="cf">return</span> mu_x, C_x</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># probabilistic PCA algorithm using SVD</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">def</span> ppca(Y, q, center<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb11-3"><a href="#cb11-3"></a>    <span class="co">&quot;&quot;&quot;Probabilistic PCA through singular value decomposition&quot;&quot;&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>    <span class="co"># remove mean</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>    <span class="cf">if</span> center:</span>
+<span id="cb11-6"><a href="#cb11-6"></a>        Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-8"><a href="#cb11-8"></a>        Y_cent <span class="op">=</span> Y</span>
+<span id="cb11-9"><a href="#cb11-9"></a>        </span>
+<span id="cb11-10"><a href="#cb11-10"></a>    <span class="co"># Comute singluar values, discard &#39;R&#39; as we will assume orthogonal</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a>    U, sqlambd, _ <span class="op">=</span> sp.linalg.svd(Y_cent.T,full_matrices<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-12"><a href="#cb11-12"></a>    lambd <span class="op">=</span> (sqlambd<span class="op">**</span><span class="dv">2</span>)<span class="op">/</span>Y.shape[<span class="dv">0</span>]</span>
+<span id="cb11-13"><a href="#cb11-13"></a>    <span class="co"># Compute residual and extract eigenvectors</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a>    sigma2 <span class="op">=</span> np.<span class="bu">sum</span>(lambd[q:])<span class="op">/</span>(Y.shape[<span class="dv">1</span>]<span class="op">-</span>q)</span>
+<span id="cb11-15"><a href="#cb11-15"></a>    ell <span class="op">=</span> np.sqrt(lambd[:q]<span class="op">-</span>sigma2)</span>
+<span id="cb11-16"><a href="#cb11-16"></a>    <span class="cf">return</span> U[:, :q], ell, sigma2</span>
+<span id="cb11-17"><a href="#cb11-17"></a></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="kw">def</span> posterior(Y, U, ell, sigma2, center<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb11-19"><a href="#cb11-19"></a>    <span class="co">&quot;&quot;&quot;Posterior computation for the latent variables given the eigendecomposition.&quot;&quot;&quot;</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a>    <span class="cf">if</span> center:</span>
+<span id="cb11-21"><a href="#cb11-21"></a>        Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
+<span id="cb11-22"><a href="#cb11-22"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-23"><a href="#cb11-23"></a>        Y_cent <span class="op">=</span> Y</span>
+<span id="cb11-24"><a href="#cb11-24"></a>    C_x <span class="op">=</span> np.diag(sigma2<span class="op">/</span>(sigma2<span class="op">+</span>ell<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb11-25"><a href="#cb11-25"></a>    d <span class="op">=</span> ell<span class="op">/</span>(sigma2<span class="op">+</span>ell<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb11-26"><a href="#cb11-26"></a>    mu_x <span class="op">=</span> np.dot(Y_cent, U)<span class="op">*</span>d[<span class="va">None</span>, :]</span>
+<span id="cb11-27"><a href="#cb11-27"></a>    <span class="cf">return</span> mu_x, C_x</span></code></pre></div>
 <h2 id="robot-navigation-example">Robot Navigation Example</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/robot-wireless-ppca.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/robot-wireless-ppca.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>In the next example we will load in data from a robot navigation problem. The data consists of wireless access point strengths as recorded by a robot performing a loop around the University of Washington’s Computer Science department in Seattle. The robot records all the wireless access points it can cache and stores their signal strength.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="im">import</span> pods</span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>data <span class="op">=</span> pods.datasets.robot_wireless()</span>
-<span id="cb15-2"><a href="#cb15-2"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
-<span id="cb15-3"><a href="#cb15-3"></a>Y.shape</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="im">import</span> pods</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>data <span class="op">=</span> pods.datasets.robot_wireless()</span>
+<span id="cb13-2"><a href="#cb13-2"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
+<span id="cb13-3"><a href="#cb13-3"></a>Y.shape</span></code></pre></div>
 <p>There are 215 observations of 30 different access points. In this case the model is suggesting that the access point signal strength should be linearly dependent on the location in the map. In other words we are expecting the access point strength for the <span class="math inline">\(j\)</span>th access point at robot position <span class="math inline">\(x_{i, :}\)</span> to be represented by <span class="math inline">\(y_{i, j} = \mathbf{ w}_{j, :}^\top \mathbf{ z}_{i, :} + \epsilon_{i,j}\)</span>.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>q <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>U, ell, sigma2 <span class="op">=</span> ppca(Y, q)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>mu_x, C_x <span class="op">=</span> posterior(Y, U, ell, sigma2)</span>
-<span id="cb17-4"><a href="#cb17-4"></a></span>
-<span id="cb17-5"><a href="#cb17-5"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
-<span id="cb17-6"><a href="#cb17-6"></a>ax.plot(mu_x[:, <span class="dv">0</span>], mu_x[:, <span class="dv">1</span>], <span class="st">&#39;rx-&#39;</span>)</span>
-<span id="cb17-7"><a href="#cb17-7"></a>ax.set_title(<span class="st">&#39;Latent Variable: Robot Inferred Locations&#39;</span>)</span>
-<span id="cb17-8"><a href="#cb17-8"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
-<span id="cb17-9"><a href="#cb17-9"></a>W <span class="op">=</span> U<span class="op">*</span>ell[<span class="va">None</span>, :]</span>
-<span id="cb17-10"><a href="#cb17-10"></a>ax.plot(W[:, <span class="dv">0</span>], W[:, <span class="dv">1</span>], <span class="st">&#39;bo&#39;</span>)</span>
-<span id="cb17-11"><a href="#cb17-11"></a>ax.set_title(<span class="st">&#39;Access Point Inferred Locations&#39;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>U, ell, sigma2 <span class="op">=</span> ppca(Y.T, q)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>q <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>U, ell, sigma2 <span class="op">=</span> ppca(Y, q)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>mu_x, C_x <span class="op">=</span> posterior(Y, U, ell, sigma2)</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb15-6"><a href="#cb15-6"></a>ax.plot(mu_x[:, <span class="dv">0</span>], mu_x[:, <span class="dv">1</span>], <span class="st">&#39;rx-&#39;</span>)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>ax.set_title(<span class="st">&#39;Latent Variable: Robot Inferred Locations&#39;</span>)</span>
+<span id="cb15-8"><a href="#cb15-8"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb15-9"><a href="#cb15-9"></a>W <span class="op">=</span> U<span class="op">*</span>ell[<span class="va">None</span>, :]</span>
+<span id="cb15-10"><a href="#cb15-10"></a>ax.plot(W[:, <span class="dv">0</span>], W[:, <span class="dv">1</span>], <span class="st">&#39;bo&#39;</span>)</span>
+<span id="cb15-11"><a href="#cb15-11"></a>ax.set_title(<span class="st">&#39;Access Point Inferred Locations&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>U, ell, sigma2 <span class="op">=</span> ppca(Y.T, q)</span></code></pre></div>
 <h1 id="interpretations-of-principal-component-analysis">Interpretations of Principal Component Analysis</h1>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/ppca-interpretations.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/ppca-interpretations.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <h2 id="relationship-to-matrix-factorization">Relationship to Matrix Factorization</h2>
@@ -650,7 +297,7 @@ p(\mathbf{Y}|\mathbf{W}) = \prod_{i=1}^n\mathcal{N}\left(\mathbf{ y}_{i,
 <h2 id="dual-probabilistic-pca">Dual Probabilistic PCA</h2>
 <p><strong>Probabilistic PCA</strong></p>
 <ul>
-<li>We have seen that PCA has a probabilistic interpretation <span class="citation" data-cites="Tipping:probpca99">(Tipping and Bishop, 1999a)</span>.</li>
+<li>We have seen that PCA has a probabilistic interpretation <span class="citation" data-cites="Tipping:probpca99">(Tipping and Bishop, 1999b)</span>.</li>
 <li>It is difficult to `non-linearise’ directly.</li>
 <li>GTM and Density Networks are an attempt to do so.</li>
 </ul>
@@ -725,8 +372,8 @@ p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_
 <p>However, in the Gaussian process case, when the likelihood also assumes Gaussian noise, we can operate this mechanism mathematically, and obtain the posterior density <em>analytically</em>. This is the benefit of Gaussian processes.</p>
 <p>First we will load in two python functions for computing the covariance function.</p>
 <p>Next we sample from a multivariate normal density (a multivariate Gaussian), using the covariance function as the covariance matrix.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>plot.rejection_samples(kernel<span class="op">=</span>kernel, </span>
-<span id="cb19-2"><a href="#cb19-2"></a>    diagrams<span class="op">=</span><span class="st">&#39;../slides/diagrams/gp&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>plot.rejection_samples(kernel<span class="op">=</span>kernel, </span>
+<span id="cb17-2"><a href="#cb17-2"></a>    diagrams<span class="op">=</span><span class="st">&#39;../slides/diagrams/gp&#39;</span>)</span></code></pre></div>
 <div class="figure">
 <div id="gp-rejection-samples-figure" class="figure-frame">
 <div class="centered" style="">
@@ -835,7 +482,7 @@ E(\boldsymbol{ \theta}) = \color{blue}{\frac{1}{2}\log\det{\mathbf{K}}} + \color
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-optimize-capacity.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gp/includes/gp-optimize-capacity.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>The parameters are <em>inside</em> the covariance function (matrix).  <span class="math display">\[k_{i, j} = k(\mathbf{ x}_i, \mathbf{ x}_j; \boldsymbol{ \theta})\]</span></p>
 <p><span> <span class="math display">\[\mathbf{K}= \mathbf{R}\boldsymbol{ \Lambda}^2 \mathbf{R}^\top\]</span></span></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>gpoptimizePlot1</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>gpoptimizePlot1</span></code></pre></div>
 <table>
 <tr>
 <td width="50%">
@@ -852,7 +499,7 @@ E(\boldsymbol{ \theta}) = \color{blue}{\frac{1}{2}\log\det{\mathbf{K}}} + \color
 <li><span class="math inline">\(\boldsymbol{ \Lambda}\)</span> is <em>diagonal</em>, <span class="math inline">\(\mathbf{R}^\top\mathbf{R}= \mathbf{I}\)</span>.</li>
 <li>Useful representation since <span class="math inline">\(\det{\mathbf{K}} = \det{\boldsymbol{ \Lambda}^2} = \det{\boldsymbol{ \Lambda}}^2\)</span>.</li>
 </ul>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>diagrams <span class="op">=</span> <span class="st">&#39;./gp/&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>diagrams <span class="op">=</span> <span class="st">&#39;./gp/&#39;</span></span></code></pre></div>
 <div class="figure">
 <div id="gp-optimise-determinant-figure-figure" class="figure-frame">
 <object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant009.svg" width="80%" style=" ">
@@ -985,17 +632,17 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <p>The documentation for GPy can be found <a href="https://gpy.readthedocs.io/en/latest/">here</a>.</p>
 <h2 id="getting-started-and-downloading-data">Getting Started and Downloading Data</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="im">import</span> GPy</span>
-<span id="cb22-3"><a href="#cb22-3"></a><span class="im">import</span> string</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="im">import</span> GPy</span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="im">import</span> string</span></code></pre></div>
 <p>The following code is for plotting and to prepare the bigger models for later useage. If you are interested, you can have a look, but this is not essential.</p>
 <p>For this lab, we’ll use a data set containing all handwritten digits from <span class="math inline">\(0 \cdots 9\)</span> handwritten, provided by <span class="citation" data-cites="deCampos-character09">de Campos et al. (2009)</span>. We will only use some of the digits for the demonstrations in this lab class, but you can edit the code below to select different subsets of the digit data as you wish.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>which <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">9</span>] <span class="co"># which digits to work on</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>data <span class="op">=</span> pods.datasets.decampos_digits(which_digits<span class="op">=</span>which)</span>
-<span id="cb23-3"><a href="#cb23-3"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
-<span id="cb23-4"><a href="#cb23-4"></a>labels <span class="op">=</span> data[<span class="st">&#39;str_lbls&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>which <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">9</span>] <span class="co"># which digits to work on</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>data <span class="op">=</span> pods.datasets.decampos_digits(which_digits<span class="op">=</span>which)</span>
+<span id="cb21-3"><a href="#cb21-3"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
+<span id="cb21-4"><a href="#cb21-4"></a>labels <span class="op">=</span> data[<span class="st">&#39;str_lbls&#39;</span>]</span></code></pre></div>
 <p>You can try to plot some of the digits using <code>plt.matshow</code> (the digit images have size <code>16x16</code>).</p>
-<h2 id="principal-component-analysis-2">Principal Component Analysis</h2>
+<h2 id="principal-component-analysis">Principal Component Analysis</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Principal component analysis (PCA) finds a rotation of the observed outputs, such that the rotated principal component (PC) space maximizes the variance of the data observed, sorted from most to least important (most to least variable in the corresponding PC).</p>
 <p>In order to apply PCA in an easy way, we have included a PCA module in pca.py. You can import the module by import &lt;path.to.pca&gt; (without the ending .py!). To run PCA on the digits we have to reshape (Hint: np.reshape ) digits .</p>
@@ -1003,49 +650,49 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <li>What is the right shape <span class="math inline">\(n\times p\)</span> to use?</li>
 </ul>
 <p>We will call the reshaped observed outputs <span class="math inline">\(\mathbf{Y}\)</span> in the following.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>Yn <span class="op">=</span> Y<span class="co">#Y-Y.mean()</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>Yn <span class="op">=</span> Y<span class="co">#Y-Y.mean()</span></span></code></pre></div>
 <p>Now let’s run PCA on the reshaped dataset <span class="math inline">\(\mathbf{Y}\)</span>:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="im">from</span> GPy.util <span class="im">import</span> pca</span>
-<span id="cb25-2"><a href="#cb25-2"></a>p <span class="op">=</span> pca.pca(Y) <span class="co"># create PCA class with digits dataset</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="im">from</span> GPy.util <span class="im">import</span> pca</span>
+<span id="cb23-2"><a href="#cb23-2"></a>p <span class="op">=</span> pca.pca(Y) <span class="co"># create PCA class with digits dataset</span></span></code></pre></div>
 <p>The resulting plot will show the lower dimensional representation of the digits in 2 dimensions.</p>
 <h2 id="gaussian-process-latent-variable-model">Gaussian Process Latent Variable Model</h2>
 <p>The Gaussian Process Latent Variable Model (GP-LVM) <span class="citation" data-cites="Lawrence:pnpca05">(Lawrence, 2005)</span> embeds PCA into a Gaussian process framework, where the latent inputs <span class="math inline">\(\mathbf{Z}\)</span> are learnt as hyperparameters and the mapping variables <span class="math inline">\(\mathbf{W}\)</span> are integrated out. The advantage of this interpretation is it allows PCA to be generalized in a non linear way by replacing the resulting <em>linear</em> covariance witha non linear covariance. But first, let’s see how GPLVM is equivalent to PCA using an automatic relevance determination (ARD, see e.g. <span class="citation" data-cites="Bishop:book06">Bishop (2006)</span>) linear kernel:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>input_dim <span class="op">=</span> <span class="dv">4</span> <span class="co"># How many latent dimensions to use</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>kernel <span class="op">=</span> GPy.kern.Linear(input_dim, ARD<span class="op">=</span><span class="va">True</span>) <span class="co"># ARD kernel</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>m <span class="op">=</span> GPy.models.GPLVM(Yn, input_dim<span class="op">=</span>input_dim, kernel<span class="op">=</span>kernel)</span>
-<span id="cb26-4"><a href="#cb26-4"></a></span>
-<span id="cb26-5"><a href="#cb26-5"></a>m.optimize(messages<span class="op">=</span><span class="dv">1</span>, max_iters<span class="op">=</span><span class="dv">1000</span>) <span class="co"># optimize for 1000 iterations</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>input_dim <span class="op">=</span> <span class="dv">4</span> <span class="co"># How many latent dimensions to use</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>kernel <span class="op">=</span> GPy.kern.Linear(input_dim, ARD<span class="op">=</span><span class="va">True</span>) <span class="co"># ARD kernel</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>m <span class="op">=</span> GPy.models.GPLVM(Yn, input_dim<span class="op">=</span>input_dim, kernel<span class="op">=</span>kernel)</span>
+<span id="cb24-4"><a href="#cb24-4"></a></span>
+<span id="cb24-5"><a href="#cb24-5"></a>m.optimize(messages<span class="op">=</span><span class="dv">1</span>, max_iters<span class="op">=</span><span class="dv">1000</span>) <span class="co"># optimize for 1000 iterations</span></span></code></pre></div>
 <p>As you can see the solution with a linear kernel is the same as the PCA solution with the exception of rotational changes and axis flips.</p>
 <p>For the sake of time, the solution you see was only running for 1000 iterations, thus it might not be converged fully yet. The GP-LVM proceeds by iterative optimization of the <em>inputs</em> to the covariance. As we saw in the lecture earlier, for the linear covariance, these latent points can be optimized with an eigenvalue problem, but generally, for non-linear covariance functions, we are obliged to use gradient based optimization.</p>
 <h2 id="cmu-mocap-database">CMU Mocap Database</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_datasets/includes/cmu-mocap-data.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_datasets/includes/cmu-mocap-data.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Motion capture data from the CMU motion capture data base <span class="citation" data-cites="CMU-mocap03">(CMU Motion Capture Labb, 2003)</span>.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="im">import</span> pods</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="im">import</span> pods</span></code></pre></div>
 <p>You can download any subject and motion from the data set. Here we will download motion <code>01</code> from subject <code>35</code>.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>subject<span class="op">=</span><span class="st">&#39;35&#39;</span> </span>
-<span id="cb28-2"><a href="#cb28-2"></a>motion<span class="op">=</span>[<span class="st">&#39;01&#39;</span>]</span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>data <span class="op">=</span> pods.datasets.cmu_mocap(subject, motion)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>subject<span class="op">=</span><span class="st">&#39;35&#39;</span> </span>
+<span id="cb26-2"><a href="#cb26-2"></a>motion<span class="op">=</span>[<span class="st">&#39;01&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>data <span class="op">=</span> pods.datasets.cmu_mocap(subject, motion)</span></code></pre></div>
 <p>The data dictionary contains the keys ‘Y’ and ‘skel’, which represent the data and the skeleton..</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>data[<span class="st">&#39;Y&#39;</span>].shape</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>data[<span class="st">&#39;Y&#39;</span>].shape</span></code></pre></div>
 <p>The data was used in the hierarchical GP-LVM paper <span class="citation" data-cites="Lawrence:hgplvm07">(Lawrence and Moore, 2007)</span> in an experiment that was also recreated in the Deep Gaussian process paper <span class="citation" data-cites="Damianou:deepgp13">(Damianou and Lawrence, 2013)</span>.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="bu">print</span>(data[<span class="st">&#39;citation&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="bu">print</span>(data[<span class="st">&#39;citation&#39;</span>])</span></code></pre></div>
 <p>And extra information about the data is included, as standard, under the keys <code>info</code> and <code>details</code>.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="bu">print</span>(data[<span class="st">&#39;info&#39;</span>])</span>
-<span id="cb32-2"><a href="#cb32-2"></a><span class="bu">print</span>()</span>
-<span id="cb32-3"><a href="#cb32-3"></a><span class="bu">print</span>(data[<span class="st">&#39;details&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="bu">print</span>(data[<span class="st">&#39;info&#39;</span>])</span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="bu">print</span>()</span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="bu">print</span>(data[<span class="st">&#39;details&#39;</span>])</span></code></pre></div>
 <p>The original data has the figure moving across the floor during the motion capture sequence. We can make the figure walk ‘in place’, by setting the x, y, z positions of the root node to zero. This makes it easier to visualize the result.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Make figure move in place.</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a>data[<span class="st">&#39;Y&#39;</span>][:, <span class="dv">0</span>:<span class="dv">3</span>] <span class="op">=</span> <span class="fl">0.0</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Make figure move in place.</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>data[<span class="st">&#39;Y&#39;</span>][:, <span class="dv">0</span>:<span class="dv">3</span>] <span class="op">=</span> <span class="fl">0.0</span></span></code></pre></div>
 <p>We can also remove the mean of the data.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
-<span id="cb34-2"><a href="#cb34-2"></a>Y_mean <span class="op">=</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb34-3"><a href="#cb34-3"></a>Y_std <span class="op">=</span> Y.std(<span class="dv">0</span>)</span>
-<span id="cb34-4"><a href="#cb34-4"></a>Yhat <span class="op">=</span> (Y<span class="op">-</span>Y_mean)<span class="op">/</span>Y_std</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
+<span id="cb32-2"><a href="#cb32-2"></a>Y_mean <span class="op">=</span> Y.mean(<span class="dv">0</span>)</span>
+<span id="cb32-3"><a href="#cb32-3"></a>Y_std <span class="op">=</span> Y.std(<span class="dv">0</span>)</span>
+<span id="cb32-4"><a href="#cb32-4"></a>Yhat <span class="op">=</span> (Y<span class="op">-</span>Y_mean)<span class="op">/</span>Y_std</span></code></pre></div>
 <p>Now we create the GP-LVM model.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a><span class="im">import</span> GPy</span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>model <span class="op">=</span> GPy.models.GPLVM(Yhat, <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="im">import</span> GPy</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>model <span class="op">=</span> GPy.models.GPLVM(Yhat, <span class="dv">2</span>)</span></code></pre></div>
 <p>Now we optimize the model.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>, max_f_eval<span class="op">=</span><span class="dv">10000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>, max_f_eval<span class="op">=</span><span class="dv">10000</span>)</span></code></pre></div>
 <h2 id="example-latent-doodle-space">Example: Latent Doodle Space</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/latent-doodle-space.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/latent-doodle-space.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <div class="figure">
@@ -1094,23 +741,23 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <p>They first visualized their data using principal component analysis. In the first two principal components this fails to separate the domains. This is perhaps because the principal components are dominated by the variation in the 64 cell systems. This in turn may be because there are more cells from the data set in that regime, and may be because the natural variation is greater. We first recreate their visualization using principal component analysis.</p>
 <p>In this notebook we will perform PCA on the original data, showing that the different regimes do not separate.</p>
 <p>Next we load in the data. We’ve provided a convenience function for loading in the data with <code>pods</code>. It is loaded in as a <code>pandas</code> DataFrame. This allows us to summarize it with the <code>describe</code> attribute.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="im">import</span> pods</span></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>data <span class="op">=</span> pods.datasets.singlecell()</span>
-<span id="cb39-2"><a href="#cb39-2"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
-<span id="cb39-3"><a href="#cb39-3"></a>Y.describe</span></code></pre></div>
-<h2 id="principal-component-analysis-3">Principal Component Analysis</h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a><span class="im">import</span> pods</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>data <span class="op">=</span> pods.datasets.singlecell()</span>
+<span id="cb37-2"><a href="#cb37-2"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
+<span id="cb37-3"><a href="#cb37-3"></a>Y.describe</span></code></pre></div>
+<h2 id="principal-component-analysis-1">Principal Component Analysis</h2>
 <p>Now we follow <span class="citation" data-cites="Guo:fate10">Guo et al. (2010)</span> in performing PCA on the data. Rather than calling a ‘PCA routine’, here we break the algorithm down into its steps: compute the data covariance, compute the eigenvalues and eigenvectors and sort according to magnitude of eigenvalue. Because we want to visualize the data, we’ve chose to compute the eigenvectors of the <em>inner product matrix</em> rather than the covariance matrix. This allows us to plot the eigenvalues directly. However, this is less efficient (in this case because the number of genes is smaller than the number of data) than computing the eigendecomposition of the covariance matrix.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
-<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># obtain a centred version of data.</span></span>
-<span id="cb41-2"><a href="#cb41-2"></a>centredY <span class="op">=</span> Y <span class="op">-</span> Y.mean()</span>
-<span id="cb41-3"><a href="#cb41-3"></a><span class="co"># compute inner product matrix</span></span>
-<span id="cb41-4"><a href="#cb41-4"></a>C <span class="op">=</span> np.dot(centredY,centredY.T)</span>
-<span id="cb41-5"><a href="#cb41-5"></a><span class="co"># perform eigendecomposition</span></span>
-<span id="cb41-6"><a href="#cb41-6"></a>V, U <span class="op">=</span> np.linalg.eig(C)</span>
-<span id="cb41-7"><a href="#cb41-7"></a><span class="co"># sort eigenvalues and vectors according to size</span></span>
-<span id="cb41-8"><a href="#cb41-8"></a>ind <span class="op">=</span> V.argsort()</span>
-<span id="cb41-9"><a href="#cb41-9"></a>ev <span class="op">=</span> V[ind[::<span class="op">-</span><span class="dv">1</span>]]</span>
-<span id="cb41-10"><a href="#cb41-10"></a>U <span class="op">=</span> U[:, ind[::<span class="op">-</span><span class="dv">1</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># obtain a centred version of data.</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>centredY <span class="op">=</span> Y <span class="op">-</span> Y.mean()</span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="co"># compute inner product matrix</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a>C <span class="op">=</span> np.dot(centredY,centredY.T)</span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="co"># perform eigendecomposition</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a>V, U <span class="op">=</span> np.linalg.eig(C)</span>
+<span id="cb39-7"><a href="#cb39-7"></a><span class="co"># sort eigenvalues and vectors according to size</span></span>
+<span id="cb39-8"><a href="#cb39-8"></a>ind <span class="op">=</span> V.argsort()</span>
+<span id="cb39-9"><a href="#cb39-9"></a>ev <span class="op">=</span> V[ind[::<span class="op">-</span><span class="dv">1</span>]]</span>
+<span id="cb39-10"><a href="#cb39-10"></a>U <span class="op">=</span> U[:, ind[::<span class="op">-</span><span class="dv">1</span>]]</span></code></pre></div>
 <p>To visualize the result, we now construct a simple helper function. This will ensure that the plots have the same legends as the GP-LVM plots we use below.</p>
 <h2 id="pca-result">PCA Result</h2>
 <p>Now, using the helper function we can plot the results with appropriate labels.</p>
@@ -1159,10 +806,10 @@ Oliver Stegle
 <p>Work done as a collaboration between Max Zwiessele, Oliver Stegle and Neil D. Lawrence.</p>
 <p>Then, we follow <span class="citation" data-cites="Buettner:resolving12">Buettner and Theis (2012)</span> in applying the GP-LVM to the data. There is a slight pathology in the result, one which they fixed by using priors that were dependent on the developmental stage. We then show how the Bayesian GP-LVM doesn’t exhibit those pathologies and gives a nice results that seems to show the lineage of the cells.</p>
 <p>They used modified prior to ensure that small differences between cells at the same differential stage were preserved. Here we apply a standard GP-LVM (no modified prior) to the data.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="im">import</span> GPy</span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>kernel <span class="op">=</span> GPy.kern.RBF(<span class="dv">2</span>)<span class="op">+</span>GPy.kern.Bias(<span class="dv">2</span>)</span>
-<span id="cb43-2"><a href="#cb43-2"></a>model <span class="op">=</span> GPy.models.GPLVM(Y.values, <span class="dv">2</span>, kernel<span class="op">=</span>kernel)</span>
-<span id="cb43-3"><a href="#cb43-3"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="im">import</span> GPy</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>kernel <span class="op">=</span> GPy.kern.RBF(<span class="dv">2</span>)<span class="op">+</span>GPy.kern.Bias(<span class="dv">2</span>)</span>
+<span id="cb41-2"><a href="#cb41-2"></a>model <span class="op">=</span> GPy.models.GPLVM(Y.values, <span class="dv">2</span>, kernel<span class="op">=</span>kernel)</span>
+<span id="cb41-3"><a href="#cb41-3"></a>model.optimize(messages<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
 <div class="figure">
 <div id="singlecell-gplvm-figure" class="figure-frame">
 <object class="svgplot " data="../slides/diagrams/gplvm/singlecell-gplvm.svg" width="60%" style=" ">
@@ -1190,10 +837,10 @@ Oliver Stegle
 <h2 id="blastocyst-data-isomap">Blastocyst Data: Isomap</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-isomap.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-isomap.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Isomap first builds a neighbourhood graph, and then uses distances along this graph to approximate the geodesic distance between points. These distances are then visualized by performing classical multidimensional scaling (which involves computing the eigendecomposition of the centred distance matrix). As the neighborhood size is increased to match the data, principal component analysis is recovered (or strictly speaking, principal coordinate analysis). The fewer the neighbors, the more ‘non-linear’ the isomap embeddings are.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a>n_neighbors <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb45-2"><a href="#cb45-2"></a>model <span class="op">=</span> sklearn.manifold.Isomap(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb45-3"><a href="#cb45-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>n_neighbors <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a>model <span class="op">=</span> sklearn.manifold.Isomap(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb43-3"><a href="#cb43-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
 <div class="figure">
 <div id="singlecell-isomap-figure" class="figure-frame">
 <object class="svgplot " data="../slides/diagrams/dimred/singlecell-isomap.svg" width="60%" style=" ">
@@ -1209,10 +856,10 @@ Oliver Stegle
 <h2 id="blastocyst-data-locally-linear-embedding">Blastocyst Data: Locally Linear Embedding</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-lle.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/singlecell-lle.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Next we try locally linear embedding. In locally linear embedding a neighborhood is also computed. Each point is then reconstructed by it’s neighbors using a linear weighting. This implies a locally linear patch is being fitted to the data in that region. These patches are assimilated into a large <span class="math inline">\(n\times n\)</span> matrix and a lower dimensional data set which reflects the same relationships is then sought. Quite a large number of neighbours needs to be selected for the data to not collapse in on itself. When a large number of neighbours is selected the embedding is more linear and begins to look like PCA. However, the algorithm does <em>not</em> converge to PCA in the limit as the number of neighbors approaches <span class="math inline">\(n\)</span>.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
-<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a>n_neighbors <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb47-2"><a href="#cb47-2"></a>model <span class="op">=</span> sklearn.manifold.LocallyLinearEmbedding(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb47-3"><a href="#cb47-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a><span class="im">import</span> sklearn.manifold</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a>n_neighbors <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>model <span class="op">=</span> sklearn.manifold.LocallyLinearEmbedding(n_neighbors<span class="op">=</span>n_neighbors, n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb45-3"><a href="#cb45-3"></a>X <span class="op">=</span> model.fit_transform(Y)</span></code></pre></div>
 <div class="figure">
 <div id="singlecell-lle-figure" class="figure-frame">
 <object class="svgplot " data="../slides/diagrams/dimred/singlecell-lle.svg" width="60%" style=" ">
@@ -1262,9 +909,6 @@ Oliver Stegle
 <div id="ref-Hastie:pcurves89">
 <p>Hastie, T., Stuetzle, W., 1989. Principal curves. Journal of the American Statistical Association 84, 502–516.</p>
 </div>
-<div id="ref-Hotelling:analysis33">
-<p>Hotelling, H., 1933. Analysis of a complex of statistical variables into principal components. Journal of Educational Psychology 24, 417–441.</p>
-</div>
 <div id="ref-Lawrence:gplvm03">
 <p>Lawrence, N.D., n.d. Gaussian process models for visualisation of high dimensional data, in:. pp. 329–336.</p>
 </div>
@@ -1273,9 +917,6 @@ Oliver Stegle
 </div>
 <div id="ref-Lawrence:hgplvm07">
 <p>Lawrence, N.D., Moore, A.J., 2007. Hierarchical Gaussian process latent variable models, in:. pp. 481–488.</p>
-</div>
-<div id="ref-LeCun:zip89">
-<p>Le Cun, Y., Boser, B.E., Denker, J.S., Henderson, D., Howard, R.E., Hubbard, W., Jackel, L.D., 1989. Backpropagation applied to handwritten zip code recognition. Neural Computation 1, 541–551. <a href="https://doi.org/10.1162/neco.1989.1.4.541">https://doi.org/10.1162/neco.1989.1.4.541</a></p>
 </div>
 <div id="ref-Levine:control12">
 <p>Levine, S., Wang, J.M., Haraux, A., Popović, Z., Koltun, V., 2012. Continuous character control with low-dimensional embeddings. ACM Transactions on Graphics (SIGGRAPH 2012) 31.</p>
@@ -1292,11 +933,11 @@ Oliver Stegle
 <div id="ref-Scholkopf:nonlinear98">
 <p>Schölkopf, B., Smola, A., Müller, K.-R., 1998. Nonlinear component analysis as a kernel eigenvalue problem. Neural Computation 10, 1299–1319. <a href="https://doi.org/10.1162/089976698300017467">https://doi.org/10.1162/089976698300017467</a></p>
 </div>
-<div id="ref-Tipping:probpca99">
-<p>Tipping, M.E., Bishop, C.M., 1999a. Probabilistic principal component analysis. Journal of the Royal Statistical Society, B 6, 611–622. <a href="https://doi.org/doi:10.1111/1467-9868.00196">https://doi.org/doi:10.1111/1467-9868.00196</a></p>
-</div>
 <div id="ref-Tipping:pca97">
-<p>Tipping, M.E., Bishop, C.M., 1999b. Mixtures of probabilistic principal component analysers. Neural Computation 11, 443–482.</p>
+<p>Tipping, M.E., Bishop, C.M., 1999a. Mixtures of probabilistic principal component analysers. Neural Computation 11, 443–482.</p>
+</div>
+<div id="ref-Tipping:probpca99">
+<p>Tipping, M.E., Bishop, C.M., 1999b. Probabilistic principal component analysis. Journal of the Royal Statistical Society, B 6, 611–622. <a href="https://doi.org/doi:10.1111/1467-9868.00196">https://doi.org/doi:10.1111/1467-9868.00196</a></p>
 </div>
 <div id="ref-Urtasun:3dpeople06">
 <p>Urtasun, R., Fleet, D.J., Fua, P., 2006. 3D people tracking with Gaussian process dynamical models, in: Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition. IEEE Computer Society Press, New York, U.S.A., pp. 238–245. <a href="https://doi.org/10.1109/CVPR.2006.15">https://doi.org/10.1109/CVPR.2006.15</a></p>
