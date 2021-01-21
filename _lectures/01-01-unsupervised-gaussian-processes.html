@@ -212,7 +212,7 @@ sns.set_palette('colorblind')}-->
 \]</span> then we know that <span class="math inline">\(\mathbf{ y}\)</span> is also drawn from a multivariate Gaussian with, <span class="math display">\[
 \mathbf{ y}\sim \mathcal{N}\left(\mathbf{W}\boldsymbol{ \mu},\mathbf{W}\mathbf{C}\mathbf{W}^\top + \boldsymbol{ \Sigma}\right).
 \]</span></p>
-<p>With appropriately defined covariance, <span class="math inline">\(\boldsymbol{ \Sigma}\)</span>, this is actually the marginal likelihood for Factor Analysis, or Probabilistic Principal Component Analysis <span class="citation" data-cites="Tipping:probpca99">(Tipping and Bishop, 1999a)</span>, because we integrated out the inputs (or <em>latent</em> variables they would be called in that case).</p>
+<p>With appropriately defined covariance, <span class="math inline">\(\boldsymbol{ \Sigma}\)</span>, this is actually the marginal likelihood for Factor Analysis, or Probabilistic Principal Component Analysis <span class="citation" data-cites="Tipping:probpca99">(Tipping and Bishop, 1999)</span>, because we integrated out the inputs (or <em>latent</em> variables they would be called in that case).</p>
 <h1 id="latent-variables">Latent Variables</h1>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/latent-variables.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/latent-variables.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Latent means hidden, and hidden variables are simply <em>unobservable</em> variables. The idea of a latent variable is crucial to the concept of artificial intelligence, machine learning and experimental design. A latent variable could take many forms. We might observe a man walking along a road with a large bag of clothes and we might <em>infer</em> that the man is walking to the laundrette. Our observations are a highly complex data space, the response in our eyes is processed through our visual cortex, the combination of the individual’s limb movememnts and the direction they are walking in all conflate in our heads to cause us to infer that (perhaps) the individual is going to the laundrette. We don’t <em>know</em> that the man is walking to the laundrette, but we have a model of the world that suggests that it’s a likely outcome for the very complex data. In some ways the latent variable can be seen as a <em>compression</em> of this very complex scene. If I were writing a book, I might write that “A man tripped over whilst walking to the laundrette”. In the reader’s mind an image of a man, perhaps laden with dirty clothes, may occur. All these ideas come from our expectations of the world around us. We can make further inference about the man, some of it perhaps plausible others less so. The man may be going to the laundrette because his washing machine is broken, or because he doesn’t have a large enough flat to have a washing machine, or because he’s carrying a duvet, or because he doesn’t like ironing. All of these may <em>increase</em> in probability given our observation, but they are still <em>latent</em> variables. Unless we follow the man back to his appartment, or start making other enquirires about the man, we don’t know the true answer.</p>
@@ -304,7 +304,7 @@ p(\mathbf{ y}_{i, :}|\mathbf{W}) =
 <p><span class="math display">\[
 \mathbf{W}\mathbf{ z}_{i, :} + \boldsymbol{ \epsilon}_{i, :} \sim \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right)
 \]</span></p>
-<p><strong>Probabilistic PCA Max. Likelihood Soln</strong> (<span class="citation" data-cites="Tipping:probpca99">Tipping and Bishop (1999a)</span>)</p>
+<p><strong>Probabilistic PCA Max. Likelihood Soln</strong> (<span class="citation" data-cites="Tipping:probpca99">Tipping and Bishop (1999)</span>)</p>
 <div class="figure">
 <div id="ppca-graph-figure" class="figure-frame">
 <div class="centered" style="">
@@ -345,186 +345,6 @@ b_i^2
 <p>If <span class="math inline">\(\mathbf{C}=\mathbf{A}^\top \mathbf{A}\)</span> then express <span class="math inline">\(c_{i,j}\)</span>, the value of the element at the <span class="math inline">\(i\)</span>th row and the <span class="math inline">\(j\)</span>th column of <span class="math inline">\(\mathbf{C}\)</span>, in terms of the columns of <span class="math inline">\(\mathbf{A}\)</span>. Use this to show that (i) the matrix is symmetric and (ii) the matrix has positive elements along its diagonal.</p>
 <h2 id="eigenvectors-of-a-symmetric-matric">Eigenvectors of a Symmetric Matric</h2>
 <p>Symmetric matrices have <em>orthonormal</em> eigenvectors. This means that <span class="math inline">\(\mathbf{U}\)</span> is an <a href="http://en.wikipedia.org/wiki/Orthogonal_matrix">orthogonal matrix</a>, <span class="math inline">\(\mathbf{U}^\top\mathbf{U} = \mathbf{I}\)</span>. This implies that <span class="math inline">\(\mathbf{u}_{:, i} ^\top \mathbf{u}_{:, j}\)</span> is equal to 0 if <span class="math inline">\(i\neq j\)</span> and 1 if <span class="math inline">\(i=j\)</span>.</p>
-<h2 id="principal-component-analysis-1">Principal Component Analysis</h2>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/principal-component-analysis.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/principal-component-analysis.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<ul>
-<li><p>PCA (<span class="citation" data-cites="Hotelling:analysis33">Hotelling (1933)</span>) is a linear embedding.</p></li>
-<li><p>Today its presented as:</p>
-<ul>
-<li>Rotate to find ‘directions’ in data with maximal variance.</li>
-<li>How do we find these directions?</li>
-</ul></li>
-<li><p>Algorithmically we do this by diagonalizing the sample covariance matrix <span class="math display">\[
-\mathbf{S}=\frac{1}{n}\sum_{i=1}^n\left(\mathbf{ y}_{i, :}-\boldsymbol{ \mu}\right)\left(\mathbf{ y}_{i, :} - \boldsymbol{ \mu}\right)^\top
-\]</span></p></li>
-<li><p>Find directions in the data, <span class="math inline">\(\mathbf{ z}= \mathbf{U}\mathbf{ y}\)</span>, for which variance is maximized.</p></li>
-<li><p>Solution is found via constrained optimisation (which uses <a href="https://en.wikipedia.org/wiki/Lagrange_multiplier">Lagrange multipliers</a>): <span class="math display">\[
-L\left(\mathbf{u}_{1},\lambda_{1}\right)=\mathbf{u}_{1}^{\top}\mathbf{S}\mathbf{u}_{1}+\lambda_{1}\left(1-\mathbf{u}_{1}^{\top}\mathbf{u}_{1}\right)
-\]</span></p></li>
-<li><p>Gradient with respect to <span class="math inline">\(\mathbf{u}_{1}\)</span> <span class="math display">\[\frac{\text{d}L\left(\mathbf{u}_{1},\lambda_{1}\right)}{\text{d}\mathbf{u}_{1}}=2\mathbf{S}\mathbf{u}_{1}-2\lambda_{1}\mathbf{u}_{1}\]</span> rearrange to form <span class="math display">\[\mathbf{S}\mathbf{u}_{1}=\lambda_{1}\mathbf{u}_{1}.\]</span> Which is known as an <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors"><em>eigenvalue problem</em></a>.</p></li>
-<li><p>Further directions that are <em>orthogonal</em> to the first can also be shown to be eigenvectors of the covariance.</p></li>
-<li><p>Represent data, <span class="math inline">\(\mathbf{Y}\)</span>, with a lower dimensional set of latent variables <span class="math inline">\(\mathbf{Z}\)</span>.</p></li>
-<li><p>Assume a linear relationship of the form <span class="math display">\[
-\mathbf{ y}_{i,:}=\mathbf{W}\mathbf{ z}_{i,:}+\boldsymbol{ \epsilon}_{i,:},
-\]</span> where <span class="math display">\[
-\boldsymbol{ \epsilon}_{i,:} \sim \mathcal{N}\left(\mathbf{0},\sigma^2\mathbf{I}\right)
-\]</span></p></li>
-</ul>
-<p><strong>Probabilistic PCA</strong></p>
-<table>
-<tr>
-<td width>
-<ul>
-<li>Define <em>linear-Gaussian relationship</em> between latent variables and data.</li>
-<li><strong>Standard</strong> Latent variable approach:
-<ul>
-<li>Define Gaussian prior over <em>latent space</em>, <span class="math inline">\(\mathbf{Z}\)</span>.</li>
-</ul></li>
-<li>Integrate out <em>latent variables</em>.
-</td>
-<td width="">
-<div class="figure">
-<div id="ppca-graph-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/dimred/ppca_graph.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-<div id="ppca-graph-magnify" class="magnify" onclick="magnifyFigure(&#39;ppca-graph&#39;)">
-<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
-</div>
-<div id="ppca-graph-caption" class="caption-frame">
-<p>Figure: Graphical model representing probabilistic PCA.</p>
-</div>
-</div></li>
-</ul>
-<p><span class="math display">\[
-p\left(\mathbf{Y}|\mathbf{Z},\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{W}\mathbf{ z}_{i,:},\sigma^2\mathbf{I}\right)
-\]</span></p>
-<p><span class="math display">\[
-p\left(\mathbf{Z}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ z}_{i,:}|\mathbf{0},\mathbf{I}\right)
-\]</span></p>
-<span class="math display">\[
-p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{0},\mathbf{W}\mathbf{W}^{\top}+\sigma^{2}\mathbf{I}\right)
-\]</span>
-</td>
-</tr>
-</table>
-<h1 id="probabilistic-pca">Probabilistic PCA</h1>
-<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/probabilistic-pca.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/probabilistic-pca.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
-<p>In 1997 <a href="http://research.microsoft.com/pubs/67218/bishop-ppca-jrss.pdf">Tipping and Bishop</a> <span class="citation" data-cites="Tipping:pca97">(Tipping and Bishop, 1999b)</span> and <a href="https://www.cs.nyu.edu/~roweis/papers/empca.pdf">Roweis</a> <span class="citation" data-cites="Roweis:SPCA97">(Roweis, n.d.)</span> independently revisited Hotelling’s model and considered the case where the noise variance was finite, but <em>shared</em> across all output dimensons. Their model can be thought of as a factor analysis where <span class="math display">\[
-\boldsymbol{\Sigma} = \sigma^2 \mathbf{I}.
-\]</span> This leads to a marginal likelihood of the form <span class="math display">\[
-p(\mathbf{Y}|\mathbf{W}, \sigma^2)
-= \prod_{i=1}^n\mathcal{N}\left(\mathbf{ y}_{i, :}|\mathbf{0},\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right)
-\]</span> where the limit of <span class="math inline">\(\sigma^2\rightarrow 0\)</span> is <em>not</em> taken. This defines a proper probabilistic model. Tippping and Bishop then went on to prove that the <em>maximum likelihood</em> solution of this model with respect to <span class="math inline">\(\mathbf{W}\)</span> is given by an eigenvalue problem. In the probabilistic PCA case the eigenvalues and eigenvectors are given as follows. <span class="math display">\[
-\mathbf{W}= \mathbf{U}\mathbf{L} \mathbf{R}^\top
-\]</span> where <span class="math inline">\(\mathbf{U}\)</span> is the eigenvectors of the empirical covariance matrix <span class="math display">\[
-\mathbf{S} = \sum_{i=1}^n(\mathbf{ y}_{i, :} - \boldsymbol{ \mu})(\mathbf{ y}_{i,
-:} - \boldsymbol{ \mu})^\top,
-\]</span> which can be written <span class="math inline">\(\mathbf{S} = \frac{1}{n} \mathbf{Y}^\top\mathbf{Y}\)</span> if the data is zero mean. The matrix <span class="math inline">\(\mathbf{L}\)</span> is diagonal and is dependent on the <em>eigenvalues</em> of <span class="math inline">\(\mathbf{S}\)</span>, <span class="math inline">\(\boldsymbol{\Lambda}\)</span>. If the <span class="math inline">\(i\)</span>th diagonal element of this matrix is given by <span class="math inline">\(\lambda_i\)</span> then the corresponding element of <span class="math inline">\(\mathbf{L}\)</span> is <span class="math display">\[
-\ell_i = \sqrt{\lambda_i - \sigma^2}
-\]</span> where <span class="math inline">\(\sigma^2\)</span> is the noise variance. Note that if <span class="math inline">\(\sigma^2\)</span> is larger than any particular eigenvalue, then that eigenvalue (along with its corresponding eigenvector) is <em>discarded</em> from the solution.</p>
-<h2 id="python-implementation-of-probabilistic-pca">Python Implementation of Probabilistic PCA</h2>
-<p>We will now implement this algorithm in python.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># probabilistic PCA algorithm</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">def</span> ppca(Y, q):</span>
-<span id="cb10-3"><a href="#cb10-3"></a>    <span class="co"># remove mean</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>    Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb10-5"><a href="#cb10-5"></a></span>
-<span id="cb10-6"><a href="#cb10-6"></a>    <span class="co"># Comute covariance</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>    S <span class="op">=</span> np.dot(Y_cent.T, Y_cent)<span class="op">/</span>Y.shape[<span class="dv">0</span>]</span>
-<span id="cb10-8"><a href="#cb10-8"></a>    lambd, U <span class="op">=</span> np.linalg.eig(S)</span>
-<span id="cb10-9"><a href="#cb10-9"></a></span>
-<span id="cb10-10"><a href="#cb10-10"></a>    <span class="co"># Choose number of eigenvectors</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a>    sigma2 <span class="op">=</span> np.<span class="bu">sum</span>(lambd[q:])<span class="op">/</span>(Y.shape[<span class="dv">1</span>]<span class="op">-</span>q)</span>
-<span id="cb10-12"><a href="#cb10-12"></a>    l <span class="op">=</span> np.sqrt(lambd[:q]<span class="op">-</span>sigma2)</span>
-<span id="cb10-13"><a href="#cb10-13"></a>    W <span class="op">=</span> U[:, :q]<span class="op">*</span>l[<span class="va">None</span>, :]</span>
-<span id="cb10-14"><a href="#cb10-14"></a>    <span class="cf">return</span> W, sigma2</span></code></pre></div>
-<p>In practice we may not wish to compute the eigenvectors of the covariance matrix directly. This is because it requires us to estimate the covariance, which involves a sum of squares term, before estimating the eigenvectors. We can estimate the eigenvectors directly either through <a href="http://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> or <a href="http://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a>. We saw a similar issue arise when , where we also wished to avoid computation of <span class="math inline">\(\mathbf{Z}^\top\mathbf{Z}\)</span> (or in the case of  <span class="math inline">\(\boldsymbol{\Phi}^\top\boldsymbol{\Phi}\)</span>).</p>
-<h1 id="posterior-for-principal-component-analysis">Posterior for Principal Component Analysis</h1>
-<p>Under the latent variable model justification for principal component analysis, we are normally interested in inferring something about the latent variables given the data. This is the distribution, <span class="math display">\[
-p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :})
-\]</span> for any given data point. Determining this density turns out to be very similar to the approach for determining the Bayesian posterior of <span class="math inline">\(\mathbf{ w}\)</span> in Bayesian linear regression, only this time we place the prior density over <span class="math inline">\(\mathbf{ z}_{i, :}\)</span> instead of <span class="math inline">\(\mathbf{ w}\)</span>. The posterior is proportional to the joint density as follows, <span class="math display">\[
-p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) \propto p(\mathbf{ y}_{i,
-:}|\mathbf{W}, \mathbf{ z}_{i, :}, \sigma^2) p(\mathbf{ z}_{i, :})
-\]</span> And as in the Bayesian linear regression case we first consider the log posterior, <span class="math display">\[
-\log p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) = \log p(\mathbf{ y}_{i, :}|\mathbf{W},
-\mathbf{ z}_{i, :}, \sigma^2) + \log p(\mathbf{ z}_{i, :}) + \text{const}
-\]</span> where the constant is not dependent on <span class="math inline">\(\mathbf{ z}\)</span>. As before we collect the quadratic terms in <span class="math inline">\(\mathbf{ z}_{i, :}\)</span> and we assemble them into a Gaussian density over <span class="math inline">\(\mathbf{ z}\)</span>. <span class="math display">\[
-\log p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) =
--\frac{1}{2\sigma^2} (\mathbf{ y}_{i, :} - \mathbf{W}\mathbf{ z}_{i,
-:})^\top(\mathbf{ y}_{i, :} - \mathbf{W}\mathbf{ z}_{i, :}) - \frac{1}{2}
-\mathbf{ z}_{i, :}^\top \mathbf{ z}_{i, :} + \text{const}
-\]</span></p>
-<h3 id="exercise-1-2">Exercise 1</h3>
-<p>Multiply out the terms in the brackets. Then collect the quadratic term and the linear terms together. Show that the posterior has the form <span class="math display">\[
-\mathbf{ z}_{i, :} | \mathbf{W}\sim \mathcal{N}\left(\boldsymbol{ \mu}_x,\mathbf{C}_x\right)
-\]</span> where <span class="math display">\[
-\mathbf{C}_x = \left(\sigma^{-2}
-\mathbf{W}^\top\mathbf{W}+ \mathbf{I}\right)^{-1}
-\]</span> and <span class="math display">\[
-\boldsymbol{ \mu}_x
-= \mathbf{C}_x \sigma^{-2}\mathbf{W}^\top \mathbf{ y}_{i, :} 
-\]</span> Compare this to the posterior for the Bayesian linear regression from last week, do they have similar forms? What matches and what differs?</p>
-<h2 id="python-implementation-of-the-posterior">Python Implementation of the Posterior</h2>
-<p>Now let’s implement the system in code.</p>
-<h3 id="exercise-2">Exercise 2</h3>
-<p>Use the values for <span class="math inline">\(\mathbf{W}\)</span> and <span class="math inline">\(\sigma^2\)</span> you have computed, along with the data set <span class="math inline">\(\mathbf{Y}\)</span> to compute the posterior density over <span class="math inline">\(\mathbf{Z}\)</span>. Write a function of the form</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>mu_x, C_x <span class="op">=</span> posterior(Y, W, sigma2)</span></code></pre></div>
-<p>where <code>mu_x</code> and <code>C_x</code> are the posterior mean and posterior covariance for the given <span class="math inline">\(\mathbf{Y}\)</span>.</p>
-<p>Don’t forget to subtract the mean of the data <code>Y</code> inside your function before computing the posterior: remember we assumed at the beginning of our analysis that the data had been centred (i.e. the mean was removed).</p>
-<h2 id="numerically-stable-and-efficient-version">Numerically Stable and Efficient Version</h2>
-<p>Just as we saw for  and  computation of a matrix such as <span class="math inline">\(\mathbf{Y}^\top\mathbf{Y}\)</span> (or its centred version) can be a bad idea in terms of loss of numerical accuracy. Fortunately, we can find the eigenvalues and eigenvectors of the matrix <span class="math inline">\(\mathbf{Y}^\top\mathbf{Y}\)</span> without direct computation of the matrix. This can be done with the <a href="http://en.wikipedia.org/wiki/Singular_value_decomposition"><em>singular value decomposition</em></a>. The singular value decompsition takes a matrix, <span class="math inline">\(\mathbf{Z}\)</span> and represents it in the form, <span class="math display">\[
-\mathbf{Z} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{V}^\top
-\]</span> where <span class="math inline">\(\mathbf{U}\)</span> is a matrix of orthogonal vectors in the columns, meaning <span class="math inline">\(\mathbf{U}^\top\mathbf{U} = \mathbf{I}\)</span>. It has the same number of rows and columns as <span class="math inline">\(\mathbf{Z}\)</span>. The matrices <span class="math inline">\(\mathbf{\Lambda}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are both square with dimensionality given by the number of columns of <span class="math inline">\(\mathbf{Z}\)</span>. The matrix <span class="math inline">\(\mathbf{\Lambda}\)</span> is <em>diagonal</em> and <span class="math inline">\(\mathbf{V}\)</span> is an orthogonal matrix so <span class="math inline">\(\mathbf{V}^\top\mathbf{V} = \mathbf{V}\mathbf{V}^\top = \mathbf{I}\)</span>. The eigenvalues of the matrix <span class="math inline">\(\mathbf{Y}^\top\mathbf{Y}\)</span> are then given by the singular values of the matrix <span class="math inline">\(\mathbf{Y}^\top\)</span> squared and the eigenvectors are given by <span class="math inline">\(\mathbf{U}\)</span>.</p>
-<h2 id="solution-for-mathbfw">Solution for <span class="math inline">\(\mathbf{W}\)</span></h2>
-<p>Given the singular value decomposition of <span class="math inline">\(\mathbf{Y}\)</span> then we have <span class="math display">\[
-\mathbf{W}=
-\mathbf{U}\mathbf{L}\mathbf{R}^\top
-\]</span> where <span class="math inline">\(\mathbf{R}\)</span> is an arbitrary rotation matrix. This implies that the posterior is given by <span class="math display">\[
-\mathbf{C}_x =
-\left[\sigma^{-2}\mathbf{R}\mathbf{L}^2\mathbf{R}^\top + \mathbf{I}\right]^{-1}
-\]</span> because <span class="math inline">\(\mathbf{U}^\top \mathbf{U} = \mathbf{I}\)</span>. Since, by convention, we normally take <span class="math inline">\(\mathbf{R} = \mathbf{I}\)</span> to ensure that the principal components are orthonormal we can write <span class="math display">\[
-\mathbf{C}_x = \left[\sigma^{-2}\mathbf{L}^2 +
-\mathbf{I}\right]^{-1}
-\]</span> which implies that <span class="math inline">\(\mathbf{C}_x\)</span> is actually diagonal with elements given by <span class="math display">\[
-c_i = \frac{\sigma^2}{\sigma^2 + \ell^2_i}
-\]</span> and allows us to write <span class="math display">\[
-\boldsymbol{ \mu}_x = [\mathbf{L}^2 + \sigma^2
-\mathbf{I}]^{-1} \mathbf{L} \mathbf{U}^\top \mathbf{ y}_{i, :}
-\]</span> <span class="math display">\[
-\boldsymbol{ \mu}_x = \mathbf{D}\mathbf{U}^\top \mathbf{ y}_{i, :}
-\]</span> where <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix with diagonal elements given by <span class="math inline">\(d_{i} = \frac{\ell_i}{\sigma^2 + \ell_i^2}\)</span>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># probabilistic PCA algorithm using SVD</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">def</span> ppca(Y, q, center<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb13-3"><a href="#cb13-3"></a>    <span class="co">&quot;&quot;&quot;Probabilistic PCA through singular value decomposition&quot;&quot;&quot;</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>    <span class="co"># remove mean</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>    <span class="cf">if</span> center:</span>
-<span id="cb13-6"><a href="#cb13-6"></a>        Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb13-7"><a href="#cb13-7"></a>    <span class="cf">else</span>:</span>
-<span id="cb13-8"><a href="#cb13-8"></a>        Y_cent <span class="op">=</span> Y</span>
-<span id="cb13-9"><a href="#cb13-9"></a>        </span>
-<span id="cb13-10"><a href="#cb13-10"></a>    <span class="co"># Comute singluar values, discard &#39;R&#39; as we will assume orthogonal</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a>    U, sqlambd, _ <span class="op">=</span> sp.linalg.svd(Y_cent.T,full_matrices<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-12"><a href="#cb13-12"></a>    lambd <span class="op">=</span> (sqlambd<span class="op">**</span><span class="dv">2</span>)<span class="op">/</span>Y.shape[<span class="dv">0</span>]</span>
-<span id="cb13-13"><a href="#cb13-13"></a>    <span class="co"># Compute residual and extract eigenvectors</span></span>
-<span id="cb13-14"><a href="#cb13-14"></a>    sigma2 <span class="op">=</span> np.<span class="bu">sum</span>(lambd[q:])<span class="op">/</span>(Y.shape[<span class="dv">1</span>]<span class="op">-</span>q)</span>
-<span id="cb13-15"><a href="#cb13-15"></a>    ell <span class="op">=</span> np.sqrt(lambd[:q]<span class="op">-</span>sigma2)</span>
-<span id="cb13-16"><a href="#cb13-16"></a>    <span class="cf">return</span> U[:, :q], ell, sigma2</span>
-<span id="cb13-17"><a href="#cb13-17"></a></span>
-<span id="cb13-18"><a href="#cb13-18"></a><span class="kw">def</span> posterior(Y, U, ell, sigma2, center<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb13-19"><a href="#cb13-19"></a>    <span class="co">&quot;&quot;&quot;Posterior computation for the latent variables given the eigendecomposition.&quot;&quot;&quot;</span></span>
-<span id="cb13-20"><a href="#cb13-20"></a>    <span class="cf">if</span> center:</span>
-<span id="cb13-21"><a href="#cb13-21"></a>        Y_cent <span class="op">=</span> Y <span class="op">-</span> Y.mean(<span class="dv">0</span>)</span>
-<span id="cb13-22"><a href="#cb13-22"></a>    <span class="cf">else</span>:</span>
-<span id="cb13-23"><a href="#cb13-23"></a>        Y_cent <span class="op">=</span> Y</span>
-<span id="cb13-24"><a href="#cb13-24"></a>    C_x <span class="op">=</span> np.diag(sigma2<span class="op">/</span>(sigma2<span class="op">+</span>ell<span class="op">**</span><span class="dv">2</span>))</span>
-<span id="cb13-25"><a href="#cb13-25"></a>    d <span class="op">=</span> ell<span class="op">/</span>(sigma2<span class="op">+</span>ell<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb13-26"><a href="#cb13-26"></a>    mu_x <span class="op">=</span> np.dot(Y_cent, U)<span class="op">*</span>d[<span class="va">None</span>, :]</span>
-<span id="cb13-27"><a href="#cb13-27"></a>    <span class="cf">return</span> mu_x, C_x</span></code></pre></div>
 <h2 id="thanks">Thanks!</h2>
 <p>For more information on these subjects and more you might want to check the following resources.</p>
 <ul>
@@ -541,14 +361,8 @@ c_i = \frac{\sigma^2}{\sigma^2 + \ell^2_i}
 <div id="ref-LeCun:zip89">
 <p>Le Cun, Y., Boser, B.E., Denker, J.S., Henderson, D., Howard, R.E., Hubbard, W., Jackel, L.D., 1989. Backpropagation applied to handwritten zip code recognition. Neural Computation 1, 541–551. <a href="https://doi.org/10.1162/neco.1989.1.4.541">https://doi.org/10.1162/neco.1989.1.4.541</a></p>
 </div>
-<div id="ref-Roweis:SPCA97">
-<p>Roweis, S.T., n.d. EM algorithms for PCA and SPCA, in:. pp. 626–632.</p>
-</div>
 <div id="ref-Tipping:probpca99">
-<p>Tipping, M.E., Bishop, C.M., 1999a. Probabilistic principal component analysis. Journal of the Royal Statistical Society, B 6, 611–622. <a href="https://doi.org/doi:10.1111/1467-9868.00196">https://doi.org/doi:10.1111/1467-9868.00196</a></p>
-</div>
-<div id="ref-Tipping:pca97">
-<p>Tipping, M.E., Bishop, C.M., 1999b. Mixtures of probabilistic principal component analysers. Neural Computation 11, 443–482.</p>
+<p>Tipping, M.E., Bishop, C.M., 1999. Probabilistic principal component analysis. Journal of the Royal Statistical Society, B 6, 611–622. <a href="https://doi.org/doi:10.1111/1467-9868.00196">https://doi.org/doi:10.1111/1467-9868.00196</a></p>
 </div>
 </div>
 

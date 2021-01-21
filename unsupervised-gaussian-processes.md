@@ -13,7 +13,7 @@ You can find the [intro talk and notes here (split into two lectures).
 
 ### [Week 1: Session 1](/r250/lectures/01-01-unsupervised-gaussian-processes.html).
 
-### [Week 1: Session 2](/r250/lectures/01-01-unsupervised-gaussian-processes.html).
+### [Week 1: Session 2](/r250/lectures/01-02-unsupervised-gaussian-processes-II.html).
 
 If you want to review some of the background then the following might also be useful.
 
