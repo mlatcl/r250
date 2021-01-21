@@ -53,6 +53,70 @@ sns.set_palette('colorblind')}-->
 <p>The code is also available on github: <a href="https://github.com/sods/ods" class="uri">https://github.com/sods/ods</a></p>
 <p>Once <code>pods</code> is installed, it can be imported in the usual manner.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> pods</span></code></pre></div>
+<h2 id="principal-component-analysis">Principal Component Analysis</h2>
+<p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/principal-component-analysis.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/principal-component-analysis.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
+<ul>
+<li><p>PCA (<span class="citation" data-cites="Hotelling:analysis33">Hotelling (1933)</span>) is a linear embedding.</p></li>
+<li><p>Today its presented as:</p>
+<ul>
+<li>Rotate to find ‘directions’ in data with maximal variance.</li>
+<li>How do we find these directions?</li>
+</ul></li>
+<li><p>Algorithmically we do this by diagonalizing the sample covariance matrix <span class="math display">\[
+\mathbf{S}=\frac{1}{n}\sum_{i=1}^n\left(\mathbf{ y}_{i, :}-\boldsymbol{ \mu}\right)\left(\mathbf{ y}_{i, :} - \boldsymbol{ \mu}\right)^\top
+\]</span></p></li>
+<li><p>Find directions in the data, <span class="math inline">\(\mathbf{ z}= \mathbf{U}\mathbf{ y}\)</span>, for which variance is maximized.</p></li>
+<li><p>Solution is found via constrained optimisation (which uses <a href="https://en.wikipedia.org/wiki/Lagrange_multiplier">Lagrange multipliers</a>): <span class="math display">\[
+L\left(\mathbf{u}_{1},\lambda_{1}\right)=\mathbf{u}_{1}^{\top}\mathbf{S}\mathbf{u}_{1}+\lambda_{1}\left(1-\mathbf{u}_{1}^{\top}\mathbf{u}_{1}\right)
+\]</span></p></li>
+<li><p>Gradient with respect to <span class="math inline">\(\mathbf{u}_{1}\)</span> <span class="math display">\[\frac{\text{d}L\left(\mathbf{u}_{1},\lambda_{1}\right)}{\text{d}\mathbf{u}_{1}}=2\mathbf{S}\mathbf{u}_{1}-2\lambda_{1}\mathbf{u}_{1}\]</span> rearrange to form <span class="math display">\[\mathbf{S}\mathbf{u}_{1}=\lambda_{1}\mathbf{u}_{1}.\]</span> Which is known as an <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors"><em>eigenvalue problem</em></a>.</p></li>
+<li><p>Further directions that are <em>orthogonal</em> to the first can also be shown to be eigenvectors of the covariance.</p></li>
+<li><p>Represent data, <span class="math inline">\(\mathbf{Y}\)</span>, with a lower dimensional set of latent variables <span class="math inline">\(\mathbf{Z}\)</span>.</p></li>
+<li><p>Assume a linear relationship of the form <span class="math display">\[
+\mathbf{ y}_{i,:}=\mathbf{W}\mathbf{ z}_{i,:}+\boldsymbol{ \epsilon}_{i,:},
+\]</span> where <span class="math display">\[
+\boldsymbol{ \epsilon}_{i,:} \sim \mathcal{N}\left(\mathbf{0},\sigma^2\mathbf{I}\right)
+\]</span></p></li>
+</ul>
+<p><strong>Probabilistic PCA</strong></p>
+<table>
+<tr>
+<td width>
+<ul>
+<li>Define <em>linear-Gaussian relationship</em> between latent variables and data.</li>
+<li><strong>Standard</strong> Latent variable approach:
+<ul>
+<li>Define Gaussian prior over <em>latent space</em>, <span class="math inline">\(\mathbf{Z}\)</span>.</li>
+</ul></li>
+<li>Integrate out <em>latent variables</em>.
+</td>
+<td width="">
+<div class="figure">
+<div id="ppca-graph-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/ppca_graph.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div id="ppca-graph-magnify" class="magnify" onclick="magnifyFigure(&#39;ppca-graph&#39;)">
+<img class="img-button" src="{{ '/assets/images/Magnify_Large.svg' | relative_url }}" style="width:1.5ex">
+</div>
+<div id="ppca-graph-caption" class="caption-frame">
+<p>Figure: Graphical model representing probabilistic PCA.</p>
+</div>
+</div></li>
+</ul>
+<p><span class="math display">\[
+p\left(\mathbf{Y}|\mathbf{Z},\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{W}\mathbf{ z}_{i,:},\sigma^2\mathbf{I}\right)
+\]</span></p>
+<p><span class="math display">\[
+p\left(\mathbf{Z}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ z}_{i,:}|\mathbf{0},\mathbf{I}\right)
+\]</span></p>
+<span class="math display">\[
+p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{0},\mathbf{W}\mathbf{W}^{\top}+\sigma^{2}\mathbf{I}\right)
+\]</span>
+</td>
+</tr>
+</table>
 <h1 id="probabilistic-pca">Probabilistic PCA</h1>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/probabilistic-pca.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_dimred/includes/probabilistic-pca.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>In 1997 <a href="http://research.microsoft.com/pubs/67218/bishop-ppca-jrss.pdf">Tipping and Bishop</a> <span class="citation" data-cites="Tipping:pca97">(Tipping and Bishop, 1999a)</span> and <a href="https://www.cs.nyu.edu/~roweis/papers/empca.pdf">Roweis</a> <span class="citation" data-cites="Roweis:SPCA97">(Roweis, n.d.)</span> independently revisited Hotelling’s model and considered the case where the noise variance was finite, but <em>shared</em> across all output dimensons. Their model can be thought of as a factor analysis where <span class="math display">\[
@@ -642,7 +706,7 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <span id="cb21-3"><a href="#cb21-3"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
 <span id="cb21-4"><a href="#cb21-4"></a>labels <span class="op">=</span> data[<span class="st">&#39;str_lbls&#39;</span>]</span></code></pre></div>
 <p>You can try to plot some of the digits using <code>plt.matshow</code> (the digit images have size <code>16x16</code>).</p>
-<h2 id="principal-component-analysis">Principal Component Analysis</h2>
+<h2 id="principal-component-analysis-1">Principal Component Analysis</h2>
 <p><span style="text-align:right"><span class="editsection-bracket" style="">[</span><span class="editsection" style=""><a href="https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial.md" target="_blank" onclick="ga('send', 'event', 'Edit Page', 'Edit', 'https://github.com/lawrennd/talks/edit/gh-pages/_gplvm/includes/gplvm-tutorial.md', 13);">edit</a></span><span class="editsection-bracket" style="">]</span></span></p>
 <p>Principal component analysis (PCA) finds a rotation of the observed outputs, such that the rotated principal component (PC) space maximizes the variance of the data observed, sorted from most to least important (most to least variable in the corresponding PC).</p>
 <p>In order to apply PCA in an easy way, we have included a PCA module in pca.py. You can import the module by import &lt;path.to.pca&gt; (without the ending .py!). To run PCA on the digits we have to reshape (Hint: np.reshape ) digits .</p>
@@ -745,7 +809,7 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>data <span class="op">=</span> pods.datasets.singlecell()</span>
 <span id="cb37-2"><a href="#cb37-2"></a>Y <span class="op">=</span> data[<span class="st">&#39;Y&#39;</span>]</span>
 <span id="cb37-3"><a href="#cb37-3"></a>Y.describe</span></code></pre></div>
-<h2 id="principal-component-analysis-1">Principal Component Analysis</h2>
+<h2 id="principal-component-analysis-2">Principal Component Analysis</h2>
 <p>Now we follow <span class="citation" data-cites="Guo:fate10">Guo et al. (2010)</span> in performing PCA on the data. Rather than calling a ‘PCA routine’, here we break the algorithm down into its steps: compute the data covariance, compute the eigenvalues and eigenvectors and sort according to magnitude of eigenvalue. Because we want to visualize the data, we’ve chose to compute the eigenvectors of the <em>inner product matrix</em> rather than the covariance matrix. This allows us to plot the eigenvalues directly. However, this is less efficient (in this case because the number of genes is smaller than the number of data) than computing the eigendecomposition of the covariance matrix.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
 <div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># obtain a centred version of data.</span></span>
@@ -908,6 +972,9 @@ Oliver Stegle
 </div>
 <div id="ref-Hastie:pcurves89">
 <p>Hastie, T., Stuetzle, W., 1989. Principal curves. Journal of the American Statistical Association 84, 502–516.</p>
+</div>
+<div id="ref-Hotelling:analysis33">
+<p>Hotelling, H., 1933. Analysis of a complex of statistical variables into principal components. Journal of Educational Psychology 24, 417–441.</p>
 </div>
 <div id="ref-Lawrence:gplvm03">
 <p>Lawrence, N.D., n.d. Gaussian process models for visualisation of high dimensional data, in:. pp. 329–336.</p>
