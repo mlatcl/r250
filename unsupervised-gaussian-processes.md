@@ -7,9 +7,13 @@ hide: true
 
 This is the material for my R250 Unit in 2020-2021 Academic Year on "Unsupervised Gaussian Processes".
 
-### Introduction Session 
+## Introduction Session 
 
-You can find the [intro talk and notes here](/r250/lectures/01-unsupervised-gaussian-processes.html).
+You can find the [intro talk and notes here (split into two lectures).
+
+### [Week 1: Session 1](/r250/lectures/01-01-unsupervised-gaussian-processes.html).
+
+### [Week 1: Session 2](/r250/lectures/01-01-unsupervised-gaussian-processes.html).
 
 If you want to review some of the background then the following might also be useful.
 
