@@ -15,70 +15,6 @@
       span.underline{text-decoration: underline;}
       div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
-  <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-  </style>
   <link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
   <link rel="stylesheet" href="../assets/css/talks.css"/>
   <!-- Printing and PDF exports -->
@@ -134,45 +70,33 @@ sns.set_palette('colorblind')}-->
 <li>3648 dimensions (64 rows, 57 columns)</li>
 <li>Space contains much more than just this digit.</li>
 </ul>
-<div class="figure">
-<div id="dem_six000-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six000.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-</div>
-<aside class="notes">
-</aside>
-<div class="figure">
-<div id="dem_six001-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six001.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-</div>
-<aside class="notes">
-</aside>
-<div class="figure">
-<div id="dem_six002-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six002.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-</div>
-<aside class="notes">
-</aside>
-<div class="figure">
-<div id="dem_six003-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six003.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-</div>
-<aside class="notes">
-</aside>
 </section>
 <section id="usps-samples" class="slide level2">
 <h2>USPS Samples</h2>
+<script>
+showDivs(0, 'dem-six-sample');
+</script>
+<p><small></small> <input id="range-dem-six-sample" type="range" min="0" max="4" value="0" onchange="setDivs('dem-six-sample')" oninput="setDivs('dem-six-sample')"> <button onclick="plusDivs(-1, 'dem-six-sample')">❮</button> <button onclick="plusDivs(1, 'dem-six-sample')">❯</button></p>
+<div class="dem-six-sample" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six000.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div class="dem-six-sample" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six001.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div class="dem-six-sample" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six002.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div class="dem-six-sample" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six003.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
 <ul>
 <li>Even if we sample every nanonsecond from now until end of universe you won’t see original six!</li>
 </ul>
@@ -182,41 +106,63 @@ sns.set_palette('colorblind')}-->
 <ul>
 <li>Rotate a prototype</li>
 </ul>
-<div class="figure">
-<div id="dem_six_rotate000-figure" class="figure-frame">
+<script>
+showDivs(1, 'dem-six-rotate');
+</script>
+<p><small></small> <input id="range-dem-six-rotate" type="range" min="1" max="6" value="1" onchange="setDivs('dem-six-rotate')" oninput="setDivs('dem-six-rotate')"> <button onclick="plusDivs(-1, 'dem-six-rotate')">❮</button> <button onclick="plusDivs(1, 'dem-six-rotate')">❯</button></p>
+<div class="dem-six-rotate" style="text-align:center;">
 <div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six_rotate000.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+<img class="" src="../slides/diagrams/dimred/dem_six_rotate001.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
 </div>
+</div>
+<div class="dem-six-rotate" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six_rotate002.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div class="dem-six-rotate" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six_rotate003.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div class="dem-six-rotate" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six_rotate004.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div class="dem-six-rotate" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six_rotate005.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+<div class="dem-six-rotate" style="text-align:center;">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_six_rotate006.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="figure">
+<div id="dem-six-mainfold-print-figure" class="figure-frame">
+<table>
+<tr>
+<td width="30%">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_manifold_print001.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</td>
+<td width="30%">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/dem_manifold_print002.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <aside class="notes">
-</aside>
-<div class="figure">
-<div id="dem_six_rotate001-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six_rotate001.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-</div>
-<aside class="notes">
-</aside>
-<div class="figure">
-<div id="dem_six_rotate002-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six_rotate002.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-</div>
-<aside class="notes">
-</aside>
-<div class="figure">
-<div id="dem_six_rotate003-figure" class="figure-frame">
-<div class="centered" style="">
-<img class="" src="../slides/diagrams/ml/dem_six_rotate003.png.png" width="30%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
-</div>
-</div>
-</div>
-<aside class="notes">
+The rotated sixes projected onto the first two principal components of the ‘rotated data set’. The data lives on a one dimensional manifold in the 3,648 dimensional space.
 </aside>
 </section>
 <section id="low-dimensional-manifolds" class="slide level2">
@@ -233,7 +179,6 @@ sns.set_palette('colorblind')}-->
 <li>Conclusion: Deal with high dimensional data by looking for a lower dimensional non-linear embedding.</li>
 </ul></li>
 </ul>
-<p>bu</p>
 </section>
 <section id="dimensionality-reduction" class="slide level2">
 <h2>Dimensionality Reduction</h2>
@@ -275,6 +220,14 @@ Thinking of dimensionality reduction as a marionette. We observe the high dimens
 <li>Myers-Briggs assumes personality is four dimensional.</li>
 <li>Political belief (left/right wing).</li>
 <li>Also language modelling has taken similar approaches: <a href="https://arxiv.org/abs/1301.3781">word2vec</a></li>
+</ul>
+</section>
+<section id="gaussian-variables-and-linear-dimensionality-reduction" class="slide level2">
+<h2>Gaussian Variables and Linear Dimensionality Reduction</h2>
+<ul>
+<li>Return to non-linear shortly.</li>
+<li>Now: Linear dimensionality reduction.</li>
+<li>First: Review Gaussian density properties.</li>
 </ul>
 </section>
 <section id="two-important-gaussian-properties" class="slide level2">
@@ -342,6 +295,9 @@ Thinking of dimensionality reduction as a marionette. We observe the high dimens
 <p><span class="math display">\[
 \mathbf{f}(\mathbf{ z}) = \mathbf{W}\mathbf{ z}
 \]</span></p>
+</section>
+<section id="closely-related-to-linear-regression" class="slide level2">
+<h2>Closely Related to Linear Regression</h2>
 <p><span class="math display">\[
 \mathbf{f}(\mathbf{ z}) =
 \begin{bmatrix} f_1(\mathbf{ z}) \\ f_2(\mathbf{ z}) \\ \vdots \\
@@ -354,6 +310,9 @@ f_j(\mathbf{ z}) =
 <p><span class="math display">\[
 \epsilon_j \sim \mathcal{N}\left(0,\sigma^2_j\right).
 \]</span></p>
+</section>
+<section id="data-representation" class="slide level2">
+<h2>Data Representation</h2>
 <p><span class="math display">\[
 \mathbf{Y}
 = \begin{bmatrix} \mathbf{ y}_{1, :}^\top \\ \mathbf{ y}_{2, :}^\top \\ \vdots \\
@@ -374,48 +333,62 @@ f_j(\mathbf{ z}_{i, :}) = \mathbf{ w}_{j, :}^\top
 \mathbf{ z}_{i, :}
 \]</span></p>
 </section>
-<section id="latent-variables-1" class="slide level2">
-<h2>Latent Variables</h2>
-<p>The difference between this model and a multiple output regression is that in the regression case we are provided with the covariates <span class="math inline">\(\mathbf{Z}\)</span>, here they are <em>latent variables</em>. These variables are unknown. Just as we have done in the past for unknowns, we now treat them with a probability distribution. In <em>factor analysis</em> we assume that the latent variables have a Gaussian density which is independent across both across the latent variables associated with the different data points, and across those associated with different data features, so we have, <span class="math display">\[
+<section id="latent-variables-vs-linear-regression" class="slide level2">
+<h2>Latent Variables vs Linear Regression</h2>
+<p><span class="math display">\[
 x_{i,j} \sim
 \mathcal{N}\left(0,1\right),
 \]</span> and we can write the density governing the latent variable associated with a single point as, <span class="math display">\[
 \mathbf{ z}_{i, :} \sim \mathcal{N}\left(\mathbf{0},\mathbf{I}\right).
-\]</span> If we consider the values of the function for the <span class="math inline">\(i\)</span>th data point as <span class="math display">\[
+\]</span></p>
+<p><span class="math display">\[
 \mathbf{f}_{i, :} =
 \mathbf{f}(\mathbf{ z}_{i, :}) = \mathbf{W}\mathbf{ z}_{i, :} 
-\]</span> then we can use the rules for multivariate Gaussian relationships to write that <span class="math display">\[
+\]</span></p>
+<p><span class="math display">\[
 \mathbf{f}_{i, :} \sim \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top\right)
-\]</span> which implies that the distribution for <span class="math inline">\(\mathbf{ y}_{i, :}\)</span> is given by <span class="math display">\[
+\]</span></p>
+</section>
+<section id="data-distribution" class="slide level2">
+<h2>Data Distribution</h2>
+<p><span class="math display">\[
 \mathbf{ y}_{i, :} = \sim \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top + \boldsymbol{\Sigma}\right)
-\]</span> where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> the covariance of the noise variable, <span class="math inline">\(\epsilon_{i, :}\)</span> which for factor analysis is a diagonal matrix (because we have assumed that the noise was <em>independent</em> across the features), <span class="math display">\[
+\]</span></p>
+<p><span class="math display">\[
 \boldsymbol{\Sigma} = \begin{bmatrix}\sigma^2_{1} &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; \sigma^2_{2} &amp; 0 &amp; 0\\
                                      0 &amp; 0 &amp; \ddots &amp;
 0\\
                                      0 &amp; 0 &amp; 0 &amp; \sigma^2_p\end{bmatrix}.
-\]</span> For completeness, we could also add in a <em>mean</em> for the data vector <span class="math inline">\(\boldsymbol{ \mu}\)</span>, <span class="math display">\[
+\]</span></p>
+</section>
+<section id="mean-vector" class="slide level2">
+<h2>Mean Vector</h2>
+<p><span class="math display">\[
 \mathbf{ y}_{i, :} = \mathbf{W}\mathbf{ z}_{i, :} +
 \boldsymbol{ \mu}+ \boldsymbol{ \epsilon}_{i, :}
-\]</span> which would give our marginal distribution for <span class="math inline">\(\mathbf{ y}_{i, :}\)</span> a mean <span class="math inline">\(\boldsymbol{ \mu}\)</span>. However, the maximum likelihood solution for <span class="math inline">\(\boldsymbol{ \mu}\)</span> turns out to equal the empirical mean of the data, <span class="math display">\[
+\]</span></p>
+<p><span class="math display">\[
 \boldsymbol{ \mu}= \frac{1}{n} \sum_{i=1}^n
 \mathbf{ y}_{i, :},
-\]</span> <em>regardless</em> of the form of the covariance, <span class="math inline">\(\mathbf{C}= \mathbf{W}\mathbf{W}^\top + \boldsymbol{\Sigma}\)</span>. As a result it is very common to simply preprocess the data and ensure it is zero mean. We will follow that convention for this session.</p>
-<p>The prior density over latent variables is independent, and the likelihood is independent, that means that the marginal likelihood here is also independent over the data points. Factor analysis was developed mainly in psychology and the social sciences for understanding personality and intelligence. <a href="http://en.wikipedia.org/wiki/Charles_Spearman">Charles Spearman</a> was concerned with the measurements of “the abilities of man” and is credited with the earliest version of factor analysis.</p>
+\]</span> <span class="math inline">\(\mathbf{C}= \mathbf{W}\mathbf{W}^\top + \boldsymbol{\Sigma}\)</span></p>
 <!-- SECTION Principal Component Analysis -->
 </section>
 <section id="principal-component-analysis" class="slide level2">
 <h2>Principal Component Analysis</h2>
-<p>In 1933 <a href="http://en.wikipedia.org/wiki/Harold_Hotelling">Harold Hotelling</a> published on <em>principal component analysis</em> the first mention of this approach <span class="citation" data-cites="Hotelling:analysis33">(Hotelling, 1933)</span>. Hotelling’s inspiration was to provide mathematical foundation for factor analysis methods that were by then widely used within psychology and the social sciences. His model was a factor analysis model, but he considered the noiseless ‘limit’ of the model. In other words he took <span class="math inline">\(\sigma^2_i \rightarrow 0\)</span> so that he had <span class="math display">\[
+<p><span class="citation" data-cites="Hotelling:analysis33">Hotelling (1933)</span> took <span class="math inline">\(\sigma^2_i \rightarrow 0\)</span> so <span class="math display">\[
 \mathbf{ y}_{i, :} \sim \lim_{\sigma^2 \rightarrow 0} \mathcal{N}\left(\mathbf{0},\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right).
-\]</span> The paper had two unfortunate effects. Firstly, the resulting model is no longer valid probablistically, because the covariance of this Gaussian is ‘degenerate’. Because <span class="math inline">\(\mathbf{W}\mathbf{W}^\top\)</span> has rank of at most <span class="math inline">\(q\)</span> where <span class="math inline">\(q&lt;p\)</span> (due to the dimensionality reduction) the determinant of the covariance is zero, meaning the inverse doesn’t exist so the density, <span class="math display">\[
+\]</span></p>
+</section>
+<section id="degenerate-covariance" class="slide level2">
+<h2>Degenerate Covariance</h2>
+<p><small> <span class="math display">\[
 p(\mathbf{ y}_{i, :}|\mathbf{W}) =
 \lim_{\sigma^2 \rightarrow 0} \frac{1}{(2\pi)^\frac{p}{2}
-|\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}|^{-1}}
+|\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}|^{\frac{1}{2}}}
 \exp\left(-\frac{1}{2}\mathbf{ y}_{i, :}\left[\mathbf{W}\mathbf{W}^\top+ \sigma^2
 \mathbf{I}\right]^{-1}\mathbf{ y}_{i, :}\right),
-\]</span> is <em>not</em> valid for <span class="math inline">\(q&lt;p\)</span> (where <span class="math inline">\(\mathbf{W}\in \Re^{p\times q}\)</span>). This mathematical consequence is a probability density which has no ‘support’ in large regions of the space for <span class="math inline">\(\mathbf{ y}_{i, :}\)</span>. There are regions for which the probability of <span class="math inline">\(\mathbf{ y}_{i, :}\)</span> is zero. These are any regions that lie off the hyperplane defined by mapping from <span class="math inline">\(\mathbf{ z}\)</span> to <span class="math inline">\(\mathbf{ y}\)</span> with the matrix <span class="math inline">\(\mathbf{W}\)</span>. In factor analysis the noise corruption, <span class="math inline">\(\boldsymbol{ \epsilon}\)</span>, allows for points to be found away from the hyperplane. In Hotelling’s PCA the noise variance is zero, so there is only support for points that fall precisely on the hyperplane. Secondly, Hotelling explicity chose to rename factor analysis as principal component analysis, arguing that the factors social scientist sought were different in nature to the concept of a mathematical factor. This was unfortunate because the factor loadings, <span class="math inline">\(\mathbf{W}\)</span> can also be seen as factors in the mathematical sense because the model Hotelling defined is a Gaussian model with covariance given by <span class="math inline">\(\mathbf{C}= \mathbf{W}\mathbf{W}^\top\)</span> so <span class="math inline">\(\mathbf{W}\)</span> is a <em>factor</em> of the covariance in the mathematical sense, as well as a factor loading.</p>
-<p>However, the paper had one great advantage over standard approaches to factor analysis. Despite the fact that the model was a special case that is subsumed by the more general approach of factor analysis it is this special case that leads to a particular algorithm, namely that the factor loadings (or principal components as Hotelling referred to them) are given by an <em>eigenvalue decomposition</em> of the empirical covariance matrix.</p>
+\]</span></small></p>
 </section>
 <section id="computation-of-the-marginal-likelihood" class="slide level2">
 <h2>Computation of the Marginal Likelihood</h2>
@@ -432,7 +405,16 @@ p(\mathbf{ y}_{i, :}|\mathbf{W}) =
 <section id="linear-latent-variable-model-ii" class="slide level2">
 <h2>Linear Latent Variable Model II</h2>
 <p><strong>Probabilistic PCA Max. Likelihood Soln</strong> (<span class="citation" data-cites="Tipping:probpca99">Tipping and Bishop (1999)</span>)</p>
-%
+<div class="figure">
+<div id="ppca-graph-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/ppca_graph.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+Graphical model representing probabilistic PCA.
+</aside>
 <p><span class="math display">\[p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i, :}|\mathbf{0},\mathbf{W}\mathbf{W}^{\top}+\sigma^{2}\mathbf{I}\right)\]</span></p>
 </section>
 <section id="linear-latent-variable-model-ii-1" class="slide level2">
@@ -444,40 +426,6 @@ p(\mathbf{ y}_{i, :}|\mathbf{W}) =
   \]</span> If <span class="math inline">\(\mathbf{U}_{q}\)</span> are first <span class="math inline">\(q\)</span> principal eigenvectors of <span class="math inline">\(n^{-1}\mathbf{Y}^{\top}\mathbf{Y}\)</span> and the corresponding eigenvalues are <span class="math inline">\(\boldsymbol{\Lambda}_{q}\)</span>, <span class="math display">\[
   \mathbf{W}=\mathbf{U}_{q}\mathbf{L}\mathbf{R}^{\top},\quad\mathbf{L}=\left(\boldsymbol{\Lambda}_{q}-\sigma^{2}\mathbf{I}\right)^{\frac{1}{2}}
   \]</span> where <span class="math inline">\(\mathbf{R}\)</span> is an arbitrary rotation matrix.</p>
-</section>
-<section id="eigenvalue-decomposition" class="slide level2">
-<h2>Eigenvalue Decomposition</h2>
-<p>Eigenvalue problems are widespreads in physics and mathematics, they are often written as a matrix/vector equation but we prefer to write them as a full matrix equation. In an eigenvalue problem you are looking to find a matrix of eigenvectors, <span class="math inline">\(\mathbf{U}\)</span> and a <em>diagonal</em> matrix of eigenvalues, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> that satisfy the <em>matrix</em> equation <span class="math display">\[
-\mathbf{A}\mathbf{U} = \mathbf{U}\boldsymbol{\Lambda}.
-\]</span> where <span class="math inline">\(\mathbf{A}\)</span> is your matrix of interest. This equation is not trivially solvable through matrix inverse because matrix multiplication is not <a href="http://en.wikipedia.org/wiki/Commutative_property">commutative</a>, so premultiplying by <span class="math inline">\(\mathbf{U}^{-1}\)</span> gives <span class="math display">\[
-\mathbf{U}^{-1}\mathbf{A}\mathbf{U}
-= \boldsymbol{\Lambda}, 
-\]</span> where we remember that <span class="math inline">\(\boldsymbol{\Lambda}\)</span> is a <em>diagonal</em> matrix, so the eigenvectors can be used to <em>diagonalise</em> the matrix. When performing the eigendecomposition on a Gaussian covariances, diagonalisation is very important because it returns the covariance to a form where there is no correlation between points.</p>
-</section>
-<section id="positive-definite" class="slide level2">
-<h2>Positive Definite</h2>
-<p>We are interested in the case where <span class="math inline">\(\mathbf{A}\)</span> is a covariance matrix, which implies it is <em>positive definite</em>. A positive definite matrix is one for which the inner product, <span class="math display">\[
-\mathbf{ w}^\top \mathbf{C}\mathbf{ w}
-\]</span> is positive for <em>all</em> values of the vector <span class="math inline">\(\mathbf{ w}\)</span> other than the zero vector. One way of creating a positive definite matrix is to assume that the symmetric and positive definite matrix <span class="math inline">\(\mathbf{C}\in \Re^{p\times p}\)</span> is factorised into, <span class="math inline">\(\mathbf{A}in \Re^{p\times p}\)</span>, a <em>full rank</em> matrix, so that <span class="math display">\[
-\mathbf{C}= \mathbf{A}^\top
-\mathbf{A}.
-\]</span> This ensures that <span class="math inline">\(\mathbf{C}\)</span> must be positive definite because <span class="math display">\[
-\mathbf{ w}^\top \mathbf{C}\mathbf{ w}=\mathbf{ w}^\top
-\mathbf{A}^\top\mathbf{A}\mathbf{ w}
-\]</span> and if we now define a new <em>vector</em> <span class="math inline">\(\mathbf{b}\)</span> as <span class="math display">\[
-\mathbf{b} = \mathbf{A}\mathbf{ w}
-\]</span> we can now rewrite as <span class="math display">\[
-\mathbf{ w}^\top \mathbf{C}\mathbf{ w}= \mathbf{b}^\top\mathbf{b} = \sum_{i}
-b_i^2
-\]</span> which, since it is a sum of squares, is positive or zero. The constraint that <span class="math inline">\(\mathbf{A}\)</span> must be <em>full rank</em> ensures that there is no vector <span class="math inline">\(\mathbf{ w}\)</span>, other than the zero vector, which causes the vector <span class="math inline">\(\mathbf{b}\)</span> to be all zeros.</p>
-</section>
-<section id="exercise-1-1" class="slide level2">
-<h2>Exercise 1</h2>
-<p>If <span class="math inline">\(\mathbf{C}=\mathbf{A}^\top \mathbf{A}\)</span> then express <span class="math inline">\(c_{i,j}\)</span>, the value of the element at the <span class="math inline">\(i\)</span>th row and the <span class="math inline">\(j\)</span>th column of <span class="math inline">\(\mathbf{C}\)</span>, in terms of the columns of <span class="math inline">\(\mathbf{A}\)</span>. Use this to show that (i) the matrix is symmetric and (ii) the matrix has positive elements along its diagonal.</p>
-</section>
-<section id="eigenvectors-of-a-symmetric-matric" class="slide level2">
-<h2>Eigenvectors of a Symmetric Matric</h2>
-<p>Symmetric matrices have <em>orthonormal</em> eigenvectors. This means that <span class="math inline">\(\mathbf{U}\)</span> is an <a href="http://en.wikipedia.org/wiki/Orthogonal_matrix">orthogonal matrix</a>, <span class="math inline">\(\mathbf{U}^\top\mathbf{U} = \mathbf{I}\)</span>. This implies that <span class="math inline">\(\mathbf{u}_{:, i} ^\top \mathbf{u}_{:, j}\)</span> is equal to 0 if <span class="math inline">\(i\neq j\)</span> and 1 if <span class="math inline">\(i=j\)</span>.</p>
 </section>
 <section id="principal-component-analysis-1" class="slide level2">
 <h2>Principal Component Analysis</h2>
@@ -523,93 +471,49 @@ L\left(\mathbf{u}_{1},\lambda_{1}\right)=\mathbf{u}_{1}^{\top}\mathbf{S}\mathbf{
 <section id="linear-latent-variable-model" class="slide level2">
 <h2>Linear Latent Variable Model</h2>
 <p><strong>Probabilistic PCA</strong></p>
+<table>
+<tr>
+<td width>
 <ul>
 <li>Define <em>linear-Gaussian relationship</em> between latent variables and data.</li>
 <li><strong>Standard</strong> Latent variable approach:
 <ul>
 <li>Define Gaussian prior over <em>latent space</em>, <span class="math inline">\(\mathbf{Z}\)</span>.</li>
 </ul></li>
-<li>Integrate out <em>latent variables</em>.</li>
-</ul>
-<p><span class="math display">\[
+<li>Integrate out <em>latent variables</em>.
+</td>
+<td width="">
+<div class="figure">
+<div id="ppca-graph-figure" class="figure-frame">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/ppca_graph.png" width="40%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</div>
+</div>
+<aside class="notes">
+Graphical model representing probabilistic PCA.
+</aside>
+<small> <span class="math display">\[
 p\left(\mathbf{Y}|\mathbf{Z},\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{W}\mathbf{ z}_{i,:},\sigma^2\mathbf{I}\right)
-\]</span></p>
+\]</span></li>
+</ul>
 <p><span class="math display">\[
 p\left(\mathbf{Z}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ z}_{i,:}|\mathbf{0},\mathbf{I}\right)
 \]</span></p>
-<p><span class="math display">\[
+<span class="math display">\[
 p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{0},\mathbf{W}\mathbf{W}^{\top}+\sigma^{2}\mathbf{I}\right)
-\]</span></p>
-<!-- SECTION Probabilistic PCA -->
-</section>
-<section id="probabilistic-pca" class="slide level2">
-<h2>Probabilistic PCA</h2>
-<p><span class="math display">\[
-\boldsymbol{\Sigma} = \sigma^2 \mathbf{I}.
-\]</span></p>
-<p><span class="math display">\[
-p(\mathbf{Y}|\mathbf{W}, \sigma^2)
-= \prod_{i=1}^n\mathcal{N}\left(\mathbf{ y}_{i, :}|\mathbf{0},\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right)
-\]</span></p>
-<p><span class="math display">\[
-\mathbf{W}= \mathbf{U}\mathbf{L} \mathbf{R}^\top
-\]</span></p>
-<p><span class="math display">\[
-\mathbf{S} = \sum_{i=1}^n(\mathbf{ y}_{i, :} - \boldsymbol{ \mu})(\mathbf{ y}_{i,
-:} - \boldsymbol{ \mu})^\top,
-\]</span></p>
-<p><span class="math display">\[
-\ell_i = \sqrt{\lambda_i - \sigma^2}
-\]</span></p>
-</section>
-<section id="python-implementation-of-probabilistic-pca" class="slide level2">
-<h2>Python Implementation of Probabilistic PCA</h2>
-<p>We will now implement this algorithm in python.</p>
-<!-- SECTION Posterior for Principal Component Analysis -->
-</section>
-<section id="posterior-for-principal-component-analysis" class="slide level2">
-<h2>Posterior for Principal Component Analysis</h2>
-<p><span class="math display">\[
-p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :})
-\]</span></p>
-<p><span class="math display">\[
-p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) \propto p(\mathbf{ y}_{i,
-:}|\mathbf{W}, \mathbf{ z}_{i, :}, \sigma^2) p(\mathbf{ z}_{i, :})
-\]</span></p>
-<p><span class="math display">\[
-\log p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) = \log p(\mathbf{ y}_{i, :}|\mathbf{W},
-\mathbf{ z}_{i, :}, \sigma^2) + \log p(\mathbf{ z}_{i, :}) + \text{const}
-\]</span></p>
-<p><span class="math display">\[
-\log p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) =
--\frac{1}{2\sigma^2} (\mathbf{ y}_{i, :} - \mathbf{W}\mathbf{ z}_{i,
-:})^\top(\mathbf{ y}_{i, :} - \mathbf{W}\mathbf{ z}_{i, :}) - \frac{1}{2}
-\mathbf{ z}_{i, :}^\top \mathbf{ z}_{i, :} + \text{const}
-\]</span></p>
-</section>
-<section id="exercise-1-2" class="slide level2">
-<h2>Exercise 1</h2>
-<p>Multiply out the terms in the brackets. Then collect the quadratic term and the linear terms together. Show that the posterior has the form <span class="math display">\[
-\mathbf{ z}_{i, :} | \mathbf{W}\sim \mathcal{N}\left(\boldsymbol{ \mu}_x,\mathbf{C}_x\right)
-\]</span> where <span class="math display">\[
-\mathbf{C}_x = \left(\sigma^{-2}
-\mathbf{W}^\top\mathbf{W}+ \mathbf{I}\right)^{-1}
-\]</span> and <span class="math display">\[
-\boldsymbol{ \mu}_x
-= \mathbf{C}_x \sigma^{-2}\mathbf{W}^\top \mathbf{ y}_{i, :} 
-\]</span> Compare this to the posterior for the Bayesian linear regression from last week, do they have similar forms? What matches and what differs?</p>
-</section>
-<section id="exercise-2" class="slide level2">
-<h2>Exercise 2</h2>
-<p>Use the values for <span class="math inline">\(\mathbf{W}\)</span> and <span class="math inline">\(\sigma^2\)</span> you have computed, along with the data set <span class="math inline">\(\mathbf{Y}\)</span> to compute the posterior density over <span class="math inline">\(\mathbf{Z}\)</span>. Write a function of the form</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>mu_x, C_x <span class="op">=</span> posterior(Y, W, sigma2)</span></code></pre></div>
-<p>where <code>mu_x</code> and <code>C_x</code> are the posterior mean and posterior covariance for the given <span class="math inline">\(\mathbf{Y}\)</span>.</p>
-<p>Don’t forget to subtract the mean of the data <code>Y</code> inside your function before computing the posterior: remember we assumed at the beginning of our analysis that the data had been centred (i.e. the mean was removed).</p>
+\]</span></small>
+</td>
+</tr>
+</table>
 </section>
 <section id="robot-navigation-example" class="slide level2">
 <h2>Robot Navigation Example</h2>
-<p>In the next example we will load in data from a robot navigation problem. The data consists of wireless access point strengths as recorded by a robot performing a loop around the University of Washington’s Computer Science department in Seattle. The robot records all the wireless access points it can cache and stores their signal strength.</p>
-<p>There are 215 observations of 30 different access points. In this case the model is suggesting that the access point signal strength should be linearly dependent on the location in the map. In other words we are expecting the access point strength for the <span class="math inline">\(j\)</span>th access point at robot position <span class="math inline">\(x_{i, :}\)</span> to be represented by <span class="math inline">\(y_{i, j} = \mathbf{ w}_{j, :}^\top \mathbf{ z}_{i, :} + \epsilon_{i,j}\)</span>.</p>
+<ul>
+<li>Example involving 215 observations of 30 access points.</li>
+<li>Infer location of ‘robot’ and accesspoints.</li>
+<li>This is known as SLAM (simulataneous localization and mapping).</li>
+</ul>
 <!-- SECTION Interpretations of Principal Component Analysis -->
 </section>
 <section id="interpretations-of-principal-component-analysis" class="slide level2">
@@ -617,15 +521,25 @@ p(\mathbf{ z}_{i, :} | \mathbf{ y}_{i, :}) \propto p(\mathbf{ y}_{i,
 </section>
 <section id="relationship-to-matrix-factorization" class="slide level2">
 <h2>Relationship to Matrix Factorization</h2>
-<p><span class="math display">\[
+<ul>
+<li><p>PCA is closely related to matrix factorisation.</p></li>
+<li><p>Instead of <span class="math inline">\(\mathbf{Z}\)</span>, <span class="math inline">\(\mathbf{W}\)</span></p></li>
+<li><p>Define Users <span class="math inline">\(\mathbf{U}\)</span> and items <span class="math inline">\(\mathbf{V}\)</span></p></li>
+<li><p>Matrix factorisation: <span class="math display">\[
 f_{i, j} =
 \mathbf{u}_{i, :}^\top \mathbf{v}_{j, :} 
-\]</span> for matrix factorization or <span class="math display">\[
+\]</span> PCA: <span class="math display">\[
 f_{i, j} = \mathbf{ z}_{i, :}^\top \mathbf{ w}_{j, :} 
-\]</span></p>
+\]</span></p></li>
+</ul>
 </section>
 <section id="other-interpretations-of-pca-separating-model-and-algorithm" class="slide level2">
 <h2>Other Interpretations of PCA: Separating Model and Algorithm</h2>
+<ul>
+<li>PCA introduced as latent variable model (a model).</li>
+<li>Solution is through an eigenvalue problem (an algorithm).</li>
+<li>This causes some confusion about what PCA is.</li>
+</ul>
 <p><span class="math display">\[
 \mathbf{Y}= \mathbf{V} \boldsymbol{\Lambda} \mathbf{U}^\top
 \]</span></p>
@@ -637,55 +551,16 @@ f_{i, j} = \mathbf{ z}_{i, :}^\top \mathbf{ w}_{j, :}
 </section>
 <section id="separating-model-and-algorithm" class="slide level2">
 <h2>Separating Model and Algorithm</h2>
-<p>I’ve given a fair amount of personal thought to this situation and my own opinion that this confusion about method arises because of a conflation of model and algorithm. The model of Hotelling, that which he termed principal component analysis, was really a variant of factor analysis, and it was unfortunate that he chose to rename it. However, the algorithm he derived was a very convenient way of optimising a (simplified) factor analysis, and it’s therefore become very popular. The algorithm is also the optimal solution for many other models of the data, even some which might seem initally to be unrelated (e.g. seeking directions of maximum variance). It is only through the mathematics of this linear system (which also contains some intersting symmetries) that all these ides become related. However, as soon as we choose to non-linearise the system (e.g. through basis functions) we find that each of the non-linear intepretations we can derive for the different models each leads to a very different algorithm (if such an algorithm is possible). For example <a href="http://web.stanford.edu/~hastie/Papers/Principal_Curves.pdf">principal curves</a> of <span class="citation" data-cites="Hastie:pcurves89">Hastie and Stuetzle (1989)</span> attempt to non-linearise the maximum variance interpretation, <a href="http://en.wikipedia.org/wiki/Kernel_principal_component_analysis">kernel PCA</a> of <span class="citation" data-cites="Scholkopf:nonlinear98">Schölkopf et al. (1998)</span> uses basis functions to form the eigenvalue problem in a nonlinear space, and my own work in this area <a href="http://jmlr.org/papers/volume6/lawrence05a/lawrence05a.pdf">non-linearises the dual probabilistic PCA</a> <span class="citation" data-cites="Lawrence:pnpca05">(Lawrence, 2005)</span>.</p>
-<p>My conclusion is that when you are doing machine learning you should always have it clear in your mind what your <em>model</em> is and what your <em>algorithm</em> is. You can recognise your model because it normally contains a prediction function and an objective function. The algorithm on the other hand is the sequence of steps you implement on the computer to solve for the parameters of this model. For efficient implementation, we often modify our model to allow for faster algorithms, and this is a perfectly valid pragmatist’s approach, so conflation of model and algorithm is not always a bad thing. But for clarity of thinking and understanding it is necessary to maintain the separation and to maintain a handle on when and why we perform the conflation.</p>
-<!-- SECTION PCA in Practice -->
-</section>
-<section id="pca-in-practice" class="slide level2">
-<h2>PCA in Practice</h2>
-<p>Principal component analysis is so effective in practice that there has almost developed a mini-industry in renaming the method itself (which is ironic, given its origin). In particular <a href="http://en.wikipedia.org/wiki/Latent_semantic_indexing">Latent Semantic Indexing</a> in text processing is simply PCA on a particular representation of the term frequencies of the document. There is a particular fad to rename the eigenvectors after the nature of the data you are examining, perhaps initially triggered by <a href="http://www.face-rec.org/algorithms/PCA/jcn.pdf">Turk and Pentland’s</a> paper on eigenfaces, but also with <a href="https://wiki.inf.ed.ac.uk/twiki/pub/CSTR/ListenSemester1_2007_8/kuhn-%20junqua-eigenvoice-icslp1998.pdf">eigenvoices</a> and <a href="http://www.biomedcentral.com/1752-0509/1/54">eigengenes</a>. This seems to be an instantiation of a wider, and hopefully subconcious, tendency in academia to attempt to differentiate one idea from the same idea in related fields in order to emphasise the novelty. The unfortunate result is somewhat of a confusing literature for relatively simple model. My recommendations would be as follows. If you have multivariate data, applying some form of principal component would seem to be a very good idea as a first step. Even if you intend to later perform classification or regression on your data, it can give you understanding of the structure of the underlying data and help you to develop your intuitions about the nature of your data. Intelligent plotting and interaction with your data is always a good think, and for high dimensional data that means that you need some way of visualisation, PCA is typically a good starting point.</p>
-<!-- SECTION PPCA Marginal Likelihood -->
-</section>
-<section id="ppca-marginal-likelihood" class="slide level2">
-<h2>PPCA Marginal Likelihood</h2>
-<p>We have developed the posterior density over the latent variables given the data and the parameters, and due to symmetries in the underlying prediction function, it has a very similar form to its sister density, the posterior of the weights given the data from Bayesian regression. Two key differences are as follows. If we were to do a Bayesian multiple output regression we would find that the marginal likelihood of the data is independent across the features and correlated across the data, <span class="math display">\[
-p(\mathbf{Y}|\mathbf{Z})
-= \prod_{j=1}^p \mathcal{N}\left(\mathbf{ y}_{:, j}|\mathbf{0},
-\alpha\mathbf{Z}\mathbf{Z}^\top + \sigma^2 \mathbf{I}\right)
-\]</span> where <span class="math inline">\(\mathbf{ y}_{:, j}\)</span> is a column of the data matrix and the independence is across the <em>features</em>, in probabilistic PCA the marginal likelihood has the form, <span class="math display">\[
-p(\mathbf{Y}|\mathbf{W}) = \prod_{i=1}^n\mathcal{N}\left(\mathbf{ y}_{i,
-:}|\mathbf{0},\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right)
-\]</span> where <span class="math inline">\(\mathbf{ y}_{i, :}\)</span> is a row of the data matrix <span class="math inline">\(\mathbf{Y}\)</span> and the independence is across the data points.</p>
-<!-- SECTION Computation of the Log Likelihood -->
-</section>
-<section id="computation-of-the-log-likelihood" class="slide level2">
-<h2>Computation of the Log Likelihood</h2>
-<p>The quality of the model can be assessed using the log likelihood of this Gaussian form. <span class="math display">\[
-\log p(\mathbf{Y}|\mathbf{W}) = -\frac{n}{2} \log \left|
-\mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right| -\frac{1}{2}
-\sum_{i=1}^n\mathbf{ y}_{i, :}^\top \left(\mathbf{W}\mathbf{W}^\top + \sigma^2
-\mathbf{I}\right)^{-1} \mathbf{ y}_{i, :} +\text{const}
-\]</span> but this can be computed more rapidly by exploiting the low rank form of the covariance covariance, <span class="math inline">\(\mathbf{C}= \mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\)</span> and the fact that <span class="math inline">\(\mathbf{W}= \mathbf{U}\mathbf{L}\mathbf{R}^\top\)</span>. Specifically, we first use the decomposition of <span class="math inline">\(\mathbf{W}\)</span> to write: <span class="math display">\[
--\frac{n}{2} \log \left| \mathbf{W}\mathbf{W}^\top + \sigma^2 \mathbf{I}\right|
-= -\frac{n}{2} \sum_{i=1}^q \log (\ell_i^2 + \sigma^2) - \frac{n(p-q)}{2}\log
-\sigma^2,
-\]</span> where <span class="math inline">\(\ell_i\)</span> is the <span class="math inline">\(i\)</span>th diagonal element of <span class="math inline">\(\mathbf{L}\)</span>. Next, we use the <a href="http://en.wikipedia.org/wiki/Woodbury_matrix_identity">Woodbury matrix identity</a> which allows us to write the inverse as a quantity which contains another inverse in a smaller matrix: <span class="math display">\[
-(\sigma^2 \mathbf{I}+ \mathbf{W}\mathbf{W}^\top)^{-1} =
-\sigma^{-2}\mathbf{I}-\sigma^{-4}\mathbf{W}{\underbrace{(\mathbf{I}+\sigma^{-2}\mathbf{W}^\top\mathbf{W})}_{\mathbf{C}_x}}^{-1}\mathbf{W}^\top
-\]</span> So, it turns out that the original inversion of the <span class="math inline">\(p \times p\)</span> matrix can be done by forming a quantity which contains the inversion of a <span class="math inline">\(q \times q\)</span> matrix which, moreover, turns out to be the quantity <span class="math inline">\(\mathbf{C}_x\)</span> of the posterior.</p>
-<p>Now, we put everything together to obtain: <span class="math display">\[
-\log p(\mathbf{Y}|\mathbf{W}) = -\frac{n}{2} \sum_{i=1}^q
-\log (\ell_i^2 + \sigma^2)
-- \frac{n(p-q)}{2}\log \sigma^2 - \frac{1}{2} \text{tr}\left(\mathbf{Y}^\top \left(
-\sigma^{-2}\mathbf{I}-\sigma^{-4}\mathbf{W}\mathbf{C}_x
-\mathbf{W}^\top \right) \mathbf{Y}\right) + \text{const},
-\]</span> where we used the fact that a scalar sum can be written as <span class="math inline">\(\sum_{i=1}^n\mathbf{ y}_{i,:}^\top \mathbf{K}\mathbf{ y}_{i,:} = \text{tr}\left(\mathbf{Y}^\top \mathbf{K}\mathbf{Y}\right)\)</span>, for any matrix <span class="math inline">\(\mathbf{K}\)</span> of appropriate dimensions. We now use the properties of the trace <span class="math inline">\(\text{tr}\left(\mathbf{A}+\mathbf{B}\right)=\text{tr}\left(\mathbf{A}\right)+\text{tr}\left(\mathbf{B}\right)\)</span> and <span class="math inline">\(\text{tr}\left(c \mathbf{A}\right) = c \text{tr}\left(\mathbf{A}\right)\)</span>, where <span class="math inline">\(c\)</span> is a scalar and <span class="math inline">\(\mathbf{A},\mathbf{B}\)</span> matrices of compatible sizes. Therefore, the final log likelihood takes the form: <span class="math display">\[
-\log p(\mathbf{Y}|\mathbf{W}) = -\frac{n}{2}
-\sum_{i=1}^q \log (\ell_i^2 + \sigma^2) - \frac{n(p-q)}{2}\log \sigma^2 -
-\frac{\sigma^{-2}}{2} \text{tr}\left(\mathbf{Y}^\top \mathbf{Y}\right)
-+\frac{\sigma^{-4}}{2} \text{tr}\left(\mathbf{B}\mathbf{C}_x\mathbf{B}^\top\right) +
-\text{const}
-\]</span> where we also defined <span class="math inline">\(\mathbf{B}=\mathbf{Y}^\top\mathbf{W}\)</span>. Finally, notice that <span class="math inline">\(\text{tr}\left(\mathbf{Y}\mathbf{Y}^\top\right)=\text{tr}\left(\mathbf{Y}^\top\mathbf{Y}\right)\)</span> can be computed faster as the sum of all the elements of <span class="math inline">\(\mathbf{Y}\circ\mathbf{Y}\)</span>, where <span class="math inline">\(\circ\)</span> denotes the element-wise (or <a href="http://en.wikipedia.org/wiki/Hadamard_product_(matrices)">Hadamard</a>) product.</p>
+<ul>
+<li>Separation between <em>model</em> and <em>algorithm</em> is helpful conceptually.</li>
+<li>Even if in practice they conflate (e.g. deep neural networks).</li>
+<li>Sometimes difficult to pull apart.</li>
+<li>Helpful to revisit algorithms with modelling perspective in mind.
+<ul>
+<li>Probabilistic numerics</li>
+</ul></li>
+</ul>
+<!--include{_dimred/includes/ppca-marginal-likelihood.md}-->
 </section>
 <section id="difficulty-for-probabilistic-approaches" class="slide level2">
 <h2>Difficulty for Probabilistic Approaches</h2>
@@ -767,35 +642,37 @@ A Gaussian density over the input of a non linear function leads to a very non G
 <li>Integrate out <em>parameters</em>.
 </td>
 <td width="45%">
- {}</li>
-</ul>
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/gplvm_graph.png" width="50%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+<span class="math display">\[
+p\left(\mathbf{Y}|\mathbf{Z},\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{W}\mathbf{ z}_{i,:},\sigma^{2}\mathbf{I}\right)
+\]</span> <span class="math display">\[
+ p\left(\mathbf{W}\right)=\prod_{i=1}^{p}\mathcal{N}\left(\mathbf{ w}_{i,:}|\mathbf{0},\mathbf{I}\right)\]</span> <span class="math display">\[
+ p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{p}\mathcal{N}\left(\mathbf{ y}_{:,j}|\mathbf{0},\mathbf{Z}\mathbf{Z}^{\top}+\sigma^{2}\mathbf{I}\right)\]</span>
 </td>
 </tr>
-</table>
+</table></li>
+</ul>
+<p>{</p>
 </section>
 <section id="linear-latent-variable-model-iv" class="slide level2">
 <h2>Linear Latent Variable Model IV</h2>
 <div class="fragment" data-fragment-index="1" style="">
 <strong>Dual</strong>
 </div>
-<div class="fragment" data-fragment-index="2" style="">
-<strong>Dual</strong>
-</div>
 Probabilistic PCA Max. Likelihood Soln
 <div class="fragment" data-fragment-index="1" style="">
-<span class="citation" data-cites="Lawrence:gplvm03">(Lawrence, n.d., p. Lawrence:pnpca05)</span>
+<span class="citation" data-cites="Lawrence:gplvm03">(Lawrence, n.d., p. @Lawrence:pnpca05)</span>
 </div>
-<div class="fragment" data-fragment-index="2" style="">
-<span class="citation" data-cites="Lawrence:gplvm03">(Lawrence, n.d., p. Lawrence:pnpca05)</span>
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/gplvm_graph.png" width="25%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
 </div>
-<div class="fragment" data-fragment-index="3" style="">
-<span class="citation" data-cites="Tipping:probpca99">(Tipping and Bishop, 1999)</span>
-</div>
-<pre><code> \includegraphics&lt;1&gt;[width=0.25\textwidth]{../../../gplvm/tex/diagrams/gplvmGraph}</code></pre>
+<small>
 <div class="fragment" data-fragment-index="1" style="">
-<span class="math display">\[
+<p><span class="math display">\[
 p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{p}\mathcal{N}\left(\mathbf{ y}_{:,j}|\mathbf{0},\mathbf{Z}\mathbf{Z}^{\top}+\sigma^{2}\mathbf{I}\right)
-\]</span>
+\]</span></p>
 </div>
 <div class="fragment" data-fragment-index="2" style="">
 <span class="math display">\[
@@ -806,6 +683,15 @@ p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{p}\mathcal{N}\left(\mathbf{ y}_
 \mathbf{Z}=\mathbf{U^{\prime}}_{q}\mathbf{L}\mathbf{R}^{\top},\quad\quad\mathbf{L}=\left(\Lambda_{q}-\sigma^{2}\mathbf{I}\right)^{\frac{1}{2}}
 \]</span> where <span class="math inline">\(\mathbf{R}\)</span> is an arbitrary rotation matrix.
 </div>
+<div class="fragment" data-fragment-index="3" style="">
+<span class="math display">\[
+p\left(\mathbf{Y}|\mathbf{W}\right)=\prod_{i=1}^{n}\mathcal{N}\left(\mathbf{ y}_{i,:}|\mathbf{0},\mathbf{C}\right),\quad\quad\mathbf{C}=\mathbf{W}\mathbf{W}^{\top}+\sigma^{2}\mathbf{I}\]</span> <span class="math display">\[
+\log p\left(\mathbf{Y}|\mathbf{W}\right)=-\frac{n}{2}\log\left|\mathbf{C}\right|-\frac{1}{2}\text{tr}\left(\mathbf{C}^{-1}\mathbf{Y}^{\top}\mathbf{Y}\right)+\mbox{const.}
+\]</span> If <span class="math inline">\(\mathbf{U}_{q}\)</span> are first <span class="math inline">\(q\)</span> principal eigenvectors of <span class="math inline">\(n^{-1}\mathbf{Y}^{\top}\mathbf{Y}\)</span> and the corresponding eigenvalues are <span class="math inline">\(\Lambda_{q}\)</span>, <span class="math display">\[
+\mathbf{W}=\mathbf{U}_{q}\mathbf{L}\mathbf{R}^{\top},\quad\quad\mathbf{L}=\left(\Lambda_{q}-\sigma^{2}\mathbf{I}\right)^{\frac{1}{2}}
+\]</span> where <span class="math inline">\(\mathbf{R}\)</span> is an arbitrary rotation matrix.
+</div>
+<pre><code> &lt;/small&gt;</code></pre>
 </section>
 <section id="equivalence-of-formulations" class="slide level2">
 <h2>Equivalence of Formulations</h2>
@@ -822,7 +708,7 @@ p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{p}\mathcal{N}\left(\mathbf{ y}_
   \]</span></p></li>
 </ul>
 </section>
-<section id="section" class="slide level2">
+<section id="section-1" class="slide level2">
 <h2></h2>
 <div class="centered" style="">
 <img class="negate" src="../slides/diagrams/gp/gp_rejection_sample001.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
@@ -831,7 +717,7 @@ p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{p}\mathcal{N}\left(\mathbf{ y}_
 Here we’re showing 20 samples taken from the prior over functions defined by our covarariance
 </aside>
 </section>
-<section id="section-1" class="slide level2">
+<section id="section-2" class="slide level2">
 <h2></h2>
 <div class="centered" style="">
 <img class="negate" src="../slides/diagrams/gp/gp_rejection_sample002.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
@@ -840,7 +726,7 @@ Here we’re showing 20 samples taken from the prior over functions defined by o
 We can sample many such functions, in this slide there are now 1000 in total. This is a sample from our prior over functions.
 </aside>
 </section>
-<section id="section-2" class="slide level2">
+<section id="section-3" class="slide level2">
 <h2></h2>
 <div class="centered" style="">
 <img class="negate" src="../slides/diagrams/gp/gp_rejection_sample003.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
@@ -849,7 +735,7 @@ We can sample many such functions, in this slide there are now 1000 in total. Th
 Now we observe data. Here there are three data points. Conceptually in Bayesian inference we discard all samples that are distant from the data.
 </aside>
 </section>
-<section id="section-3" class="slide level2">
+<section id="section-4" class="slide level2">
 <h2></h2>
 <div class="centered" style="">
 <img class="negate" src="../slides/diagrams/gp/gp_rejection_sample004.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
@@ -858,7 +744,7 @@ Now we observe data. Here there are three data points. Conceptually in Bayesian 
 Throwing away such samples we are left with our posterior. This is the collection of samples from the prior that are consistent with the data.
 </aside>
 </section>
-<section id="section-4" class="slide level2">
+<section id="section-5" class="slide level2">
 <h2></h2>
 <div class="centered" style="">
 <img class="negate" src="../slides/diagrams/gp/gp_rejection_sample005.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
@@ -877,6 +763,11 @@ The elegance of the Gaussian process is that this result can be computed analyti
 <li>Prior distribution over <em>instantiations</em> of the function: finite dimensional objects.</li>
 <li>Can prove by induction that GP is ‘consistent’.</li>
 </ul></li>
+</ul>
+</section>
+<section id="gaussian-process-gp-ii" class="slide level2">
+<h2>Gaussian Process (GP) II</h2>
+<ul>
 <li><p>Mean and Covariance Functions</p></li>
 <li><p>Instead of mean and covariance matrix, GP is defined by mean function and covariance function.</p>
 <ul>
@@ -886,8 +777,8 @@ The elegance of the Gaussian process is that this result can be computed analyti
 </ul></li>
 </ul>
 </section>
-<section id="gaussian-processes-ii" class="slide level2">
-<h2>Gaussian Processes II</h2>
+<section id="gaussian-processes-iii" class="slide level2">
+<h2>Gaussian Processes III</h2>
 <p><strong>Zero mean Gaussian Process</strong></p>
 <ul>
 <li><p>A (zero mean) Gaussian process likelihood is of the form<span class="math display">\[
@@ -900,10 +791,6 @@ The elegance of the Gaussian process is that this result can be computed analyti
 </ul></li>
 </ul>
 </section>
-<section id="covariance-samples" class="slide level2">
-<h2>Covariance Samples</h2>
-%
-</section>
 <section id="gaussian-process-regression" class="slide level2">
 <h2>Gaussian Process Regression</h2>
 <p><strong>Posterior Distribution over Functions</strong></p>
@@ -914,57 +801,367 @@ The elegance of the Gaussian process is that this result can be computed analyti
 <li>Combine the prior with data to get a  distribution over functions.</li>
 </ul>
 </section>
-<section id="gaussian-process-regression-1" class="slide level2">
-<h2>Gaussian Process Regression</h2>
-%
+<section id="exponentiated-quadratic-covariance" class="slide level2">
+<h2>Exponentiated Quadratic Covariance</h2>
+<center>
+<span class="math display">\[k(\mathbf{ x}, \mathbf{ x}^\prime) = \alpha \exp\left(-\frac{\left\Vert \mathbf{ x}-\mathbf{ x}^\prime \right\Vert_2^2}{2\ell^2}\right)\]</span>
+</center>
+<div class="figure">
+<div id="eq-covariance-plot-figure" class="figure-frame">
+<table>
+<tr>
+<td width="45%">
+<object class data="../slides/diagrams/kern/eq_covariance.svg" width="100%" style=" ">
+</object>
+</td>
+<td width="45%">
+<div class="centered" style="">
+<img class="negate" src="../slides/diagrams/kern/eq_covariance.gif" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<aside class="notes">
+The exponentiated quadratic covariance function.
+</aside>
 </section>
-<section id="learning-kernel-parameters" class="slide level2">
-<h2>Learning Kernel Parameters</h2>
-<p></p>
-<p>                 </p>
+<section id="learning-covariance-parameters" class="slide level2">
+<h2>Learning Covariance Parameters</h2>
+<p>Can we determine covariance parameters from the data?</p>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<p><span class="math display">\[
+\mathcal{N}\left(\mathbf{ y}|\mathbf{0},\mathbf{K}\right)=\frac{1}{(2\pi)^\frac{n}{2}{\det{\mathbf{K}}^{\frac{1}{2}}}}{\exp\left(-\frac{\mathbf{ y}^{\top}\mathbf{K}^{-1}\mathbf{ y}}{2}\right)}
+\]</span></p>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<p><span class="math display">\[
+\begin{aligned}
+    \mathcal{N}\left(\mathbf{ y}|\mathbf{0},\mathbf{K}\right)=\frac{1}{(2\pi)^\frac{n}{2}\color{yellow}{\det{\mathbf{K}}^{\frac{1}{2}}}}\color{cyan}{\exp\left(-\frac{\mathbf{ y}^{\top}\mathbf{K}^{-1}\mathbf{ y}}{2}\right)}
+\end{aligned}
+\]</span></p>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<p><span class="math display">\[
+\begin{aligned}
+    \log \mathcal{N}\left(\mathbf{ y}|\mathbf{0},\mathbf{K}\right)=&amp;\color{yellow}{-\frac{1}{2}\log\det{\mathbf{K}}}\color{cyan}{-\frac{\mathbf{ y}^{\top}\mathbf{K}^{-1}\mathbf{ y}}{2}} \\ &amp;-\frac{n}{2}\log2\pi
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+E(\boldsymbol{ \theta}) = \color{yellow}{\frac{1}{2}\log\det{\mathbf{K}}} + \color{cyan}{\frac{\mathbf{ y}^{\top}\mathbf{K}^{-1}\mathbf{ y}}{2}}
+\]</span></p>
+</section>
+<section id="capacity-control-through-the-determinant" class="slide level2">
+<h2>Capacity Control through the Determinant</h2>
+<p>The parameters are <em>inside</em> the covariance function (matrix).  <span class="math display">\[k_{i, j} = k(\mathbf{ x}_i, \mathbf{ x}_j; \boldsymbol{ \theta})\]</span></p>
+</section>
+<section id="eigendecomposition-of-covariance" class="slide level2">
+<h2>Eigendecomposition of Covariance</h2>
+<p><span> <span class="math display">\[\mathbf{K}= \mathbf{R}\boldsymbol{ \Lambda}^2 \mathbf{R}^\top\]</span></span></p>
+<table>
+<tr>
+<td width="50%">
+<div class="centered" style="">
+<img class="negate" src="../slides/diagrams/gp/gp-optimize-eigen.png" width="100%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+</td>
+<td width="50%">
+<span class="math inline">\(\boldsymbol{ \Lambda}\)</span> represents distance on axes. <span class="math inline">\(\mathbf{R}\)</span> gives rotation.
+</td>
+</tr>
+</table>
+</section>
+<section id="eigendecomposition-of-covariance-1" class="slide level2">
+<h2>Eigendecomposition of Covariance</h2>
+<ul>
+<li><span class="math inline">\(\boldsymbol{ \Lambda}\)</span> is <em>diagonal</em>, <span class="math inline">\(\mathbf{R}^\top\mathbf{R}= \mathbf{I}\)</span>.</li>
+<li>Useful representation since <span class="math inline">\(\det{\mathbf{K}} = \det{\boldsymbol{ \Lambda}^2} = \det{\boldsymbol{ \Lambda}}^2\)</span>.</li>
+</ul>
+</section>
+<section id="capacity-control-coloryellowlog-detmathbfk" class="slide level2">
+<h2>Capacity control: <span class="math inline">\(\color{yellow}{\log \det{\mathbf{K}}}\)</span></h2>
+<script>
+showDivs(0, 'gp-optimise-determinant');
+</script>
+<p><small></small> <input id="range-gp-optimise-determinant" type="range" min="0" max="10" value="0" onchange="setDivs('gp-optimise-determinant')" oninput="setDivs('gp-optimise-determinant')"> <button onclick="plusDivs(-1, 'gp-optimise-determinant')">❮</button> <button onclick="plusDivs(1, 'gp-optimise-determinant')">❯</button></p>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant000.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant001.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant002.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant003.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant004.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant005.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant006.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant007.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant008.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-determinant" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-determinant009.svg" width="80%" style=" ">
+</object>
+</div>
+</section>
+<section id="data-fit-colorcyanfracmathbf-ytopmathbfk-1mathbf-y2" class="slide level2">
+<h2>Data Fit: <span class="math inline">\(\color{cyan}{\frac{\mathbf{ y}^\top\mathbf{K}^{-1}\mathbf{ y}}{2}}\)</span></h2>
+<script>
+showDivs(0, 'gp-optimise-quadratic');
+</script>
+<p><small></small> <input id="range-gp-optimise-quadratic" type="range" min="0" max="2" value="0" onchange="setDivs('gp-optimise-quadratic')" oninput="setDivs('gp-optimise-quadratic')"> <button onclick="plusDivs(-1, 'gp-optimise-quadratic')">❮</button> <button onclick="plusDivs(1, 'gp-optimise-quadratic')">❯</button></p>
+<div class="gp-optimise-quadratic" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-quadratic000.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-quadratic" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-quadratic001.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="gp-optimise-quadratic" style="text-align:center;">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-quadratic002.svg" width="80%" style=" ">
+</object>
+</div>
+<div class="figure">
+<div id="gp-optimise-quadratic-figure" class="figure-frame">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise-quadratic002.svg" width="80%" style=" ">
+</object>
+</div>
+</div>
+<aside class="notes">
+The data fit term of the Gaussian process is a quadratic loss centered around zero. This has eliptical contours, the principal axes of which are given by the covariance matrix.
+</aside>
+</section>
+<section id="eboldsymbol-theta-coloryellowfrac12logdetmathbfkcolorcyanfracmathbf-ytopmathbfk-1mathbf-y2" class="slide level2">
+<h2><span class="math display">\[E(\boldsymbol{ \theta}) = \color{yellow}{\frac{1}{2}\log\det{\mathbf{K}}}+\color{cyan}{\frac{\mathbf{ y}^{\top}\mathbf{K}^{-1}\mathbf{ y}}{2}}\]</span></h2>
+</section>
+<section id="quadratic-data-fit" class="slide level2">
+<h2>Quadratic Data Fit</h2>
+</section>
+<section id="data-fit-term" class="slide level2">
+<h2>Data Fit Term</h2>
+<script>
+showDivs(0, 'gp-optimise');
+</script>
+<p><small></small> <input id="range-gp-optimise" type="range" min="0" max="10" value="0" onchange="setDivs('gp-optimise')" oninput="setDivs('gp-optimise')"> <button onclick="plusDivs(-1, 'gp-optimise')">❮</button> <button onclick="plusDivs(1, 'gp-optimise')">❯</button></p>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise000.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise001.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise002.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise003.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise004.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise005.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise006.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise007.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise008.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise009.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise010.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise011.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise012.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise013.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise014.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise015.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise016.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise017.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise018.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise019.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
+<div class="gp-optimise" style="text-align:center;">
+<table>
+<tr>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise020.svg" width style=" ">
+</object>
+</td>
+<td width="50%">
+<object class="svgplot " data="../slides/diagrams/gp/gp-optimise021.svg" width style=" ">
+</object>
+</td>
+</tr>
+</table>
+</div>
 </section>
 <section id="non-linear-latent-variable-model" class="slide level2">
 <h2>Non-Linear Latent Variable Model</h2>
-<p>\begin{columns}[c]</p>
-<pre><code>\column{5cm}</code></pre>
-<p><strong>Dual Probabilistic PCA</strong></p>
-<pre><code>\only&lt;1&gt;{
-  
-* Define \emph{linear-Gaussian relationship} between latent variables
-    and data.
-* **Novel** Latent variable approach:
-
-
-  * Define Gaussian prior over \emph{parameteters}, $\mappingMatrix$.
-  * Integrate out \emph{parameters}.
-  
-
-}\only&lt;2-&gt;{
-  
-* &lt;2-&gt;Inspection of the marginal likelihood shows ...
-
-
-  * &lt;3-&gt;The covariance matrix is a covariance function.
-  * &lt;4-&gt;We recognise it as the `linear kernel&#39;.
-  
-
-}
-
-
-\column{5cm}
-
-  \includegraphics&lt;1-&gt;[width=0.5\textwidth]{../../../gplvm/tex/diagrams/gplvmGraph}
-
-\vspace{-1cm}</code></pre>
+<table>
+<tr>
+<td width="45%">
+<p><small><strong>Dual Probabilistic PCA</strong> * Define <em>linear-Gaussian relationship</em> between latent variables and data. * <strong>Novel</strong> Latent variable approach: * Define Gaussian prior over <em>parameteters</em>, <span class="math inline">\(\mathbf{W}\)</span>. * Integrate out <em>parameters</em>.</p>
+<ul>
+<li>Inspection of the marginal likelihood shows …
+<ul>
+<li>The covariance matrix is a covariance function.</li>
+<li>We recognise it as the ‘linear kernel’. </small>
+</td>
+<td width="45%">
+<div class="centered" style="">
+<img class="" src="../slides/diagrams/dimred/gplvm_graph.png" width="50%" height="auto" align="center" style="background:none; border:none; box-shadow:none; display:block; margin-left:auto; margin-right:auto;vertical-align:middle">
+</div>
+<small>
 <div class="fragment" data-fragment-index="1" style="">
 <span class="math display">\[
  p\left(\mathbf{Y}|\mathbf{Z},\mathbf{W}\right)=\prod_{i=1}^{n}N\left(\mathbf{ y}_{i,:}|\mathbf{W}\mathbf{ z}_{i,:},\sigma^{2}\mathbf{I}\right)\]</span> <span class="math display">\[
  p\left(\mathbf{W}\right)=\prod_{i=1}^{d}N\left(\mathbf{ w}_{i,:}|\mathbf{0},\mathbf{I}\right)\]</span>
 </div>
+<span class="math display">\[
+ p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{d}N\left(\mathbf{ y}_{:,j}|\mathbf{0},\mathbf{Z}\mathbf{Z}^{\top}+\sigma^{2}\mathbf{I}\right)\]</span> <span class="math display">\[
+ p\left(\mathbf{Y}|\mathbf{Z}\right)=\prod_{j=1}^{d}N\left(\mathbf{ y}_{:,j}|\mathbf{0},\mathbf{K}\right)\]</span> <span class="math display">\[
+\mathbf{K}=\mathbf{Z}\mathbf{Z}^{\top}+\sigma^{2}\mathbf{I}\]</span> This is a product of Gaussian processes with linear kernels. <span class="math display">\[
+\mathbf{K}=?
+\]</span> Replace linear kernel with non-linear kernel for non-linear model.</small>
+</td>
+</tr>
+</table></li>
+</ul></li>
+</ul>
 </section>
 <section id="non-linear-latent-variable-model-1" class="slide level2">
 <h2>Non-Linear Latent Variable Model</h2>
-<p><strong>RBF Kernel</strong></p>
+<p><strong>EQ Kernel</strong></p>
 <ul>
 <li><p>The RBF kernel has the form <span class="math inline">\(k_{i,j}=k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right),\)</span> where <span class="math display">\[
 k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\mathbf{ z}_{i,:}-\mathbf{ z}_{j,:}\right)^{\top}\left(\mathbf{ z}_{i,:}-\mathbf{ z}_{j,:}\right)}{2\ell^{2}}\right).
@@ -976,29 +1173,8 @@ k\left(\mathbf{ z}_{i,:},\mathbf{ z}_{j,:}\right)=\alpha\exp\left(-\frac{\left(\
 <section id="oil-data" class="slide level2">
 <h2>Oil Data</h2>
 </section>
-<section id="oil-data-set" class="slide level2">
-<h2>Oil Data Set</h2>
-<div class="figure">
-<div id="-figure" class="figure-frame">
-
-</div>
-</div>
-<aside class="notes">
-</aside>
-<p>{</p>
-</section>
-<section id="oil-data-set-ii" class="slide level2">
-<h2>Oil Data Set II</h2>
-<p><strong>Nearest Neighbour error in <span class="math inline">\(\mathbf{Z}\)</span></strong></p>
-<ul>
-<li>Nearest neighbour classification in latent space.</li>
-</ul>
-<p><em>cf</em> 2 errors in data space.</p>
-</section>
 <section id="stick-man-data" class="slide level2">
 <h2>Stick Man Data</h2>
-<p><code>demStick1</code></p>
-%
 </section>
 <section id="applications" class="slide level2">
 <h2>Applications</h2>
@@ -1171,7 +1347,7 @@ Oliver Stegle
 Visualisation of the <span class="citation" data-cites="Guo:fate10">Guo et al. (2010)</span> blastocyst development data with the GP-LVM.
 </aside>
 </section>
-<section id="section-5" class="slide level2">
+<section id="section-9" class="slide level2">
 <h2></h2>
 <div class="figure">
 <div id="singlecell-gplvm-ard-figure" class="figure-frame">
@@ -1229,9 +1405,6 @@ Visualisation of the <span class="citation" data-cites="Guo:fate10">Guo et al. (
 <div id="ref-Guo:fate10">
 <p>Guo, G., Huss, M., Tong, G.Q., Wang, C., Sun, L.L., Clarke, N.D., Robsonemail, P., 2010. Resolution of cell fate decisions revealed by single-cell gene expression analysis from zygote to blastocyst. Developmental Cell 18, 675–685. <a href="https://doi.org/10.1016/j.devcel.2010.02.012">https://doi.org/10.1016/j.devcel.2010.02.012</a></p>
 </div>
-<div id="ref-Hastie:pcurves89">
-<p>Hastie, T., Stuetzle, W., 1989. Principal curves. Journal of the American Statistical Association 84, 502–516.</p>
-</div>
 <div id="ref-Hotelling:analysis33">
 <p>Hotelling, H., 1933. Analysis of a complex of statistical variables into principal components. Journal of Educational Psychology 24, 417–441.</p>
 </div>
@@ -1243,9 +1416,6 @@ Visualisation of the <span class="citation" data-cites="Guo:fate10">Guo et al. (
 </div>
 <div id="ref-Levine:control12">
 <p>Levine, S., Wang, J.M., Haraux, A., Popović, Z., Koltun, V., 2012. Continuous character control with low-dimensional embeddings. ACM Transactions on Graphics (SIGGRAPH 2012) 31.</p>
-</div>
-<div id="ref-Scholkopf:nonlinear98">
-<p>Schölkopf, B., Smola, A., Müller, K.-R., 1998. Nonlinear component analysis as a kernel eigenvalue problem. Neural Computation 10, 1299–1319. <a href="https://doi.org/10.1162/089976698300017467">https://doi.org/10.1162/089976698300017467</a></p>
 </div>
 <div id="ref-Tipping:probpca99">
 <p>Tipping, M.E., Bishop, C.M., 1999. Probabilistic principal component analysis. Journal of the Royal Statistical Society, B 6, 611–622. <a href="https://doi.org/doi:10.1111/1467-9868.00196">https://doi.org/doi:10.1111/1467-9868.00196</a></p>

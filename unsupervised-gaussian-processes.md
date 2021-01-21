@@ -11,8 +11,6 @@ This is the material for my R250 Unit in 2020-2021 Academic Year on "Unsupervise
 
 You can find the [intro talk and notes here](/r250/lectures/01-unsupervised-gaussian-processes.html).
 
-Also there's a video of me giving [similar material at the Machine Learning Summer School here](http://inverseprobability.com/talks/notes/gaussian-processes.html).
-
 If you want to review some of the background then the following might also be useful.
 
 1. [Linear Algebra & Regression](http://inverseprobability.com/mlai2015/2015/10/13/week-3-linear-algebra-and-regression.html) from my old Sheffield Course (with [Jupyter notebook](https://nbviewer.jupyter.org/github/lawrennd/mlai2015/blob/master/week3.ipynb) and [video](https://www.youtube.com/watch?v=5VPr6NbHHjg)). 
