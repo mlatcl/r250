@@ -1,0 +1,20 @@
+author:
+- given: Neil D.
+  family: Lawrence
+  institution: University of Cambridge
+  gscholar: r3SJcvoAAAAJ
+  twitter: lawrennd
+  orcid: 0000-0001-9258-1030
+  url: http://inverseprobability.com
+layout: lecture
+venue: Virtual (Zoom)
+postdir: ../../../mlatcl/r250/_lectures/
+slidedir: ../../../mlatcl/r250/slides/
+notedir: ../../../mlatcl/r250/_notes/
+notebookdir: ../../../mlatcl/r250/_notebooks/
+transition: None
+ghub:
+- organization: lawrennd
+  repository: talks
+  branch: gh-pages
+  directory: _r250
