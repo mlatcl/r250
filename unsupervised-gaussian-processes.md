@@ -54,7 +54,7 @@ Here are some papers to choose from for the different sessions.
 
 ### Mini Project
 
-For the mini-project I recommend one of four tasks.
+For the mini-project here's a selection of ideas to stimulate.
 
 1. Find an implementation of Bayesian GP-LVM and one of standard GP-LVM (for example in [GPy](https://github.com/SheffieldML/GPy). Explore different initialisation strategies. See how they compare for the Bayesian and non Bayesian approach. **Note**: for the Bayesian approach you will need an additional initialisation strategy around the variances of the posterior approximation for $\mathbf{X}$ so you might need several Bayesian GP-LVM comparisons. Explore the results for several different standard data sets. You could use simulated data and real data. You might want your exploration to be two stage. One where you keep covariance function parameters fixed, and one where you vary the covariance function parameters. 
 
