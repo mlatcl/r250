@@ -9,7 +9,7 @@ This is the material for my R250 Unit in 2020-2021 Academic Year on "Unsupervise
 
 ## Introduction Session 
 
-You can find the [intro talk and notes here (split into two lectures).
+You can find the intro talk and notes here (split into two lectures).
 
 ### [Week 1: Session 1](/r250/lectures/01-01-unsupervised-gaussian-processes.html).
 
