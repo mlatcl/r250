@@ -15,6 +15,10 @@ You can find the [intro talk and notes here (split into two lectures).
 
 ### [Week 1: Session 2](/r250/lectures/01-02-unsupervised-gaussian-processes-II.html).
 
+### [Week 2: Bayesian GP LVM](/r250/lectures/02-bayesian-gp-lvm.html).
+
+### [Week 3: Manifold Relevance Determination](/r250/lectures/03-manifold-relevance-determination.html).
+
 If you want to review some of the background then the following might also be useful.
 
 1. [Linear Algebra & Regression](http://inverseprobability.com/mlai2015/2015/10/13/week-3-linear-algebra-and-regression.html) from my old Sheffield Course (with [Jupyter notebook](https://nbviewer.jupyter.org/github/lawrennd/mlai2015/blob/master/week3.ipynb) and [video](https://www.youtube.com/watch?v=5VPr6NbHHjg)). 
