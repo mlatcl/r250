@@ -24,8 +24,6 @@ start: "10:00"
 end: "11:00"
 ---
 
-\include{talk-macros.gpp}
-
 \include{_notebooks/includes/notebook-setup.md}
 \include{_dimred/includes/high-dimensional-data.md}
 \include{_dimred/includes/dimensionality-reduction-intro.md}

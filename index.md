@@ -12,3 +12,6 @@ This page contains material perpared for the departments course on Advanced Topi
 You can find lectures for the 2021-2020 session on Unsupervised Gaussian Processes [from Neil Lawrence here](./unsupervised-gaussian-processes.html).
 
 You can find lectures from the 2020-2019 session Gaussian Processes [from Neil Lawrence here](./gaussian-processes.html).
+
+The due date for the coursework assignment is last day of Lent term – Wednesday 17 March - at 16:00.
+ 

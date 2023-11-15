@@ -19,7 +19,6 @@ papersize: a4paper
 transition: None
 ---
 
-\include{talk-macros.gpp}
 \include{_physics/includes/laplace-portrait.md}
 \include{_physics/includes/laplaces-determinism.md}
 \include{_gp/includes/gp-intro-very-short.md}
