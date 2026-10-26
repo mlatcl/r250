@@ -9,14 +9,19 @@ author:
 layout: lecture
 room:
 venue: Virtual (Zoom)
-talkcss: https://inverseprobability.com/assets/css/talks.css
+talktheme: white
+talkcss: mlatcl.css
+talkfontsize: xs
 bibdir: $HOME/lawrennd/bibliography
+people: ../_people/people.yml
 postsdir: ../_lectures/
 slidesdir: ../slides/
+slidesheader: slides-header.html
 notesdir: ../_notes/
 notebooksdir: ../_notebooks/
 practicalsdir: ../_practicals/
 snippetsdir: $HOME/lawrennd/snippets
+macrosdir: $HOME/lawrennd/lamd/lamd/macros
 writediagramsdir: .
 scriptsdir: ./scripts/
 diagramsdir: ../slides/diagrams/
@@ -24,7 +29,7 @@ posts: True
 docx: False
 notespdf: False
 slidesipynb: False
-pptx: True
+pptx: False
 pdf: False
 assignment: False
 ipynb: True
@@ -32,7 +37,7 @@ reveal: True
 transition: None
 potx: custom-reference.potx 
 dotx: custom-reference.dotx
-baseurl: "deepnn/" # the subpath of your site, e.g. /blog/
+baseurl: "r250/" # the subpath of your site, e.g. /blog/
 url: "https://mlatcl.github.io/" # the base hostname & protocol for your site
 transition: None
 ghub:
