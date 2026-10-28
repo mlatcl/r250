@@ -9,22 +9,28 @@ author:
 layout: lecture
 room:
 venue: Virtual (Zoom)
-talkcss: https://inverseprobability.com/assets/css/talks.css
+talktheme: white
+talkcss: mlatcl.css
+talkfontsize: xs
 bibdir: $HOME/lawrennd/bibliography
+people: ../_people/people.yml
 postsdir: ../_lectures/
-slidesdir: ../slides/
+slidesdir: ../slides/ # Compiled slide HTML. copy_web_diagrams writes published figures into slides/diagrams/ here
+slidesheader: slides-header.html
 notesdir: ../_notes/
 notebooksdir: ../_notebooks/
 practicalsdir: ../_practicals/
 snippetsdir: $HOME/lawrennd/snippets
-writediagramsdir: .
+macrosdir: $HOME/lawrennd/lamd/lamd/macros
+writediagramsdir: . # Where the build writes newly created diagrams (not the shared library)
 scriptsdir: ./scripts/
-diagramsdir: ./slides/diagrams/
+diagramsdir: $HOME/lawrennd/slides/diagrams/ # Filesystem SOURCE library. copy_web_diagrams reads from here; not a URL
+diagramswebpath: slides/diagrams/ # Published URL path after url+baseurl. HTML \diagramsDir uses this, not diagramsdir
 posts: True
 docx: False
 notespdf: False
 slidesipynb: False
-pptx: True
+pptx: False
 pdf: False
 assignment: False
 ipynb: True
@@ -32,7 +38,7 @@ reveal: True
 transition: None
 potx: custom-reference.potx 
 dotx: custom-reference.dotx
-baseurl: "deepnn/" # the subpath of your site, e.g. /blog/
+baseurl: "r250/" # the subpath of your site, e.g. /blog/
 url: "https://mlatcl.github.io/" # the base hostname & protocol for your site
 transition: None
 ghub:
